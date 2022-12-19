@@ -10,6 +10,8 @@
 
 :root {
   --main-font-color: #f44336;
+  --black-font-color: #000000;
+  --white-font-color: #ffffff;
 }
 
 * {
@@ -24,7 +26,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #000000;
+  background-color: var(--black-font-color);
   padding: 0 20px;
   color: var(--main-font-color);
   font-family: 'Starwars';
@@ -33,7 +35,7 @@
 
 .footer {
   height: 100px;
-  background-color: #000000;
+  background-color: var(--black-font-color);
   padding: 0 20px;
 }
 
@@ -100,7 +102,7 @@
 .total-price {
   display: inline-block;
   width: 90px;
-  color: #ffffff;
+  color: var(--white-font-color);
 }
 
 .cart {
@@ -112,7 +114,7 @@
 }
 
 .count-buy {
-  color: #ffffff;
+  color: var(--white-font-color);
   display: inline-block;
   width: 24px;
 }
