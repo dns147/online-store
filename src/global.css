@@ -1,3 +1,19 @@
+@font-face {
+  font-family: 'Starwars';
+  src: url("./assets/fonts/SFDistantGalaxy.ttf");
+}
+
+@font-face {
+  font-family: 'StarwarsOutline';
+  src: url("./assets/fonts/SFDistantGalaxyOutline.ttf");
+}
+
+:root {
+  --main-font-color: #f44336;
+  --black-font-color: #000000;
+  --white-font-color: #ffffff;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -10,7 +26,95 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #000000;
+  background-color: var(--black-font-color);
   padding: 0 20px;
-  color: #f44336;
+  color: var(--main-font-color);
+  font-family: 'Starwars';
+  font-size: 18px;
+}
+
+.footer {
+  height: 100px;
+  background-color: var(--black-font-color);
+  padding: 0 20px;
+}
+
+.footer-list {
+  list-style-type: none;
+  color: var(--main-font-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  column-gap: 20px;
+  height: 100%;
+}
+
+.footer-item {
+  display: flex;
+  align-items: center;
+  font-family: 'Starwars';
+  font-size: 20px;
+  letter-spacing: 1px; 
+}
+
+.footer-link {
+  text-decoration: none;
+  color: var(--main-font-color);
+  font-family: 'StarwarsOutline';
+  font-size: 20px;
+  letter-spacing: 1px; 
+}
+
+.footer-link:hover,
+.logo-name:hover {
+  font-family: 'Starwars';
+}
+
+.cart-image,
+.github-link,
+.rs-link {
+  filter: brightness(0) saturate(100%) invert(30%) sepia(88%) saturate(2354%) hue-rotate(344deg) brightness(102%) contrast(91%);
+}
+
+.item-github {
+  display: flex;
+  width: 450px;
+  justify-content: space-between;
+}
+
+.logo-name {
+  text-decoration: none;
+  color: var(--main-font-color);
+  font-family: 'StarwarsOutline';
+  letter-spacing: 3px;
+  display: flex;
+  align-items: center;
+}
+
+.name {
+  display: inline-block;
+  width: 155px;
+  line-height: 78%;
+  text-align: center;
+}
+
+.total-price {
+  display: inline-block;
+  width: 90px;
+  color: var(--white-font-color);
+}
+
+.cart {
+  text-decoration: none;
+}
+
+.cart-container {
+  position: relative;
+}
+
+.count-buy {
+  color: var(--white-font-color);
+  display: inline-block;
+  width: 24px;
 }
