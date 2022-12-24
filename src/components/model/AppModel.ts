@@ -34,4 +34,12 @@ export default class AppModel {
       input.value = String(value - 1);
     }
   }
+
+  getTotalPrice(totalPrice: HTMLElement, priceProduct: string | null) {
+    const price: number = Number(priceProduct);
+    const currentTotalPrice: number = Number(totalPrice.innerHTML);
+    const newTotalPrice: string = String(currentTotalPrice + price);
+
+    this.view.showNewTotalPrice(totalPrice, newTotalPrice);
+  }
 }

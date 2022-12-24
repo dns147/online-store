@@ -35,6 +35,7 @@ export function makeCardProduct(): void {
       <button class="btn-cart">ADD TO CART</button>
     `;
 
+    cardMain.setAttribute('data-id', `${product.id}`);
     cardProduct.setAttribute('data-id', `${product.id}`);
     cardProduct.classList.add('card-product');
     cardMain.classList.add('card-main');
@@ -78,4 +79,16 @@ export function getId(): string | null {
   const id: string | null = params.get('id');
   
   return id;
+};
+
+export function getPrice(id: number | undefined): string | null {
+  let price = null;
+
+  products.forEach((product: IOptionsProducts) => {
+    if (product.id === id) {
+      price = product.price;
+    }
+  });
+  
+  return String(price);
 };

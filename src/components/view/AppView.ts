@@ -26,4 +26,8 @@ export default class AppView {
     this.contentContainer.innerHTML = page.render();
     page.init();
   }
+
+  showNewTotalPrice(totalPrice: HTMLElement, newTotalPrice: string) {
+    totalPrice.innerHTML = newTotalPrice;
+  }
 }

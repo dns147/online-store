@@ -103,6 +103,7 @@
   display: inline-block;
   width: 90px;
   color: var(--white-font-color);
+  font-family: monospace;
 }
 
 .order {
@@ -117,4 +118,5 @@
   color: var(--white-font-color);
   display: inline-block;
   width: 24px;
+  font-family: monospace;
 }

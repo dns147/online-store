@@ -1,3 +1,4 @@
+import { getPrice } from "../../utils/utils";
 import AppModel from "../model/AppModel";
 
 export default class AppController {
@@ -27,6 +28,7 @@ export default class AppController {
       const product = event.target.closest('.card-product') as HTMLElement;
       const plus = event.target.closest('.plus') as HTMLElement;
       const minus = event.target.closest('.minus') as HTMLElement;
+      const btnCart = event.target.closest('.btn-cart') as HTMLElement;
 
       if (product) {
         that.model.showProductDescription(product);
@@ -42,6 +44,16 @@ export default class AppController {
         const parent = minus.parentElement as HTMLElement;
         const inputAmountProduct = parent.querySelector('.product-amount') as HTMLInputElement;
         that.model.minusAmountProduct(inputAmountProduct);
+      }
+
+      if (btnCart) {
+        const parentBtn = btnCart.parentElement as HTMLElement;
+        const parentMain = parentBtn.parentElement as HTMLElement;
+        const idProduct: number | undefined = Number(parentMain.dataset.id);
+        const priceProduct: string | null = getPrice(idProduct);
+        const totalPrice = document.querySelector('.total-price') as HTMLElement;
+        
+        that.model.getTotalPrice(totalPrice, priceProduct);
       }
     }
   }
