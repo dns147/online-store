@@ -1,0 +1,264 @@
+[
+  {
+    "id": 0,
+    "title": "Training Luke with Yoda",
+    "description": "Celebrate the most stellar fandom of them all with the Empire Strikes Back Pop! of Luke carrying Master Yoda on his back. Collectible stands 3.75-inches tall.",
+    "price": 15,
+    "stock": 44,
+    "brand": "Funko Pop!",
+    "category": "Figure",
+    "images": [
+    "https://i.ibb.co/SwWgMZT/luke1.jpg",
+    "https://i.ibb.co/jZGmtsw/luke2.jpg"
+    ]
+  },
+  {
+    "id": 1,
+    "title": "Darth Vader",
+    "description": "This Sith lord will do whatever it takes to retrieve the stolen Death Star plans and uncover the location of the rebel base. Now, his search has brought him to your Star Wars: Episode IV A New Hope collection, so hide your rebel forces!",
+    "price": 20,
+    "stock": 35,
+    "brand": "Funko Pop!",
+    "category": "Figure",
+    "images": [
+    "https://i.ibb.co/JQJ08cs/vader1.jpg",
+    "https://i.ibb.co/M29HcG7/vader2.jpg"
+    ]
+  },
+  {
+    "id": 2,
+    "title": "Kylo Ren",
+    "description": "Kylo Ren stands on a Star Wars base. Kylo Ren's lightsaber lights up and makes noise when his head is pressed down. Kylo is dressed in his iconic black attire and helmet. This figure stands 3.75-inches tall and comes in a window box display.",
+    "price": 10,
+    "stock": 15,
+    "brand": "Funko Pop!",
+    "category": "Figure",
+    "images": [
+    "https://i.ibb.co/4dFbYVB/kylo-ren1.jpg",
+    "https://i.ibb.co/d2YXsF6/kylo-ren2.jpg"
+    ]
+  },
+  {
+    "id": 3,
+    "title": "Darth Maul",
+    "description": "Stylized collectable stands 3 ¾ inches tall, perfect for any Clone Wars fan!",
+    "price": 19,
+    "stock": 5,
+    "brand": "Funko Pop!",
+    "category": "Figure",
+    "images": [
+    "https://i.ibb.co/F6B7rKS/maul1.jpg",
+    "https://i.ibb.co/th94sM3/maul2.jpg"
+    ]
+  },
+  {
+    "id": 4,
+    "title": "R2D2 with Antlers",
+    "description": "Stylized collectable stands 3 ¾ inches tall, perfect for any holiday fan!",
+    "price": 47,
+    "stock": 8,
+    "brand": "Funko Pop!",
+    "category": "Figure",
+    "images": [
+    "https://i.ibb.co/HXSN68z/r2-d2-1.jpg",
+    "https://i.ibb.co/NrrqH7n/r2-d2-2.jpg"
+    ]
+  },
+  {
+    "id": 5,
+    "title": "Jawa",
+    "description": "Approximately 11-inches tall, these soft dolls come wrapped in their own unique satchel that kids can use as a carrier.",
+    "price": 12,
+    "stock": 3,
+    "brand": "Mattel",
+    "category": "Soft",
+    "images": [
+    "https://i.ibb.co/hsxQ5wp/jawa1.webp",
+    "https://i.ibb.co/N2BbpbH/jawa2.webp"
+    ]
+  },
+  {
+    "id": 6,
+    "title": "Rodian",
+    "description": "Approximately 11-inches tall, these soft dolls come wrapped in their own unique satchel that kids can use as a carrier.",
+    "price": 12,
+    "stock": 7,
+    "brand": "Mattel",
+    "category": "Soft",
+    "images": [
+    "https://i.ibb.co/nMN0mFb/rodian1.webp",
+    "https://i.ibb.co/tLj2zMg/rodian2.webp"
+    ]
+  },
+  {
+    "id": 7,
+    "title": "Ewok",
+    "description": "Approximately 11-inches tall, these soft dolls come wrapped in their own unique satchel that kids can use as a carrier.",
+    "price": 12,
+    "stock": 2,
+    "brand": "Mattel",
+    "category": "Soft",
+    "images": [
+    "https://i.ibb.co/SV5KWsQ/ewok1.webp",
+    "https://i.ibb.co/1XzY49w/ewok2.webp"
+    ]
+  },
+  {
+    "id": 8,
+    "title": "Wookiee",
+    "description": "Approximately 11-inches tall, these soft dolls come wrapped in their own unique satchel that kids can use as a carrier.",
+    "price": 12,
+    "stock": 10,
+    "brand": "Mattel",
+    "category": "Soft",
+    "images": [
+    "https://i.ibb.co/Hrj9SnH/wookiee1.webp",
+    "https://i.ibb.co/ChvZG5F/wookiee2.webp"
+    ]
+  },
+  {
+    "id": 9,
+    "title": "Darth Vader",
+    "description": "Just press the mouse bubbles down and they make a slight popping sound; then flip it over and start again!",
+    "price": 5,
+    "stock": 10,
+    "brand": "Pop It!",
+    "category": "Pop it",
+    "images": [
+    "https://i.ibb.co/ZXGkZG0/pop-vader1.webp",
+    "https://i.ibb.co/6HvDdbc/pop-vader2.webp"
+    ]
+  },
+  {
+    "id": 10,
+    "title": "Stormtrooper",
+    "description": "Just press the mouse bubbles down and they make a slight popping sound; then flip it over and start again!",
+    "price": 5,
+    "stock": 19,
+    "brand": "Pop It!",
+    "category": "Pop it",
+    "images": [
+    "https://i.ibb.co/Fgpwvfn/pop-stormtrooper1.webp",
+    "https://i.ibb.co/zhh0zxF/pop-stormtrooper2.webp"
+    ]
+  },
+  {
+    "id": 11,
+    "title": "Grogu",
+    "description": "Just press the mouse bubbles down and they make a slight popping sound; then flip it over and start again!",
+    "price": 5,
+    "stock": 4,
+    "brand": "Pop It!",
+    "category": "Pop it",
+    "images": [
+    "https://i.ibb.co/CJL7XJc/pop-grogu1.webp",
+    "https://i.ibb.co/2hbZBNP/pop-grogu2.webp"
+    ]
+  },
+  {
+    "id": 12,
+    "title": "Greedo",
+    "description": "Multicolor mini backpack.",
+    "price": 65,
+    "stock": 4,
+    "brand": "Loungefly",
+    "category": "Backpack",
+    "images": [
+    "https://i.ibb.co/k51FZVt/backpack-greedo1.webp",
+    "https://i.ibb.co/rtkK4qj/backpack-greedo2.webp"
+    ]
+  },
+  {
+    "id": 13,
+    "title": "Stormtrooper",
+    "description": "Mini-backpack made of vegan leather (polyurethane).",
+    "price": 65,
+    "stock": 6,
+    "brand": "Loungefly",
+    "category": "Backpack",
+    "images": [
+    "https://i.ibb.co/VYg5n0b/backpack-stormtrooper1.webp",
+    "https://i.ibb.co/VqphXXB/backpack-stormtrooper2.webp"
+    ]
+  },
+  {
+    "id": 14,
+    "title": "Rebel style",
+    "description": "Transform into a fighter on the Star Wars Rebel group when wearing their team color on your back. This cosplay backpack features a full front Star Wars Rebel detailing on PU leather with quilted finish, dual reinforced padded shoulder straps, top handle, front exterior zipped pocket, two side exterior pockets, fully lined interior, and top zip closure.",
+    "price": 65,
+    "stock": 2,
+    "brand": "Loungefly",
+    "category": "Backpack",
+    "images": [
+    "https://i.ibb.co/WyCr7GM/backpack-rebel1.webp",
+    "https://i.ibb.co/BKSH1mh/backpack-rebel2.webp"
+    ]
+  },
+  {
+    "id": 15,
+    "title": "X-Wing Helmet",
+    "description": "Multicolor mini backpack.",
+    "price": 65,
+    "stock": 11,
+    "brand": "Loungefly",
+    "category": "Backpack",
+    "images": [
+    "https://i.ibb.co/4TKVWJn/backpack-helmet1.webp",
+    "https://i.ibb.co/qNz3zPQ/backpack-helmet2.webp"
+    ]
+  },
+  {
+    "id": 16,
+    "title": "Darth Sidious",
+    "description": "Multicolor mini backpack.",
+    "price": 65,
+    "stock": 1,
+    "brand": "Loungefly",
+    "category": "Backpack",
+    "images": [
+    "https://i.ibb.co/VgQ3CMr/backpack-sidious1.webp",
+    "https://i.ibb.co/jLY6jLs/backpack-sidious2.webp"
+    ]
+  },
+  {
+    "id": 17,
+    "title": "Jakku",
+    "description": "Multicolor mini backpack.",
+    "price": 65,
+    "stock": 9,
+    "brand": "Loungefly",
+    "category": "Backpack",
+    "images": [
+    "https://i.ibb.co/xF4f6CX/backpack-jakku1.webp",
+    "https://i.ibb.co/zbNddHx/backpack-jakku2.webp"
+    ]
+  },
+  {
+    "id": 18,
+    "title": "Han Solo",
+    "description": "Multicolor mini backpack.",
+    "price": 65,
+    "stock": 3,
+    "brand": "Loungefly",
+    "category": "Backpack",
+    "images": [
+    "https://i.ibb.co/fqVZCWW/backpack-solo1.webp",
+    "https://i.ibb.co/0c7TzTk/backpack-solo2.webp"
+    ]
+  },
+  {
+    "id": 19,
+    "title": "Kylo Ren",
+    "description": "Multicolor mini backpack.",
+    "price": 65,
+    "stock": 2,
+    "brand": "Loungefly",
+    "category": "Backpack",
+    "images": [
+    "https://i.ibb.co/4ZQP52Y/backpack-kylo-ren1.webp",
+    "https://i.ibb.co/sFJMRYn/backpack-kylo-ren2.webp"
+    ]
+  }
+]
+
+

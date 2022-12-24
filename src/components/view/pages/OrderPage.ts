@@ -1,4 +1,6 @@
-export default class ErrorPage {
+import { checkSearchParams } from "../../../utils/utils";
+
+export default class OrderPage {
   container: HTMLElement;
   
   constructor(container: HTMLElement) {
@@ -7,11 +9,11 @@ export default class ErrorPage {
 
   render(): string {
     return `
-      <div class="main-container">Error Page</div>
+      <div class="main-container">Order Page</div>
     `;
   }
 
   init(): void {
-    
+    checkSearchParams();
   }
 }

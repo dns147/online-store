@@ -1,5 +1,5 @@
 import { Routes } from "../../utils/types";
-import StartPage from "./pages/StartPage";
+import CatalogPage from "./pages/CatalogPage";
 
 export default class AppView {
   container: HTMLElement;
@@ -14,7 +14,7 @@ export default class AppView {
   }
 
   renderContent(hashPageName: string) {
-    let routeName = 'default';
+    let routeName = 'catalog';
 
     if (hashPageName.length > 0) {
       routeName = hashPageName in this.routes ? hashPageName : 'error';
@@ -22,7 +22,8 @@ export default class AppView {
 
     window.document.title = routeName;
 
-    const page: StartPage = new this.routes[routeName](this.container);
+    const page: CatalogPage = new this.routes[routeName](this.container);
     this.contentContainer.innerHTML = page.render();
+    page.init();
   }
 }

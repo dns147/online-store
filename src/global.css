@@ -71,7 +71,7 @@
   font-family: 'Starwars';
 }
 
-.cart-image,
+.order-image,
 .github-link,
 .rs-link {
   filter: brightness(0) saturate(100%) invert(30%) sepia(88%) saturate(2354%) hue-rotate(344deg) brightness(102%) contrast(91%);
@@ -105,11 +105,11 @@
   color: var(--white-font-color);
 }
 
-.cart {
+.order {
   text-decoration: none;
 }
 
-.cart-container {
+.order-container {
   position: relative;
 }
 
