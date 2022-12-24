@@ -7,19 +7,19 @@ export const Header = {
         <div class="logo-container">
           <div class="logo"></div>
           <h1>
-            <a href="#main" class="logo-name">
+            <a href="#catalog" class="logo-name">
               <span class="name">Star Wars</span>Store
             </a>
           </h1>
         </div>
 
-        <div class="cart-total-container">
-          <p class="cart-total">Cart total: <span class="total-price">0</span></p>
+        <div class="order-total-container">
+          <p class="order-total">Cart total: <span class="total-price">0</span></p>
         </div>
 
-        <div class="cart-container">
-          <a href="#cart" class="cart">
-            <img src="https://i.ibb.co/Ypg3JLJ/cart2.png" width="50" alt="image" class="cart-image">
+        <div class="order-container">
+          <a href="#order" class="order">
+            <img src="https://i.ibb.co/Ypg3JLJ/cart2.png" width="50" alt="image" class="order-image">
             <span class="count-buy">0</span>
           </a>
         </div>

@@ -2,10 +2,10 @@ import { Content, Footer, Header } from "./components/components";
 import AppController from "./components/controller/AppController";
 import AppModel from "./components/model/AppModel";
 import AppView from "./components/view/AppView";
-import CartPage from "./components/view/pages/CartPage";
+import OrderPage from "./components/view/pages/OrderPage";
 import DescriptionPage from "./components/view/pages/DescriptionPage";
 import ErrorPage from "./components/view/pages/ErrorPage";
-import StartPage from "./components/view/pages/StartPage";
+import CatalogPage from "./components/view/pages/CatalogPage";
 import { Components, ISpa, Routes } from "./utils/types";
 
 const components: Components = {
@@ -15,9 +15,9 @@ const components: Components = {
 };
 
 const routes: Routes = {
-  default: StartPage,
-  main: StartPage,
-  cart: CartPage,
+  default: CatalogPage,
+  catalog: CatalogPage,
+  order: OrderPage,
   description: DescriptionPage,
   error: ErrorPage,
 };
