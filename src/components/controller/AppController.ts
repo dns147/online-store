@@ -52,8 +52,9 @@ export default class AppController {
         const idProduct: number | undefined = Number(parentMain.dataset.id);
         const priceProduct: string | null = getPrice(idProduct);
         const totalPrice = document.querySelector('.total-price') as HTMLElement;
-        
-        that.model.getTotalPrice(totalPrice, priceProduct);
+        const inputAmountProduct = parentBtn.querySelector('.product-amount') as HTMLInputElement;
+
+        that.model.getTotalPrice(totalPrice, priceProduct, inputAmountProduct);
       }
     }
   }

@@ -35,10 +35,11 @@ export default class AppModel {
     }
   }
 
-  getTotalPrice(totalPrice: HTMLElement, priceProduct: string | null) {
+  getTotalPrice(totalPrice: HTMLElement, priceProduct: string | null, input: HTMLInputElement) {
     const price: number = Number(priceProduct);
     const currentTotalPrice: number = Number(totalPrice.innerHTML);
-    const newTotalPrice: string = String(currentTotalPrice + price);
+    const countProduct: number = Number(input.value);
+    const newTotalPrice: string = String(currentTotalPrice + countProduct * price);
 
     this.view.showNewTotalPrice(totalPrice, newTotalPrice);
   }
