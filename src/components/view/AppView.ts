@@ -32,15 +32,11 @@ export default class AppView {
     totalPrice.innerHTML = newTotalPrice;
   }
 
-  addToCart(countProduct: number, parentMain: HTMLElement): void {
+  addToCart(countProduct: number): void {
     const countBuy = document.querySelector('.count-buy') as HTMLElement;
     const currentCountBuy: number = Number(countBuy.innerHTML);
     const newCountBuy: string = String(currentCountBuy + countProduct);
-
-    setTimeout(() => {
-      countBuy.innerHTML = newCountBuy;
-    }, 900);
-
-    showAnimateImage(parentMain);
+    
+    countBuy.innerHTML = newCountBuy;
   }
 }

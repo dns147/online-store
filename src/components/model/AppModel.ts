@@ -1,5 +1,6 @@
 import AppView from "../view/AppView";
 import products from "../../assets/json/products.json";
+import { showAnimateImage } from "../../utils/utils";
 
 export default class AppModel {
   view: AppView;
@@ -46,7 +47,11 @@ export default class AppModel {
 
   addToCart(input: HTMLInputElement, parentMain: HTMLElement): void {
     const countProduct: number = Number(input.value);
+
+    setTimeout(() => {
+      this.view.addToCart(countProduct);
+    }, 900);
     
-    this.view.addToCart(countProduct, parentMain);
+    showAnimateImage(parentMain);
   }
 }
