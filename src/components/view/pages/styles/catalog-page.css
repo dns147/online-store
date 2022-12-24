@@ -46,6 +46,7 @@
 .card-product {
   height: 160px;
   padding: 10px;
+  position: relative;
 }
 
 .card-product:hover {
@@ -158,4 +159,13 @@
 
 .cart-container:hover .product-amount {
   border: 1px solid var(--hover-color);
+}
+
+.clone-image {
+  position: absolute;
+  border: 1px solid #2196f3;
+  border-radius: 50%;
+  left: 9px;
+  top: 36px;
+  z-index: 1;
 }

@@ -55,6 +55,7 @@ export default class AppController {
         const inputAmountProduct = parentBtn.querySelector('.product-amount') as HTMLInputElement;
 
         that.model.getTotalPrice(totalPrice, priceProduct, inputAmountProduct);
+        that.model.addToCart(inputAmountProduct, parentMain);
       }
     }
   }

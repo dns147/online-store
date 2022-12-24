@@ -1,4 +1,5 @@
 import { Routes } from "../../utils/types";
+import { showAnimateImage } from "../../utils/utils";
 import CatalogPage from "./pages/CatalogPage";
 
 export default class AppView {
@@ -29,5 +30,17 @@ export default class AppView {
 
   showNewTotalPrice(totalPrice: HTMLElement, newTotalPrice: string) {
     totalPrice.innerHTML = newTotalPrice;
+  }
+
+  addToCart(countProduct: number, parentMain: HTMLElement): void {
+    const countBuy = document.querySelector('.count-buy') as HTMLElement;
+    const currentCountBuy: number = Number(countBuy.innerHTML);
+    const newCountBuy: string = String(currentCountBuy + countProduct);
+
+    setTimeout(() => {
+      countBuy.innerHTML = newCountBuy;
+    }, 900);
+
+    showAnimateImage(parentMain);
   }
 }

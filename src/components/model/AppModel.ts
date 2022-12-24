@@ -35,12 +35,18 @@ export default class AppModel {
     }
   }
 
-  getTotalPrice(totalPrice: HTMLElement, priceProduct: string | null, input: HTMLInputElement) {
+  getTotalPrice(totalPrice: HTMLElement, priceProduct: string | null, input: HTMLInputElement): void {
     const price: number = Number(priceProduct);
     const currentTotalPrice: number = Number(totalPrice.innerHTML);
     const countProduct: number = Number(input.value);
     const newTotalPrice: string = String(currentTotalPrice + countProduct * price);
 
     this.view.showNewTotalPrice(totalPrice, newTotalPrice);
+  }
+
+  addToCart(input: HTMLInputElement, parentMain: HTMLElement): void {
+    const countProduct: number = Number(input.value);
+    
+    this.view.addToCart(countProduct, parentMain);
   }
 }

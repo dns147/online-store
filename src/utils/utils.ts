@@ -92,3 +92,32 @@ export function getPrice(id: number | undefined): string | null {
   
   return String(price);
 };
+
+export function showAnimateImage(parentMain: HTMLElement) {
+  const imageProduct = parentMain.querySelector('.image-product') as HTMLElement;
+  const imageParent = parentMain.querySelector('.card-product') as HTMLElement;
+  
+  const cloneImage = imageProduct.cloneNode(true) as HTMLElement;
+  cloneImage.classList.add('clone-image');
+  imageParent.append(cloneImage);
+  const pos: DOMRect = imageProduct.getBoundingClientRect();
+  const posY: number = pos.top;
+  const posX: number = pos.left;
+  const widthElement: number = pos.width;
+  const widthWindow: number = document.documentElement.clientWidth;
+  const offsetX: number = widthWindow - posX - widthElement;
+
+  cloneImage.animate(
+    [
+      { transform: `translate(0px, 0px) scale(1)` },
+      { transform: `translate(${offsetX}px, -${posY}px) scale(0)` }
+    ],  
+    {
+      duration: 1000,
+    }
+  );
+
+  setTimeout(() => {
+    cloneImage.remove();
+  }, 900);
+}
