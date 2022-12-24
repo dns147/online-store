@@ -25,9 +25,23 @@ export default class AppController {
     const that = this;
     if (event.target instanceof Element) {
       const product = event.target.closest('.card-product') as HTMLElement;
+      const plus = event.target.closest('.plus') as HTMLElement;
+      const minus = event.target.closest('.minus') as HTMLElement;
 
       if (product) {
         that.model.showProductDescription(product);
+      }
+
+      if (plus) {
+        const parent = plus.parentElement as HTMLElement;
+        const inputAmountProduct = parent.querySelector('.product-amount') as HTMLInputElement;
+        that.model.plusAmountProduct(inputAmountProduct);
+      }
+
+      if (minus) {
+        const parent = minus.parentElement as HTMLElement;
+        const inputAmountProduct = parent.querySelector('.product-amount') as HTMLInputElement;
+        that.model.minusAmountProduct(inputAmountProduct);
       }
     }
   }

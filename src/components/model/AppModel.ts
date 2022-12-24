@@ -21,4 +21,17 @@ export default class AppModel {
     window.history.replaceState({}, '', `${window.location.pathname}?${params}`);
     window.location.hash = 'description';
   }
+
+  plusAmountProduct(input: HTMLInputElement): void {
+    const value: number = Number(input.value);
+    input.value = String(value + 1);
+  }
+
+  minusAmountProduct(input: HTMLInputElement): void {
+    const value: number = Number(input.value);
+
+    if (value > 1) {
+      input.value = String(value - 1);
+    }
+  }
 }

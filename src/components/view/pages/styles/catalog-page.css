@@ -141,7 +141,19 @@
 .cart-container:hover .btn-cart,
 .cart-container:hover .plus,
 .cart-container:hover .minus {
-  background: var(--hover-color);
+  background: linear-gradient(0deg, rgba(255,193,7,1) 0%, rgb(233, 115, 79) 100%);
+}
+
+.cart-container .btn-cart:active {
+  background: linear-gradient(0deg, rgba(233, 115, 79) 0%, rgba(255,193,7,1) 100%);
+}
+
+.cart-container .plus:active {
+  background: linear-gradient(0deg, rgba(233, 115, 79) 0%, rgba(255,193,7,1) 100%);
+}
+
+.cart-container .minus:active {
+  background: linear-gradient(0deg, rgba(233, 115, 79) 0%, rgba(255,193,7,1) 100%);
 }
 
 .cart-container:hover .product-amount {
