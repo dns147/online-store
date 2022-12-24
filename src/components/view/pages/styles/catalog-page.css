@@ -1,0 +1,149 @@
+@font-face {
+  font-family: 'Starwars';
+  src: url("../../../../assets/fonts/SFDistantGalaxy.ttf");
+}
+
+:root {
+  --btn-font: #9e430e;
+  --hover-color: #ffc107;
+  --white-font: #ffffff;
+  --amount-border: #d4cccc;
+  --card-border: #008000;
+  --minus-plus-background: #fbfbfb;
+}
+
+.main-container {
+  display: flex;
+  /* flex-wrap: wrap; */
+  justify-content: space-between;
+}
+
+.filter-container {
+  height: 500px;
+  width: 300px;
+  border: 1px solid #f0f4c3;
+  background: #f0f4c3;
+}
+
+.catalog-container {
+  width: calc(100vw - 310px);
+}
+
+.catalog-list {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 20px;
+  row-gap: 20px;
+  justify-content: center;
+  margin: 20px;
+}
+
+.card-main {
+  width: 240px;
+  border: 1px solid var(--card-border);
+}
+
+.card-product {
+  height: 160px;
+  padding: 10px;
+}
+
+.card-product:hover {
+  cursor: pointer;
+  box-shadow: #fff 0 -1px 4px inset, #ff0 0 -2px 10px inset, #ff8000 0 0px 10px inset, red 0 0px 10px, 5px 5px 15px 5px rgb(0 0 0 / 0%) inset;
+}
+
+.image-product {
+  height: 100px;
+  float: left;
+  margin: 15px 10px 15px 0;
+}
+
+.card-name,
+.list-item {
+  font-family: monospace;
+}
+
+.card-name {
+  margin-bottom: 10px;
+}
+
+.list {
+  list-style: none;
+}
+
+.list-name {
+  font-weight: bold;
+}
+
+.cart-container {
+  display: flex;
+  clear: both;
+  margin: 0 5px 10px;
+  justify-content: space-between;
+}
+
+.input-amount {
+  display: flex;
+}
+
+.product-amount {
+  border: 1px solid var(--amount-border);
+  border-radius: 15px;
+  outline: none;
+  font-size: 12px;
+  height: 27px;
+  padding: 0 7px;
+  text-align: center;
+  width: 50px;
+}
+
+.btn-cart {
+  border: 1px solid var(--hover-color);
+  border-radius: 15px;
+  color: var(--btn-font);
+  font-size: 12px;
+  padding: 6px 9px;
+  background: var(--white-font);
+  height: 27px;
+}
+
+.btn-cart:hover {
+  cursor: pointer;
+  color: var(--white-font);
+}
+
+.plus, 
+.minus {
+  background: var(--minus-plus-background);
+  border-radius: 15px;
+  font-size: 17px;
+  height: 27px;
+  line-height: 1.5;
+  text-align: center;
+  width: 29px;
+}
+
+.plus::after {
+  content: "+";
+}
+
+.minus::after {
+  content: "-";
+}
+
+.plus:hover, 
+.minus:hover {
+  cursor: pointer;
+  color: var(--white-font);
+}
+
+.cart-container:hover .btn-cart,
+.cart-container:hover .plus,
+.cart-container:hover .minus {
+  background: var(--hover-color);
+}
+
+.cart-container:hover .product-amount {
+  border: 1px solid var(--hover-color);
+}

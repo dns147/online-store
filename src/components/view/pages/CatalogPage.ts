@@ -1,4 +1,4 @@
-import './styles/startpage.css';
+import './styles/catalog-page.css';
 import products from "../../../assets/json/products.json";
 import { IOptionsProducts } from '../../../utils/types';
 import { checkSearchParams, makeCardProduct } from '../../../utils/utils';
