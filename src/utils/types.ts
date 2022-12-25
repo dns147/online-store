@@ -29,3 +29,8 @@ export interface IOptionsProducts {
   category: string;
   images: string[];
 }
+
+export enum SortByType {
+  list = 'list',
+  bar = 'bar',
+}

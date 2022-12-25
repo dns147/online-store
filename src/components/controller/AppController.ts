@@ -11,9 +11,14 @@ export default class AppController {
 
     this.updateState = this.updateState.bind(this);
     this.getEventsClick = this.getEventsClick.bind(this);
+    this.getEventsMouseOver = this.getEventsMouseOver.bind(this);
+    this.getEventsMouseOut = this.getEventsMouseOut.bind(this);
 
     window.addEventListener('hashchange', this.updateState);
-    document.addEventListener('click', this.getEventsClick);  
+    document.addEventListener('click', this.getEventsClick);
+    document.addEventListener('mouseover', this.getEventsMouseOver);
+    document.addEventListener('mouseout', this.getEventsMouseOut);
+
     this.updateState();
   }
 
@@ -24,15 +29,18 @@ export default class AppController {
 
   getEventsClick(event: Event): void {
     const that = this;
+
     if (event.target instanceof Element) {
       const product = event.target.closest('.card-product') as HTMLElement;
       const plus = event.target.closest('.plus') as HTMLElement;
       const minus = event.target.closest('.minus') as HTMLElement;
       const btnCart = event.target.closest('.btn-cart') as HTMLElement;
       const btnSortType = event.target.closest('.sort-type') as HTMLElement;
-
-      if (product) {
-        that.model.showProductDescription(product);
+      const listItem = event.target.closest('.list-item-container') as HTMLElement;
+      const btnCartSortList = event.target.closest('.btn-cart-sort-list') as HTMLElement;
+      
+      if (product || listItem) {
+        that.model.showProductDescription(product || listItem);
       }
 
       if (plus) {
@@ -55,12 +63,55 @@ export default class AppController {
         const totalPrice = document.querySelector('.total-price') as HTMLElement;
         const inputAmountProduct = parentBtn.querySelector('.product-amount') as HTMLInputElement;
 
+        const imageProduct = parentMain.querySelector('.image-product') as HTMLElement;
+        const imageParent = parentMain.querySelector('.card-product') as HTMLElement;
+
         that.model.getTotalPrice(totalPrice, priceProduct, inputAmountProduct);
-        that.model.addToCart(inputAmountProduct, parentMain);
+        that.model.addToCart(imageProduct, imageParent, inputAmountProduct);
       }
 
       if (btnSortType) {
         that.model.changeSortByType(btnSortType);
+      }
+
+      if (btnCartSortList) {
+        const parentBtn = btnCartSortList.parentElement as HTMLElement;
+        const listItemContainer = parentBtn.querySelector('.list-item-container') as HTMLElement;
+        const idProduct: number | undefined = Number(listItemContainer.dataset.id);
+        const priceProduct: string | null = getPrice(idProduct);
+        const totalPrice = document.querySelector('.total-price') as HTMLElement;
+        const imageProduct = listItemContainer.querySelector('.image-sorting-by-list') as HTMLElement;
+        
+        that.model.getTotalPrice(totalPrice, priceProduct);
+        that.model.addToCart(imageProduct, listItemContainer);
+      }
+    }
+  }
+
+  getEventsMouseOver(event: Event): void {
+    const that = this;
+
+    if (event.target instanceof Element) {
+      const btnCartSortList = event.target.closest('.btn-cart-sort-list') as HTMLElement;
+
+      if (btnCartSortList) {
+        const parentBtn = btnCartSortList.parentElement as HTMLElement;
+        const listItemContainer = parentBtn.querySelector('.list-item-container') as HTMLElement;
+        that.model.addStyleBtn(listItemContainer);
+      }
+    }
+  }
+
+  getEventsMouseOut(event: Event): void {
+    const that = this;
+
+    if (event.target instanceof Element) {
+      const btnCartSortList = event.target.closest('.btn-cart-sort-list') as HTMLElement;
+
+      if (btnCartSortList) {
+        const parentBtn = btnCartSortList.parentElement as HTMLElement;
+        const listItemContainer = parentBtn.querySelector('.list-item-container') as HTMLElement;
+        that.model.removeStyleBtn(listItemContainer);
       }
     }
   }

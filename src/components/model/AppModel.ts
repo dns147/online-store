@@ -36,28 +36,48 @@ export default class AppModel {
     }
   }
 
-  getTotalPrice(totalPrice: HTMLElement, priceProduct: string | null, input: HTMLInputElement): void {
+  getTotalPrice(totalPrice: HTMLElement, priceProduct: string | null, input?: HTMLInputElement): void {
     const price: number = Number(priceProduct);
     const currentTotalPrice: number = Number(totalPrice.innerHTML);
-    const countProduct: number = Number(input.value);
-    const newTotalPrice: string = String(currentTotalPrice + countProduct * price);
+    const countProduct: number = Number(input?.value);
+    let newTotalPrice: string = '';
+
+    if (input) {
+      newTotalPrice = String(currentTotalPrice + countProduct * price);
+    } else {
+      newTotalPrice = String(currentTotalPrice + price);
+    }
 
     this.view.showNewTotalPrice(totalPrice, newTotalPrice);
   }
 
-  addToCart(input: HTMLInputElement, parentMain: HTMLElement): void {
-    const countProduct: number = Number(input.value);
+  addToCart(imageProduct: HTMLElement, imageParent: HTMLElement, input?: HTMLInputElement): void {
+    const countProduct: number = Number(input?.value);
 
-    setTimeout(() => {
-      this.view.addToCart(countProduct);
-    }, 900);
+    if (input) {
+      setTimeout(() => {
+        this.view.addToCart(countProduct);
+      }, 900);
+    } else {
+      setTimeout(() => {
+        this.view.addToCart(1);
+      }, 900);
+    }
     
-    showAnimateImage(parentMain);
+    showAnimateImage(imageProduct, imageParent);
   }
 
   changeSortByType(btnSortType: HTMLElement):void {
     const typeOfSort: string | undefined = btnSortType.dataset.type;
 
     this.view.changeSortByType(btnSortType, typeOfSort);
+  }
+
+  addStyleBtn(listItemContainer: HTMLElement): void {
+    this.view.addStyleBtn(listItemContainer);
+  }
+
+  removeStyleBtn(listItemContainer: HTMLElement): void {
+    this.view.removeStyleBtn(listItemContainer);
   }
 }

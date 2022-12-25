@@ -1,8 +1,13 @@
 import products from "../assets/json/products.json";
-import { IOptionsProducts } from "./types";
+import { IOptionsProducts, SortByType } from "./types";
 
 export function makeCardProduct(): void {
   const contentsContainer = document.querySelector('.catalog-list') as HTMLElement;
+
+  if (contentsContainer.classList.contains('catalog-sorting-by-list')) {
+    contentsContainer.classList.remove('catalog-sorting-by-list');
+    contentsContainer.innerHTML = '';
+  }
 
   products.forEach((product: IOptionsProducts) => {
     const cardMain: HTMLDivElement = document.createElement('div');
@@ -27,10 +32,7 @@ export function makeCardProduct(): void {
       <div class="input-amount">
         <div class="minus"></div>
         <input type="text" name="product-amount" value="1" class="product-amount">
-        
         <div class="plus"></div>
-
-        
       </div>
       <button class="btn-cart">ADD TO CART</button>
     `;
@@ -101,12 +103,18 @@ export function getPrice(id: number | undefined): string | null {
   return String(price);
 };
 
-export function showAnimateImage(parentMain: HTMLElement) {
-  const imageProduct = parentMain.querySelector('.image-product') as HTMLElement;
-  const imageParent = parentMain.querySelector('.card-product') as HTMLElement;
-  
+export function showAnimateImage(imageProduct: HTMLElement, imageParent: HTMLElement) {
   const cloneImage = imageProduct.cloneNode(true) as HTMLElement;
-  cloneImage.classList.add('clone-image');
+  const params = new URLSearchParams(window.location.search);
+
+  if (params.get('type') === SortByType.bar) {
+    cloneImage.classList.add('clone-image');
+  }
+
+  if (params.get('type') === SortByType.list) {
+    cloneImage.classList.add('clone-image-list');
+  }
+
   imageParent.append(cloneImage);
   const pos: DOMRect = imageProduct.getBoundingClientRect();
   const posY: number = pos.top;
@@ -134,13 +142,38 @@ export function checkTypeOfSort(sortByType: string | null): void {
   const elemSortByBar = document.querySelector('[data-type="bar"]') as HTMLElement;
   const elemSortByList = document.querySelector('[data-type="list"]') as HTMLElement;
 
-  if (!elemSortByList.classList.contains('sort-type-active') && sortByType === 'list') {
+  if (!elemSortByList.classList.contains('sort-type-active') && sortByType === SortByType.list) {
     elemSortByList.classList.add('sort-type-active');
     elemSortByBar.classList.remove('sort-type-active');
   }
 
-  if (!elemSortByBar.classList.contains('sort-type-active') && sortByType === 'bar') {
+  if (!elemSortByBar.classList.contains('sort-type-active') && sortByType === SortByType.bar) {
     elemSortByBar.classList.add('sort-type-active');
     elemSortByList.classList.remove('sort-type-active');
   }
+}
+
+export function changeSortingByType(): void {
+  const catalogList = document.querySelector('.catalog-list') as HTMLElement;
+  catalogList.classList.add('catalog-sorting-by-list');
+  catalogList.innerHTML = '';
+
+  const list: HTMLUListElement = document.createElement('ul');
+  list.classList.add('sort-type-list');
+
+  products.forEach((product: IOptionsProducts, index: number) => {
+    const listItem: HTMLLIElement = document.createElement('li');
+    listItem.classList.add('sort-type-list-item');
+    listItem.innerHTML = `
+      <div class="list-item-container" data-id=${product.id}>
+        <img src="${product.images[0]}" alt="image" class="image-sorting-by-list">
+        <span class="list-item-text">${product.title}. <b>Price</b>: ${product.price}</span>
+      </div>
+      <button class="btn-cart-sort-list">ADD TO CART</button>
+    `;
+
+    list.append(listItem);
+  });
+
+  catalogList.append(list);
 }

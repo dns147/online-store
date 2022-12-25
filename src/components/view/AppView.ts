@@ -1,5 +1,5 @@
-import { Routes, TypeOfClasses } from "../../utils/types";
-import { showAnimateImage } from "../../utils/utils";
+import { Routes, SortByType, TypeOfClasses } from "../../utils/types";
+import { changeSortingByType, makeCardProduct, showAnimateImage } from "../../utils/utils";
 import CatalogPage from "./pages/CatalogPage";
 
 export default class AppView {
@@ -41,26 +41,36 @@ export default class AppView {
   }
 
   changeSortByType(btnSortType: HTMLElement, typeOfSort: string | undefined): void {
-    if (!btnSortType.classList.contains('sort-type-active') && typeOfSort === 'list') {
+    if (!btnSortType.classList.contains('sort-type-active') && typeOfSort === SortByType.list) {
       btnSortType.classList.add('sort-type-active');
       (document.querySelector('[data-type="bar"]') as HTMLElement).classList.remove('sort-type-active');
 
       const hashPageName: string = window.location.hash;
       const params = new URLSearchParams(window.location.search);
-      params.set('type', 'list');
+      params.set('type', SortByType.list);
       window.history.replaceState({}, '', `${window.location.pathname}?${params}${hashPageName}`);
+
+      changeSortingByType();
     }
 
-    if (!btnSortType.classList.contains('sort-type-active') && typeOfSort === 'bar') {
+    if (!btnSortType.classList.contains('sort-type-active') && typeOfSort === SortByType.bar) {
       btnSortType.classList.add('sort-type-active');
       (document.querySelector('[data-type="list"]') as HTMLElement).classList.remove('sort-type-active');
 
       const hashPageName: string = window.location.hash;
       const params = new URLSearchParams(window.location.search);
-      params.set('type', 'bar');
+      params.set('type', SortByType.bar);
       window.history.replaceState({}, '', `${window.location.pathname}?${params}${hashPageName}`);
-    } 
 
-    console.log(typeOfSort);
+      makeCardProduct();
+    }
+  }
+
+  addStyleBtn(listItemContainer: HTMLElement): void {
+    listItemContainer.classList.add('list-item-container-active');
+  }
+
+  removeStyleBtn(listItemContainer: HTMLElement): void {
+    listItemContainer.classList.remove('list-item-container-active');
   }
 }
