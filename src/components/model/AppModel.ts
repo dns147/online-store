@@ -1,5 +1,6 @@
 import AppView from "../view/AppView";
 import products from "../../assets/json/products.json";
+import { showAnimateImage } from "../../utils/utils";
 
 export default class AppModel {
   view: AppView;
@@ -20,5 +21,63 @@ export default class AppModel {
     params.set('id', `${id}`);
     window.history.replaceState({}, '', `${window.location.pathname}?${params}`);
     window.location.hash = 'description';
+  }
+
+  plusAmountProduct(input: HTMLInputElement): void {
+    const value: number = Number(input.value);
+    input.value = String(value + 1);
+  }
+
+  minusAmountProduct(input: HTMLInputElement): void {
+    const value: number = Number(input.value);
+
+    if (value > 1) {
+      input.value = String(value - 1);
+    }
+  }
+
+  getTotalPrice(totalPrice: HTMLElement, priceProduct: string | null, input?: HTMLInputElement): void {
+    const price: number = Number(priceProduct);
+    const currentTotalPrice: number = Number(totalPrice.innerHTML);
+    const countProduct: number = Number(input?.value);
+    let newTotalPrice: string = '';
+
+    if (input) {
+      newTotalPrice = String(currentTotalPrice + countProduct * price);
+    } else {
+      newTotalPrice = String(currentTotalPrice + price);
+    }
+
+    this.view.showNewTotalPrice(totalPrice, newTotalPrice);
+  }
+
+  addToCart(imageProduct: HTMLElement, imageParent: HTMLElement, input?: HTMLInputElement): void {
+    const countProduct: number = Number(input?.value);
+
+    if (input) {
+      setTimeout(() => {
+        this.view.addToCart(countProduct);
+      }, 900);
+    } else {
+      setTimeout(() => {
+        this.view.addToCart(1);
+      }, 900);
+    }
+    
+    showAnimateImage(imageProduct, imageParent);
+  }
+
+  changeSortByType(btnSortType: HTMLElement):void {
+    const typeOfSort: string | undefined = btnSortType.dataset.type;
+
+    this.view.changeSortByType(btnSortType, typeOfSort);
+  }
+
+  addStyleBtn(listItemContainer: HTMLElement): void {
+    this.view.addStyleBtn(listItemContainer);
+  }
+
+  removeStyleBtn(listItemContainer: HTMLElement): void {
+    this.view.removeStyleBtn(listItemContainer);
   }
 }

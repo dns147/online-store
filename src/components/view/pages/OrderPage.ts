@@ -14,6 +14,6 @@ export default class OrderPage {
   }
 
   init(): void {
-    checkSearchParams();
+    checkSearchParams(['id', 'type']);
   }
 }
