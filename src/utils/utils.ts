@@ -63,15 +63,16 @@ export function makeCardProduct(): void {
   });
 }
 
-export function checkSearchParams(): void {
+export function checkSearchParams(searchParams: string[]): void {
   const hashPageName: string = window.location.hash;
-  const currentUrl: string = window.location.href;
-  const url: URL = new URL(currentUrl);
+  const params = new URLSearchParams(window.location.search);
 
-  if (url.search) {
-    url.searchParams.delete('id');
-    window.history.replaceState({}, '', `${window.location.pathname}${hashPageName}`);
-  }
+  searchParams.forEach((param) => {
+    if (params.get(param)) {
+      params.delete(param);
+      window.history.replaceState({}, '', `${window.location.pathname}?${params}${hashPageName}`);
+    }
+  });
 }
 
 export function getId(): string | null {
@@ -79,6 +80,13 @@ export function getId(): string | null {
   const id: string | null = params.get('id');
   
   return id;
+};
+
+export function getType(): string | null {
+  const params = new URLSearchParams(window.location.search);
+  const type: string | null = params.get('type');
+  
+  return type;
 };
 
 export function getPrice(id: number | undefined): string | null {
@@ -120,4 +128,19 @@ export function showAnimateImage(parentMain: HTMLElement) {
   setTimeout(() => {
     cloneImage.remove();
   }, 900);
+}
+
+export function checkTypeOfSort(sortByType: string | null): void {
+  const elemSortByBar = document.querySelector('[data-type="bar"]') as HTMLElement;
+  const elemSortByList = document.querySelector('[data-type="list"]') as HTMLElement;
+
+  if (!elemSortByList.classList.contains('sort-type-active') && sortByType === 'list') {
+    elemSortByList.classList.add('sort-type-active');
+    elemSortByBar.classList.remove('sort-type-active');
+  }
+
+  if (!elemSortByBar.classList.contains('sort-type-active') && sortByType === 'bar') {
+    elemSortByBar.classList.add('sort-type-active');
+    elemSortByList.classList.remove('sort-type-active');
+  }
 }

@@ -54,4 +54,10 @@ export default class AppModel {
     
     showAnimateImage(parentMain);
   }
+
+  changeSortByType(btnSortType: HTMLElement):void {
+    const typeOfSort: string | undefined = btnSortType.dataset.type;
+
+    this.view.changeSortByType(btnSortType, typeOfSort);
+  }
 }

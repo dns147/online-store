@@ -1,13 +1,15 @@
 import './styles/catalog-page.css';
 import products from "../../../assets/json/products.json";
 import { IOptionsProducts } from '../../../utils/types';
-import { checkSearchParams, makeCardProduct } from '../../../utils/utils';
+import { checkSearchParams, checkTypeOfSort, getType, makeCardProduct } from '../../../utils/utils';
 
 export default class CatalogPage {
   container: HTMLElement;
+  sortByType: string | null;
 
   constructor(container: HTMLElement) {
     this.container = container;
+    this.sortByType = null;
   }
 
   render(): string {
@@ -33,6 +35,10 @@ export default class CatalogPage {
               <input type="search" name="search" class="search-input" id="search" placeholder="Search" autocomplete="off" autofocus="">
               <button type="submit" class="search-btn"></button>
             </form>
+            <div class="sort-type-container">
+              <img src="https://i.ibb.co/9GQ7M5J/bar1.png" alt="image" class="sort-type sort-type-active" data-type="bar">
+              <img src="https://i.ibb.co/QD06C0k/list1.png" alt="image" class="sort-type" data-type="list">
+            </div>
           </div>
           <div class="catalog-list">
           </div>
@@ -42,7 +48,12 @@ export default class CatalogPage {
   }
 
   init(): void {
-    checkSearchParams();
+    checkSearchParams(['id']);
     makeCardProduct();
+
+    this.sortByType = getType();
+    checkTypeOfSort(this.sortByType);
+    
+    // console.log(this.sortByType);
   }
 }

@@ -29,6 +29,7 @@ export default class AppController {
       const plus = event.target.closest('.plus') as HTMLElement;
       const minus = event.target.closest('.minus') as HTMLElement;
       const btnCart = event.target.closest('.btn-cart') as HTMLElement;
+      const btnSortType = event.target.closest('.sort-type') as HTMLElement;
 
       if (product) {
         that.model.showProductDescription(product);
@@ -56,6 +57,10 @@ export default class AppController {
 
         that.model.getTotalPrice(totalPrice, priceProduct, inputAmountProduct);
         that.model.addToCart(inputAmountProduct, parentMain);
+      }
+
+      if (btnSortType) {
+        that.model.changeSortByType(btnSortType);
       }
     }
   }

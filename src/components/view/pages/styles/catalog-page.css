@@ -4,6 +4,7 @@
 }
 
 :root {
+  --main-font-color: #f44336;
   --btn-font: #9e430e;
   --hover-color: #ffc107;
   --white-font: #ffffff;
@@ -255,4 +256,31 @@
   width: 12px;
   height: 12px;
   cursor: pointer;
+}
+
+.sort-type-container {
+  align-self: center;
+  width: 70px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.sort-type {
+  width: 27px;
+  height: 27px;
+}
+
+.sort-type:hover {
+  cursor: pointer;
+  background: var(--main-font-color);
+}
+
+.sort-type:active {
+  background: var(--main-font-color);
+  padding: 5px;
+}
+
+.sort-type-active {
+  background: var(--main-font-color);
+  padding: 5px;
 }
