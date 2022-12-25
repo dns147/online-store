@@ -10,12 +10,13 @@
   --amount-border: #d4cccc;
   --card-border: #008000;
   --minus-plus-background: #fbfbfb;
+  --black-color: #000000;
 }
 
 .main-container {
   display: flex;
   /* flex-wrap: wrap; */
-  justify-content: space-between;
+  /* justify-content: space-between; */
 }
 
 .filter-container {
@@ -35,7 +36,7 @@
   column-gap: 20px;
   row-gap: 20px;
   justify-content: center;
-  margin: 20px;
+  margin: 15px;
 }
 
 .card-main {
@@ -167,4 +168,91 @@
   left: 9px;
   top: 36px;
   z-index: 1;
+}
+
+.catalog-header {
+  height: 50px;
+  background: #c8e6c9;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 15px;
+}
+
+.sort-form {
+  align-self: center;
+}
+
+.search-select {
+  width: 210px;
+  height: 30px;
+  padding: 0 15px;
+  outline: none;
+  font-size: 16px;
+  font-family: monospace;
+  color: var(--white-font);
+  vertical-align: middle;
+  cursor: pointer;
+  appearance: none;
+  background: url("../../../../assets/png/arrow-down.png") no-repeat right center;
+  background-position-x: 93%;
+  background-size: 8%;
+  background-color: var(--black-color);
+}
+
+.found {
+  font-family: monospace;
+  align-self: center;
+  font-size: 20px;
+  color: var(--black-color);
+}
+
+.search-form {
+  width: 238px;
+  height: 30px;
+  background-color: var(--black-color);
+  padding: 0 15px;
+  align-self: center;
+}
+
+.search-input {
+  width: 185px;
+  outline: none;
+  font-size: 16px;
+  font-family: monospace;
+  color: var(--white-font);
+  background-color: transparent;
+  border: none;
+  position: relative;
+  top: 5px;
+}
+
+.search-btn {
+  background-image: url("../../../../assets/png/search.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 19px;
+  height: 19px;
+  vertical-align: middle;
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+  position: relative;
+  top: 4px;
+}
+
+.search-input::-webkit-input-placeholder {
+  color: gray; 
+  font-family: monospace; 
+}
+
+.search-input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  background-image: url("../../../../assets/png/cross.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 12px;
+  height: 12px;
+  cursor: pointer;
 }
