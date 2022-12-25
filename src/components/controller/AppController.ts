@@ -34,10 +34,10 @@ export default class AppController {
       const product = event.target.closest('.card-product') as HTMLElement;
       const plus = event.target.closest('.plus') as HTMLElement;
       const minus = event.target.closest('.minus') as HTMLElement;
-      const btnCart = event.target.closest('.btn-cart') as HTMLElement;
+      const btnCart = event.target.closest('.btn-cart') as HTMLButtonElement;
       const btnSortType = event.target.closest('.sort-type') as HTMLElement;
       const listItem = event.target.closest('.list-item-container') as HTMLElement;
-      const btnCartSortList = event.target.closest('.btn-cart-sort-list') as HTMLElement;
+      const btnCartSortList = event.target.closest('.btn-cart-sort-list') as HTMLButtonElement;
       
       if (product || listItem) {
         that.model.showProductDescription(product || listItem);
@@ -46,7 +46,9 @@ export default class AppController {
       if (plus) {
         const parent = plus.parentElement as HTMLElement;
         const inputAmountProduct = parent.querySelector('.product-amount') as HTMLInputElement;
-        that.model.plusAmountProduct(inputAmountProduct);
+        const btnCart = document.querySelector('.btn-cart') as HTMLElement;
+
+        that.model.plusAmountProduct(btnCart, inputAmountProduct);
       }
 
       if (minus) {
@@ -66,8 +68,10 @@ export default class AppController {
         const imageProduct = parentMain.querySelector('.image-product') as HTMLElement;
         const imageParent = parentMain.querySelector('.card-product') as HTMLElement;
 
-        that.model.getTotalPrice(totalPrice, priceProduct, inputAmountProduct);
-        that.model.addToCart(imageProduct, imageParent, inputAmountProduct);
+        that.model.changeStyleCard(btnCart, imageParent, parentBtn);
+        that.model.getTotalPrice(btnCart, totalPrice, priceProduct, inputAmountProduct);
+        that.model.addToCart(btnCart, imageProduct, imageParent, inputAmountProduct);
+        that.model.saveIdProduct(String(idProduct));
       }
 
       if (btnSortType) {
@@ -82,8 +86,10 @@ export default class AppController {
         const totalPrice = document.querySelector('.total-price') as HTMLElement;
         const imageProduct = listItemContainer.querySelector('.image-sorting-by-list') as HTMLElement;
         
-        that.model.getTotalPrice(totalPrice, priceProduct);
-        that.model.addToCart(imageProduct, listItemContainer);
+        that.model.changeStyleCard(btnCartSortList, listItemContainer, parentBtn);
+        that.model.getTotalPrice(btnCartSortList, totalPrice, priceProduct);
+        that.model.addToCart(btnCartSortList, imageProduct, listItemContainer);
+        that.model.saveIdProduct(String(idProduct));
       }
     }
   }

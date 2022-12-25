@@ -4,6 +4,7 @@ import CatalogPage from "../components/view/pages/CatalogPage";
 export type Routes = { [key: string]: typeof TypeOfClasses };
 export type Components = { [key: string]: typeof Header };
 export type InitSpa = { [key: string]: typeof Header };
+export type IdStorage = { [key: string]: boolean };
 
 export class TypeOfClasses {
   constructor(elem: HTMLElement) {}

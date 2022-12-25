@@ -1,5 +1,5 @@
 import { Routes, SortByType, TypeOfClasses } from "../../utils/types";
-import { changeSortingByType, makeCardProduct, showAnimateImage } from "../../utils/utils";
+import { changeSortingByType, checkSaveId, makeCardProduct, showAnimateImage } from "../../utils/utils";
 import CatalogPage from "./pages/CatalogPage";
 
 export default class AppView {
@@ -28,14 +28,46 @@ export default class AppView {
     page.init();
   }
 
+  changeStyleCard(btnCart: HTMLButtonElement, imageParent: HTMLElement, parentBtn: HTMLElement): void {
+    const plus = parentBtn.querySelector('.plus') as HTMLButtonElement;
+
+    if (btnCart.classList.contains('active-btn')) {
+      btnCart.innerHTML = 'ADD TO CART';
+      btnCart.classList.remove('active-btn');
+      imageParent.classList.remove('active-card');
+
+      if (imageParent.classList.contains('list-item-container-active')) {
+        imageParent.classList.remove('list-item-container-active');
+      }
+      
+      if (plus) {
+        plus.disabled = false;
+      }
+    } else {
+      btnCart.innerHTML = 'DROP FROM CART';
+      btnCart.classList.add('active-btn');
+      imageParent.classList.add('active-card');
+
+      if (plus) {
+        plus.disabled = true;
+      }
+    }
+  }
+
   showNewTotalPrice(totalPrice: HTMLElement, newTotalPrice: string) {
     totalPrice.innerHTML = newTotalPrice;
   }
 
-  addToCart(countProduct: number): void {
+  addToCart(btnCart: HTMLButtonElement, countProduct: number): void {
     const countBuy = document.querySelector('.count-buy') as HTMLElement;
     const currentCountBuy: number = Number(countBuy.innerHTML);
-    const newCountBuy: string = String(currentCountBuy + countProduct);
+    let newCountBuy: string = '';
+
+    if (btnCart.classList.contains('active-btn')) {
+      newCountBuy = String(currentCountBuy + countProduct);
+    } else {
+      newCountBuy = String(currentCountBuy - countProduct);
+    }
     
     countBuy.innerHTML = newCountBuy;
   }
@@ -51,6 +83,7 @@ export default class AppView {
       window.history.replaceState({}, '', `${window.location.pathname}?${params}${hashPageName}`);
 
       changeSortingByType();
+      checkSaveId();
     }
 
     if (!btnSortType.classList.contains('sort-type-active') && typeOfSort === SortByType.bar) {

@@ -1,5 +1,5 @@
 import products from "../assets/json/products.json";
-import { IOptionsProducts, SortByType } from "./types";
+import { IdStorage, IOptionsProducts, SortByType } from "./types";
 
 export function makeCardProduct(): void {
   const contentsContainer = document.querySelector('.catalog-list') as HTMLElement;
@@ -30,9 +30,9 @@ export function makeCardProduct(): void {
     listPrice.innerHTML = `<span class="list-name">Price: </span>${product.price}`
     cartContainer.innerHTML = `
       <div class="input-amount">
-        <div class="minus"></div>
+        <button class="minus"></button>
         <input type="text" name="product-amount" value="1" class="product-amount">
-        <div class="plus"></div>
+        <button class="plus"></button>
       </div>
       <button class="btn-cart">ADD TO CART</button>
     `;
@@ -103,7 +103,7 @@ export function getPrice(id: number | undefined): string | null {
   return String(price);
 };
 
-export function showAnimateImage(imageProduct: HTMLElement, imageParent: HTMLElement) {
+export function showAnimateImage(imageProduct: HTMLElement, imageParent: HTMLElement, state: boolean) {
   const cloneImage = imageProduct.cloneNode(true) as HTMLElement;
   const params = new URLSearchParams(window.location.search);
 
@@ -123,15 +123,27 @@ export function showAnimateImage(imageProduct: HTMLElement, imageParent: HTMLEle
   const widthWindow: number = document.documentElement.clientWidth;
   const offsetX: number = widthWindow - posX - widthElement;
 
-  cloneImage.animate(
-    [
-      { transform: `translate(0px, 0px) scale(1)` },
-      { transform: `translate(${offsetX}px, -${posY}px) scale(0)` }
-    ],  
-    {
-      duration: 1000,
-    }
-  );
+  if (state) {
+    cloneImage.animate(
+      [
+        { transform: `translate(0px, 0px) scale(1)` },
+        { transform: `translate(${offsetX}px, -${posY}px) scale(0)` }
+      ],  
+      {
+        duration: 1000,
+      }
+    );
+  } else {
+    cloneImage.animate(
+      [
+        { transform: `translate(${offsetX}px, -${posY}px) scale(0)` },
+        { transform: `translate(0px, 0px) scale(1)` }
+      ],  
+      {
+        duration: 1000,
+      }
+    );
+  }
 
   setTimeout(() => {
     cloneImage.remove();
@@ -161,7 +173,7 @@ export function changeSortingByType(): void {
   const list: HTMLUListElement = document.createElement('ul');
   list.classList.add('sort-type-list');
 
-  products.forEach((product: IOptionsProducts, index: number) => {
+  products.forEach((product: IOptionsProducts) => {
     const listItem: HTMLLIElement = document.createElement('li');
     listItem.classList.add('sort-type-list-item');
     listItem.innerHTML = `
@@ -176,4 +188,22 @@ export function changeSortingByType(): void {
   });
 
   catalogList.append(list);
+}
+
+export function checkSaveId(): void {
+  const idProductToCart: IdStorage = JSON.parse(localStorage['idProductToCart']);
+  const listItemContainer = document.querySelectorAll('.list-item-container') as NodeListOf<HTMLElement>;
+  const btnCartSortList = document.querySelectorAll('.btn-cart-sort-list') as NodeListOf<HTMLElement>;
+
+  products.forEach((product: IOptionsProducts, index: number) => {
+    const idProduct: string = String(product.id);
+    
+    for (let key in idProductToCart) {
+      if (key === idProduct) {
+        listItemContainer[index].classList.add('active-card');
+        btnCartSortList[index].innerHTML = 'DROP FROM CART';
+        btnCartSortList[index].classList.add('active-btn');
+      }
+    }
+  });
 }

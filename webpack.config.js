@@ -20,18 +20,6 @@ const baseConfig = {
                 test: /\.js$/, 
                 loader: "source-map-loader" 
             },
-            {
-                test: [/\.svg$/, /\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/, /\.ico$/],
-                use: [
-                    {
-                        loader: 'file-loader',
-                        options: {
-                            publicPath: './',
-                            name: `./assets/[name].[ext]`,
-                        },
-                    },
-                ],
-            },
         ],
     },
     resolve: {

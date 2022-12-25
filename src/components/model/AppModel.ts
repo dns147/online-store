@@ -1,6 +1,7 @@
 import AppView from "../view/AppView";
 import products from "../../assets/json/products.json";
 import { showAnimateImage } from "../../utils/utils";
+import { IdStorage } from "../../utils/types";
 
 export default class AppModel {
   view: AppView;
@@ -23,9 +24,12 @@ export default class AppModel {
     window.location.hash = 'description';
   }
 
-  plusAmountProduct(input: HTMLInputElement): void {
+  plusAmountProduct(btnCart: HTMLElement, input: HTMLInputElement): void {
     const value: number = Number(input.value);
-    input.value = String(value + 1);
+
+    if (!btnCart.classList.contains('active-btn')) {
+      input.value = String(value + 1);
+    }
   }
 
   minusAmountProduct(input: HTMLInputElement): void {
@@ -36,35 +40,64 @@ export default class AppModel {
     }
   }
 
-  getTotalPrice(totalPrice: HTMLElement, priceProduct: string | null, input?: HTMLInputElement): void {
+  changeStyleCard(btnCart: HTMLButtonElement, imageParent: HTMLElement, parentBtn: HTMLElement): void {
+    this.view.changeStyleCard(btnCart, imageParent, parentBtn);
+  }
+
+  getTotalPrice(btnCart: HTMLButtonElement, totalPrice: HTMLElement, priceProduct: string | null, input?: HTMLInputElement): void {
     const price: number = Number(priceProduct);
     const currentTotalPrice: number = Number(totalPrice.innerHTML);
     const countProduct: number = Number(input?.value);
     let newTotalPrice: string = '';
 
-    if (input) {
+    if (input && btnCart.classList.contains('active-btn')) {
       newTotalPrice = String(currentTotalPrice + countProduct * price);
-    } else {
+    } else if (!input && btnCart.classList.contains('active-btn')) {
       newTotalPrice = String(currentTotalPrice + price);
+    }
+
+    if (input && !btnCart.classList.contains('active-btn')) {
+      newTotalPrice = String(currentTotalPrice - countProduct * price);
+    } else if (!input && !btnCart.classList.contains('active-btn')) {
+      newTotalPrice = String(currentTotalPrice - price);
     }
 
     this.view.showNewTotalPrice(totalPrice, newTotalPrice);
   }
 
-  addToCart(imageProduct: HTMLElement, imageParent: HTMLElement, input?: HTMLInputElement): void {
+  addToCart(btnCart: HTMLButtonElement, imageProduct: HTMLElement, imageParent: HTMLElement, input?: HTMLInputElement): void {
     const countProduct: number = Number(input?.value);
+    btnCart.disabled = true;
 
     if (input) {
       setTimeout(() => {
-        this.view.addToCart(countProduct);
+        this.view.addToCart(btnCart, countProduct);
+        btnCart.disabled = false;
       }, 900);
     } else {
       setTimeout(() => {
-        this.view.addToCart(1);
+        this.view.addToCart(btnCart, 1);
+        btnCart.disabled = false;
       }, 900);
     }
-    
-    showAnimateImage(imageProduct, imageParent);
+
+    if (!btnCart.classList.contains('active-btn')) {
+      showAnimateImage(imageProduct, imageParent, false);
+    } else {
+      showAnimateImage(imageProduct, imageParent, true);
+    }
+  }
+
+  saveIdProduct(idProduct: string): void {
+    if (!localStorage['idProductToCart']) {
+      const idStorage: IdStorage = {};
+      idStorage[idProduct] = true;
+      localStorage.setItem('idProductToCart', JSON.stringify(idStorage));
+    } else {
+      const idProductToCart: IdStorage = JSON.parse(localStorage['idProductToCart']);
+      idProductToCart[idProduct] = true;
+      localStorage.setItem('idProductToCart', JSON.stringify(idProductToCart));
+    }
   }
 
   changeSortByType(btnSortType: HTMLElement):void {
