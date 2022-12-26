@@ -190,20 +190,67 @@ export function changeSortingByType(): void {
   catalogList.append(list);
 }
 
-export function checkSaveId(): void {
-  const idProductToCart: IdStorage = JSON.parse(localStorage['idProductToCart']);
-  const listItemContainer = document.querySelectorAll('.list-item-container') as NodeListOf<HTMLElement>;
-  const btnCartSortList = document.querySelectorAll('.btn-cart-sort-list') as NodeListOf<HTMLElement>;
-
-  products.forEach((product: IOptionsProducts, index: number) => {
-    const idProduct: string = String(product.id);
+export function loadSelectedFromLocalStorage(itemContainer: NodeListOf<HTMLElement>, btnCart: NodeListOf<HTMLElement>): void {
+  if (localStorage['idProductToCart']) {
+    const idProductToCart: IdStorage = JSON.parse(localStorage['idProductToCart']);
     
-    for (let key in idProductToCart) {
-      if (key === idProduct) {
-        listItemContainer[index].classList.add('active-card');
-        btnCartSortList[index].innerHTML = 'DROP FROM CART';
-        btnCartSortList[index].classList.add('active-btn');
+    products.forEach((product: IOptionsProducts, index: number) => {
+      const idProduct: string = String(product.id);
+      
+      for (let key in idProductToCart) {
+        if (key === idProduct) {
+          itemContainer[index].classList.add('active-card');
+          btnCart[index].innerHTML = 'DROP FROM CART';
+          btnCart[index].classList.add('active-btn');
+        }
+      }
+    });
+  }
+}
+
+export function saveSelectedToLocalStorage(idProduct: string): void {
+  const productAmount: string = getProductAmount(idProduct);
+
+  if (!localStorage['idProductToCart']) {
+    const idStorage: IdStorage = {};
+    idStorage[idProduct] = productAmount;
+    localStorage.setItem('idProductToCart', JSON.stringify(idStorage));
+  } else {
+    const idProductToCart: IdStorage = JSON.parse(localStorage['idProductToCart']);
+    idProductToCart[idProduct] = productAmount;
+    localStorage.setItem('idProductToCart', JSON.stringify(idProductToCart));
+  }
+}
+
+export function removeSelectedToLocalStorage(idProduct: string): void {
+  const idProductToCart: IdStorage = JSON.parse(localStorage['idProductToCart']);
+  
+  delete idProductToCart[idProduct];
+  localStorage.setItem('idProductToCart', JSON.stringify(idProductToCart));
+}
+
+export function clearLocalStorage(): void {
+  localStorage.removeItem('idProductToCart');
+}
+
+function getProductAmount(idProduct: string): string {
+  let productAmount: string = '';
+  const params = new URLSearchParams(window.location.search);
+
+  if (params.get('type') === SortByType.bar) {
+    const cardsMain = document.querySelectorAll('.card-main') as NodeListOf<HTMLElement>;
+   
+    for (let i = 0; i < cardsMain.length; i++) {
+      if (cardsMain[i].dataset.id === idProduct) {
+        const input = cardsMain[i].querySelector('.product-amount') as HTMLInputElement;
+        productAmount = input.value;
       }
     }
-  });
+  }
+
+  if (params.get('type') === SortByType.list) {
+    productAmount = '1';
+  }
+
+  return productAmount;
 }

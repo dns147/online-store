@@ -1,7 +1,7 @@
 import './styles/catalog-page.css';
 import products from "../../../assets/json/products.json";
 import { IOptionsProducts, SortByType } from '../../../utils/types';
-import { changeSortingByType, checkSearchParams, checkTypeOfSort, getType, makeCardProduct } from '../../../utils/utils';
+import { changeSortingByType, checkSearchParams, checkTypeOfSort, clearLocalStorage, getType, makeCardProduct } from '../../../utils/utils';
 
 export default class CatalogPage {
   container: HTMLElement;
@@ -48,6 +48,7 @@ export default class CatalogPage {
   }
 
   init(): void {
+    //clearLocalStorage();
     checkSearchParams(['id']);
     makeCardProduct();
 
@@ -61,6 +62,5 @@ export default class CatalogPage {
     if (this.sortByType === SortByType.bar) {
       makeCardProduct();
     }
-    // console.log(this.sortByType);
   }
 }

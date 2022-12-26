@@ -68,10 +68,9 @@ export default class AppController {
         const imageProduct = parentMain.querySelector('.image-product') as HTMLElement;
         const imageParent = parentMain.querySelector('.card-product') as HTMLElement;
 
-        that.model.changeStyleCard(btnCart, imageParent, parentBtn);
+        that.model.changeStyleCard(btnCart, imageParent, parentBtn, String(idProduct));
         that.model.getTotalPrice(btnCart, totalPrice, priceProduct, inputAmountProduct);
         that.model.addToCart(btnCart, imageProduct, imageParent, inputAmountProduct);
-        that.model.saveIdProduct(String(idProduct));
       }
 
       if (btnSortType) {
@@ -86,10 +85,9 @@ export default class AppController {
         const totalPrice = document.querySelector('.total-price') as HTMLElement;
         const imageProduct = listItemContainer.querySelector('.image-sorting-by-list') as HTMLElement;
         
-        that.model.changeStyleCard(btnCartSortList, listItemContainer, parentBtn);
+        that.model.changeStyleCard(btnCartSortList, listItemContainer, parentBtn, String(idProduct));
         that.model.getTotalPrice(btnCartSortList, totalPrice, priceProduct);
         that.model.addToCart(btnCartSortList, imageProduct, listItemContainer);
-        that.model.saveIdProduct(String(idProduct));
       }
     }
   }

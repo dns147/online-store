@@ -40,8 +40,8 @@ export default class AppModel {
     }
   }
 
-  changeStyleCard(btnCart: HTMLButtonElement, imageParent: HTMLElement, parentBtn: HTMLElement): void {
-    this.view.changeStyleCard(btnCart, imageParent, parentBtn);
+  changeStyleCard(btnCart: HTMLButtonElement, imageParent: HTMLElement, parentBtn: HTMLElement, idProduct: string): void {
+    this.view.changeStyleCard(btnCart, imageParent, parentBtn, idProduct);
   }
 
   getTotalPrice(btnCart: HTMLButtonElement, totalPrice: HTMLElement, priceProduct: string | null, input?: HTMLInputElement): void {
@@ -85,18 +85,6 @@ export default class AppModel {
       showAnimateImage(imageProduct, imageParent, false);
     } else {
       showAnimateImage(imageProduct, imageParent, true);
-    }
-  }
-
-  saveIdProduct(idProduct: string): void {
-    if (!localStorage['idProductToCart']) {
-      const idStorage: IdStorage = {};
-      idStorage[idProduct] = true;
-      localStorage.setItem('idProductToCart', JSON.stringify(idStorage));
-    } else {
-      const idProductToCart: IdStorage = JSON.parse(localStorage['idProductToCart']);
-      idProductToCart[idProduct] = true;
-      localStorage.setItem('idProductToCart', JSON.stringify(idProductToCart));
     }
   }
 

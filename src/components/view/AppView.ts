@@ -1,5 +1,5 @@
 import { Routes, SortByType, TypeOfClasses } from "../../utils/types";
-import { changeSortingByType, checkSaveId, makeCardProduct, showAnimateImage } from "../../utils/utils";
+import { changeSortingByType, loadSelectedFromLocalStorage, makeCardProduct, removeSelectedToLocalStorage, saveSelectedToLocalStorage, showAnimateImage } from "../../utils/utils";
 import CatalogPage from "./pages/CatalogPage";
 
 export default class AppView {
@@ -28,10 +28,11 @@ export default class AppView {
     page.init();
   }
 
-  changeStyleCard(btnCart: HTMLButtonElement, imageParent: HTMLElement, parentBtn: HTMLElement): void {
+  changeStyleCard(btnCart: HTMLButtonElement, imageParent: HTMLElement, parentBtn: HTMLElement, idProduct: string): void {
     const plus = parentBtn.querySelector('.plus') as HTMLButtonElement;
 
     if (btnCart.classList.contains('active-btn')) {
+      
       btnCart.innerHTML = 'ADD TO CART';
       btnCart.classList.remove('active-btn');
       imageParent.classList.remove('active-card');
@@ -43,7 +44,10 @@ export default class AppView {
       if (plus) {
         plus.disabled = false;
       }
+
+      removeSelectedToLocalStorage(idProduct);
     } else {
+      
       btnCart.innerHTML = 'DROP FROM CART';
       btnCart.classList.add('active-btn');
       imageParent.classList.add('active-card');
@@ -51,6 +55,8 @@ export default class AppView {
       if (plus) {
         plus.disabled = true;
       }
+
+      saveSelectedToLocalStorage(idProduct);
     }
   }
 
@@ -83,7 +89,10 @@ export default class AppView {
       window.history.replaceState({}, '', `${window.location.pathname}?${params}${hashPageName}`);
 
       changeSortingByType();
-      checkSaveId();
+
+      const listItemContainer = document.querySelectorAll('.list-item-container') as NodeListOf<HTMLElement>;
+      const btnCartSortList = document.querySelectorAll('.btn-cart-sort-list') as NodeListOf<HTMLElement>;
+      loadSelectedFromLocalStorage(listItemContainer, btnCartSortList);
     }
 
     if (!btnSortType.classList.contains('sort-type-active') && typeOfSort === SortByType.bar) {
@@ -96,6 +105,10 @@ export default class AppView {
       window.history.replaceState({}, '', `${window.location.pathname}?${params}${hashPageName}`);
 
       makeCardProduct();
+
+      const itemContainer = document.querySelectorAll('.card-product') as NodeListOf<HTMLElement>;
+      const btnCart = document.querySelectorAll('.btn-cart') as NodeListOf<HTMLElement>;
+      loadSelectedFromLocalStorage(itemContainer, btnCart);
     }
   }
 
