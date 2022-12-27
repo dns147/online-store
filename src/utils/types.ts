@@ -1,5 +1,4 @@
 import { Header } from "../components/components";
-import CatalogPage from "../components/view/pages/CatalogPage";
 
 export type Routes = { [key: string]: typeof TypeOfClasses };
 export type Components = { [key: string]: typeof Header };

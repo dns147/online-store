@@ -1,7 +1,7 @@
 import './styles/catalog-page.css';
 import products from "../../../assets/json/products.json";
 import { IOptionsProducts, SortByType } from '../../../utils/types';
-import { changeSortingByType, checkSearchParams, checkTypeOfSort, clearLocalStorage, getType, makeCardProduct } from '../../../utils/utils';
+import { changeSortingByType, checkSearchParams, checkTypeOfSort, clearLocalStorage, getType, loadSelectedFromLocalStorage, makeCardProduct } from '../../../utils/utils';
 
 export default class CatalogPage {
   container: HTMLElement;
@@ -50,17 +50,32 @@ export default class CatalogPage {
   init(): void {
     //clearLocalStorage();
     checkSearchParams(['id']);
-    makeCardProduct();
 
     this.sortByType = getType();
     checkTypeOfSort(this.sortByType);
     
     if (this.sortByType === SortByType.list) {
       changeSortingByType();
+
+      const listItemContainer = document.querySelectorAll('.list-item-container') as NodeListOf<HTMLElement>;
+      const btnCartSortList = document.querySelectorAll('.btn-cart-sort-list') as NodeListOf<HTMLElement>;
+      loadSelectedFromLocalStorage(listItemContainer, btnCartSortList);
     }
 
-    if (this.sortByType === SortByType.bar) {
+    if (!this.sortByType || this.sortByType === SortByType.bar) {
       makeCardProduct();
+
+      const itemContainer = document.querySelectorAll('.card-product') as NodeListOf<HTMLElement>;
+      const btnCart = document.querySelectorAll('.btn-cart') as NodeListOf<HTMLElement>;
+      loadSelectedFromLocalStorage(itemContainer, btnCart);
+    }
+
+    if (localStorage['totalPrice']) {
+      (document.querySelector('.total-price') as HTMLElement).innerHTML = localStorage['totalPrice'];
+    }
+
+    if (localStorage['countBuy']) {
+      (document.querySelector('.count-buy') as HTMLElement).innerHTML = localStorage['countBuy'];
     }
   }
 }

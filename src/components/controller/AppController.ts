@@ -44,16 +44,16 @@ export default class AppController {
       }
 
       if (plus) {
-        const parent = plus.parentElement as HTMLElement;
-        const inputAmountProduct = parent.querySelector('.product-amount') as HTMLInputElement;
-        const btnCart = document.querySelector('.btn-cart') as HTMLElement;
-
+        const parentPlus = plus.parentElement as HTMLElement;
+        const inputAmountProduct = parentPlus.querySelector('.product-amount') as HTMLInputElement;
+        const parentInput = parentPlus.parentElement as HTMLElement;
+        const btnCart = parentInput.querySelector('.btn-cart') as HTMLElement;
         that.model.plusAmountProduct(btnCart, inputAmountProduct);
       }
 
       if (minus) {
-        const parent = minus.parentElement as HTMLElement;
-        const inputAmountProduct = parent.querySelector('.product-amount') as HTMLInputElement;
+        const parentMinus = minus.parentElement as HTMLElement;
+        const inputAmountProduct = parentMinus.querySelector('.product-amount') as HTMLInputElement;
         that.model.minusAmountProduct(inputAmountProduct);
       }
 

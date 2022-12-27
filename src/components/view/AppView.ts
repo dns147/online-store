@@ -1,4 +1,4 @@
-import { Routes, SortByType, TypeOfClasses } from "../../utils/types";
+import { IdStorage, Routes, SortByType, TypeOfClasses } from "../../utils/types";
 import { changeSortingByType, loadSelectedFromLocalStorage, makeCardProduct, removeSelectedToLocalStorage, saveSelectedToLocalStorage, showAnimateImage } from "../../utils/utils";
 import CatalogPage from "./pages/CatalogPage";
 
@@ -30,9 +30,9 @@ export default class AppView {
 
   changeStyleCard(btnCart: HTMLButtonElement, imageParent: HTMLElement, parentBtn: HTMLElement, idProduct: string): void {
     const plus = parentBtn.querySelector('.plus') as HTMLButtonElement;
+    const minus = parentBtn.querySelector('.minus') as HTMLButtonElement;
 
     if (btnCart.classList.contains('active-btn')) {
-      
       btnCart.innerHTML = 'ADD TO CART';
       btnCart.classList.remove('active-btn');
       imageParent.classList.remove('active-card');
@@ -43,17 +43,18 @@ export default class AppView {
       
       if (plus) {
         plus.disabled = false;
+        minus.disabled = false;
       }
 
       removeSelectedToLocalStorage(idProduct);
     } else {
-      
       btnCart.innerHTML = 'DROP FROM CART';
       btnCart.classList.add('active-btn');
       imageParent.classList.add('active-card');
 
       if (plus) {
         plus.disabled = true;
+        minus.disabled = true;
       }
 
       saveSelectedToLocalStorage(idProduct);
@@ -62,6 +63,7 @@ export default class AppView {
 
   showNewTotalPrice(totalPrice: HTMLElement, newTotalPrice: string) {
     totalPrice.innerHTML = newTotalPrice;
+    localStorage.setItem('totalPrice', newTotalPrice);
   }
 
   addToCart(btnCart: HTMLButtonElement, countProduct: number): void {
@@ -76,6 +78,7 @@ export default class AppView {
     }
     
     countBuy.innerHTML = newCountBuy;
+    localStorage.setItem('countBuy', newCountBuy);
   }
 
   changeSortByType(btnSortType: HTMLElement, typeOfSort: string | undefined): void {

@@ -31,7 +31,7 @@ export function makeCardProduct(): void {
     cartContainer.innerHTML = `
       <div class="input-amount">
         <button class="minus"></button>
-        <input type="text" name="product-amount" value="1" class="product-amount">
+        <input type="text" name="product-amount" value="1" class="product-amount" readonly>
         <button class="plus"></button>
       </div>
       <button class="btn-cart">ADD TO CART</button>
@@ -191,6 +191,8 @@ export function changeSortingByType(): void {
 }
 
 export function loadSelectedFromLocalStorage(itemContainer: NodeListOf<HTMLElement>, btnCart: NodeListOf<HTMLElement>): void {
+  const sortByType: string | null = getType();
+
   if (localStorage['idProductToCart']) {
     const idProductToCart: IdStorage = JSON.parse(localStorage['idProductToCart']);
     
@@ -198,12 +200,29 @@ export function loadSelectedFromLocalStorage(itemContainer: NodeListOf<HTMLEleme
       const idProduct: string = String(product.id);
       
       for (let key in idProductToCart) {
-        if (key === idProduct) {
+        if (key === idProduct && sortByType === SortByType.list) {
+          itemContainer[index].classList.add('active-card');
+          btnCart[index].innerHTML = `DROP FROM CART (${idProductToCart[key]})`;
+          btnCart[index].classList.add('active-btn');
+          btnCart[index].setAttribute('data-count', idProductToCart[key]);
+        }
+
+        if (key === idProduct && sortByType === SortByType.bar) {
           itemContainer[index].classList.add('active-card');
           btnCart[index].innerHTML = 'DROP FROM CART';
           btnCart[index].classList.add('active-btn');
+          btnCart[index].setAttribute('data-count', idProductToCart[key]);
+
+          const parentBtn = btnCart[index].parentElement as HTMLElement;
+          const input = parentBtn.querySelector('.product-amount') as HTMLInputElement;
+          input.value = idProductToCart[key];
+
+          const minus = parentBtn.querySelector('.minus') as HTMLButtonElement;
+          const plus = parentBtn.querySelector('.plus') as HTMLButtonElement;
+          minus.disabled = true;
+          plus.disabled = true;
         }
-      }
+      }      
     });
   }
 }

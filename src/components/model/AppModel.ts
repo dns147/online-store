@@ -48,6 +48,7 @@ export default class AppModel {
     const price: number = Number(priceProduct);
     const currentTotalPrice: number = Number(totalPrice.innerHTML);
     const countProduct: number = Number(input?.value);
+    const savedCountProduct: number = Number(btnCart.dataset.count);
     let newTotalPrice: string = '';
 
     if (input && btnCart.classList.contains('active-btn')) {
@@ -59,7 +60,7 @@ export default class AppModel {
     if (input && !btnCart.classList.contains('active-btn')) {
       newTotalPrice = String(currentTotalPrice - countProduct * price);
     } else if (!input && !btnCart.classList.contains('active-btn')) {
-      newTotalPrice = String(currentTotalPrice - price);
+      newTotalPrice = String(currentTotalPrice - savedCountProduct * price);
     }
 
     this.view.showNewTotalPrice(totalPrice, newTotalPrice);
@@ -68,6 +69,7 @@ export default class AppModel {
   addToCart(btnCart: HTMLButtonElement, imageProduct: HTMLElement, imageParent: HTMLElement, input?: HTMLInputElement): void {
     const countProduct: number = Number(input?.value);
     btnCart.disabled = true;
+    const savedCountProduct = Number(btnCart.dataset?.count) ? Number(btnCart.dataset?.count) : 1;
 
     if (input) {
       setTimeout(() => {
@@ -76,7 +78,7 @@ export default class AppModel {
       }, 900);
     } else {
       setTimeout(() => {
-        this.view.addToCart(btnCart, 1);
+        this.view.addToCart(btnCart, savedCountProduct);
         btnCart.disabled = false;
       }, 900);
     }
