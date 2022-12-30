@@ -1,6 +1,6 @@
-import { IdStorage, Routes, SortByType, TypeOfClasses } from "../../utils/types";
-import { changeSortingByType, loadSelectedFromLocalStorage, makeCardProduct, removeSelectedToLocalStorage, saveSelectedToLocalStorage, showAnimateImage } from "../../utils/utils";
-import CatalogPage from "./pages/CatalogPage";
+import products from "../../assets/json/products.json";
+import { IOptionsProducts, Routes, SortByType, TypeOfClasses } from "../../utils/types";
+import { addQueryParam, changeSortingByType, getQueryParam, loadSelectedFromLocalStorage, makeCardProduct, removeSelectedToLocalStorage, saveSelectedToLocalStorage, sortProducts } from "../../utils/utils-catalog-page";
 
 export default class AppView {
   container: HTMLElement;
@@ -91,7 +91,7 @@ export default class AppView {
       params.set('type', SortByType.list);
       window.history.replaceState({}, '', `${window.location.pathname}?${params}${hashPageName}`);
 
-      changeSortingByType();
+      changeSortingByType(products);
 
       const listItemContainer = document.querySelectorAll('.list-item-container') as NodeListOf<HTMLElement>;
       const btnCartSortList = document.querySelectorAll('.btn-cart-sort-list') as NodeListOf<HTMLElement>;
@@ -107,7 +107,7 @@ export default class AppView {
       params.set('type', SortByType.bar);
       window.history.replaceState({}, '', `${window.location.pathname}?${params}${hashPageName}`);
 
-      makeCardProduct();
+      makeCardProduct(products);
 
       const itemContainer = document.querySelectorAll('.card-product') as NodeListOf<HTMLElement>;
       const btnCart = document.querySelectorAll('.btn-cart') as NodeListOf<HTMLElement>;
@@ -121,5 +121,84 @@ export default class AppView {
 
   removeStyleBtn(listItemContainer: HTMLElement): void {
     listItemContainer.classList.remove('list-item-container-active');
+  }
+
+  clickSelect(valueSelect: string): void {
+    const sort = getQueryParam('type');
+
+    switch (valueSelect) {
+      case '1':
+        addQueryParam('sort', SortByType.priceUp);
+        const sortCatalog1: IOptionsProducts[] = sortProducts(SortByType.priceUp);
+
+        if (sort === SortByType.list) {
+          changeSortingByType(sortCatalog1);
+        }
+
+        if (sort === SortByType.bar) {
+          makeCardProduct(sortCatalog1);
+        }
+
+        break;
+
+      case '2':
+        addQueryParam('sort', SortByType.priceDown);
+        const sortCatalog2: IOptionsProducts[] = sortProducts(SortByType.priceDown);
+
+        if (sort === SortByType.list) {
+          changeSortingByType(sortCatalog2);
+        }
+
+        if (sort === SortByType.bar) {
+          makeCardProduct(sortCatalog2);
+        }
+
+        break;
+
+      case '3':
+        addQueryParam('sort', SortByType.stockUp);
+        const sortCatalog3: IOptionsProducts[] = sortProducts(SortByType.stockUp);
+
+        if (sort === SortByType.list) {
+          changeSortingByType(sortCatalog3);
+        }
+
+        if (sort === SortByType.bar) {
+          makeCardProduct(sortCatalog3);
+        }
+        
+        break;
+      
+      case '4':
+        addQueryParam('sort', SortByType.stockDown);
+        const sortCatalog4: IOptionsProducts[] = sortProducts(SortByType.stockDown);
+
+        if (sort === SortByType.list) {
+          changeSortingByType(sortCatalog4);
+        }
+
+        if (sort === SortByType.bar) {
+          makeCardProduct(sortCatalog4);
+        }
+        
+        break;
+      
+      case '5':
+        addQueryParam('sort', SortByType.default);
+        const sortCatalog5: IOptionsProducts[] = sortProducts(SortByType.default);
+
+        if (sort === SortByType.list) {
+          changeSortingByType(sortCatalog5);
+        }
+
+        if (sort === SortByType.bar) {
+          makeCardProduct(sortCatalog5);
+        }
+        
+        break;
+  
+      default:
+        break;
+    }
   }
 }

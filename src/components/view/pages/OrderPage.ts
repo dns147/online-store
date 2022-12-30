@@ -1,4 +1,4 @@
-import { checkSearchParams } from "../../../utils/utils";
+import { checkSearchParams } from "../../../utils/utils-catalog-page";
 
 export default class OrderPage {
   container: HTMLElement;

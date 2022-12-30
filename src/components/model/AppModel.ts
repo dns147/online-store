@@ -1,6 +1,6 @@
 import AppView from "../view/AppView";
 import products from "../../assets/json/products.json";
-import { showAnimateImage } from "../../utils/utils";
+import { showAnimateImage } from "../../utils/utils-catalog-page";
 import { IdStorage } from "../../utils/types";
 
 export default class AppModel {
@@ -102,5 +102,10 @@ export default class AppModel {
 
   removeStyleBtn(listItemContainer: HTMLElement): void {
     this.view.removeStyleBtn(listItemContainer);
+  }
+
+  clickSelect(select: HTMLInputElement): void {
+    const valueSelect: string = select.value;
+    this.view.clickSelect(valueSelect);
   }
 }

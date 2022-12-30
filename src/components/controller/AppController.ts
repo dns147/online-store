@@ -1,4 +1,4 @@
-import { getPrice } from "../../utils/utils";
+import { getPrice } from "../../utils/utils-catalog-page";
 import AppModel from "../model/AppModel";
 
 export default class AppController {
@@ -13,11 +13,13 @@ export default class AppController {
     this.getEventsClick = this.getEventsClick.bind(this);
     this.getEventsMouseOver = this.getEventsMouseOver.bind(this);
     this.getEventsMouseOut = this.getEventsMouseOut.bind(this);
+    this.getEventsChange = this.getEventsChange.bind(this);
 
     window.addEventListener('hashchange', this.updateState);
     document.addEventListener('click', this.getEventsClick);
     document.addEventListener('mouseover', this.getEventsMouseOver);
     document.addEventListener('mouseout', this.getEventsMouseOut);
+    document.addEventListener('change', this.getEventsChange);
 
     this.updateState();
   }
@@ -116,6 +118,19 @@ export default class AppController {
         const parentBtn = btnCartSortList.parentElement as HTMLElement;
         const listItemContainer = parentBtn.querySelector('.list-item-container') as HTMLElement;
         that.model.removeStyleBtn(listItemContainer);
+      }
+    }
+  }
+
+  getEventsChange(event: Event): void {
+    const that = this;
+
+    if (event.target instanceof Element) {
+      const select = event.target.closest('.search-select') as HTMLInputElement;
+
+      if (select) {
+        event.preventDefault();
+        that.model.clickSelect(select);
       }
     }
   }

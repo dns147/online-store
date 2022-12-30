@@ -33,4 +33,9 @@ export interface IOptionsProducts {
 export enum SortByType {
   list = 'list',
   bar = 'bar',
+  priceUp = 'price-up',
+  priceDown = 'price-down',
+  stockUp = 'stock-up',
+  stockDown = 'stock-down',
+  default = 'default'
 }

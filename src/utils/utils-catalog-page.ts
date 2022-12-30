@@ -1,15 +1,17 @@
 import products from "../assets/json/products.json";
 import { IdStorage, IOptionsProducts, SortByType } from "./types";
 
-export function makeCardProduct(): void {
+export function makeCardProduct(arrayProducts: IOptionsProducts[]): void {
   const contentsContainer = document.querySelector('.catalog-list') as HTMLElement;
 
   if (contentsContainer.classList.contains('catalog-sorting-by-list')) {
     contentsContainer.classList.remove('catalog-sorting-by-list');
-    contentsContainer.innerHTML = '';
+    //contentsContainer.innerHTML = '';
   }
 
-  products.forEach((product: IOptionsProducts) => {
+  contentsContainer.innerHTML = '';
+
+  arrayProducts.forEach((product: IOptionsProducts) => {
     const cardMain: HTMLDivElement = document.createElement('div');
     const cardProduct: HTMLDivElement = document.createElement('div');
     const cardName: HTMLHeadingElement = document.createElement('h3');
@@ -84,11 +86,11 @@ export function getId(): string | null {
   return id;
 };
 
-export function getType(): string | null {
+export function getQueryParam(type: string): string | null {
   const params = new URLSearchParams(window.location.search);
-  const type: string | null = params.get('type');
+  const typeParam: string | null = params.get(type);
   
-  return type;
+  return typeParam;
 };
 
 export function getPrice(id: number | undefined): string | null {
@@ -165,7 +167,7 @@ export function checkTypeOfSort(sortByType: string | null): void {
   }
 }
 
-export function changeSortingByType(): void {
+export function changeSortingByType(arrayProducts: IOptionsProducts[]): void {
   const catalogList = document.querySelector('.catalog-list') as HTMLElement;
   catalogList.classList.add('catalog-sorting-by-list');
   catalogList.innerHTML = '';
@@ -173,13 +175,13 @@ export function changeSortingByType(): void {
   const list: HTMLUListElement = document.createElement('ul');
   list.classList.add('sort-type-list');
 
-  products.forEach((product: IOptionsProducts) => {
+  arrayProducts.forEach((product: IOptionsProducts) => {
     const listItem: HTMLLIElement = document.createElement('li');
     listItem.classList.add('sort-type-list-item');
     listItem.innerHTML = `
       <div class="list-item-container" data-id=${product.id}>
         <img src="${product.images[0]}" alt="image" class="image-sorting-by-list">
-        <span class="list-item-text">${product.title}. <b>Price</b>: ${product.price}</span>
+        <span class="list-item-text">${product.title}. <b>Stock</b>: ${product.stock}. <b>Price</b>: ${product.price}</span>
       </div>
       <button class="btn-cart-sort-list">ADD TO CART</button>
     `;
@@ -191,7 +193,7 @@ export function changeSortingByType(): void {
 }
 
 export function loadSelectedFromLocalStorage(itemContainer: NodeListOf<HTMLElement>, btnCart: NodeListOf<HTMLElement>): void {
-  const sortByType: string | null = getType();
+  const sortByType: string | null = getQueryParam('type');
 
   if (localStorage['idProductToCart']) {
     const idProductToCart: IdStorage = JSON.parse(localStorage['idProductToCart']);
@@ -250,6 +252,55 @@ export function removeSelectedToLocalStorage(idProduct: string): void {
 
 export function clearLocalStorage(): void {
   localStorage.removeItem('idProductToCart');
+}
+
+export function addQueryParam(typeSort: string, param: string): void {
+  const hashPageName: string = window.location.hash;
+  const params = new URLSearchParams(window.location.search);
+  params.set(typeSort, param);
+  window.history.replaceState({}, '', `${window.location.pathname}?${params}${hashPageName}`);
+}
+
+export function sortProducts(typeSort: string): IOptionsProducts[] {
+  let resultSort: IOptionsProducts[] = [];
+
+  switch (typeSort) {
+    case SortByType.priceUp:
+      resultSort = products.sort((a, b) => {
+        return a.price - b.price;
+      });
+      break;
+    
+    case SortByType.priceDown:
+      resultSort = products.sort((a, b) => {
+        return b.price - a.price;
+      });
+      break;
+    
+    case SortByType.stockUp:
+      resultSort = products.sort((a, b) => {
+        return a.stock - b.stock;
+      });
+      break;
+
+    case SortByType.stockDown:
+      resultSort = products.sort((a, b) => {
+        return b.stock - a.stock;
+      });
+      break;
+
+    case SortByType.default:
+      resultSort = products.sort((a, b) => {
+        return a.id - b.id;
+      });
+      break;
+
+    default:
+      break;
+  }
+
+
+  return resultSort;
 }
 
 function getProductAmount(idProduct: string): string {
