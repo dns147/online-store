@@ -40,6 +40,7 @@ export default class AppController {
       const btnSortType = event.target.closest('.sort-type') as HTMLElement;
       const listItem = event.target.closest('.list-item-container') as HTMLElement;
       const btnCartSortList = event.target.closest('.btn-cart-sort-list') as HTMLButtonElement;
+      const logoName = event.target.closest('.logo-name') as HTMLElement;
       
       if (product || listItem) {
         that.model.showProductDescription(product || listItem);
@@ -90,6 +91,10 @@ export default class AppController {
         that.model.changeStyleCard(btnCartSortList, listItemContainer, parentBtn, String(idProduct));
         that.model.getTotalPrice(btnCartSortList, totalPrice, priceProduct);
         that.model.addToCart(btnCartSortList, imageProduct, listItemContainer);
+      }
+
+      if (logoName) {
+        that.model.setDefaultParams();
       }
     }
   }

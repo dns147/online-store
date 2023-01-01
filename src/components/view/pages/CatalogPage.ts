@@ -1,16 +1,16 @@
 import './styles/catalog-page.css';
 import products from "../../../assets/json/products.json";
-import { IOptionsProducts, SortByType } from '../../../utils/types';
-import { changeSortingByType, checkSearchParams, checkTypeOfSort, clearLocalStorage, getQueryParam, loadSelectedFromLocalStorage, makeCardProduct, sortProducts } from '../../../utils/utils-catalog-page';
+import { SortByType } from '../../../utils/types';
+import { deleteSearchParams, checkTypeOfSort, getQueryParam, showSortProductListView, showSortProductBarView } from '../../../utils/utils-catalog-page';
 
 export default class CatalogPage {
   container: HTMLElement;
-  sortByType: string | null;
+  typeOfView: string | null;
   sort: string | null;
 
   constructor(container: HTMLElement) {
     this.container = container;
-    this.sortByType = null;
+    this.typeOfView = null;
     this.sort = null;
   }
 
@@ -51,130 +51,67 @@ export default class CatalogPage {
 
   init(): void {
     //clearLocalStorage();
-    checkSearchParams(['id']);
+    deleteSearchParams(['id']);
 
-    this.sortByType = getQueryParam('type');
+    this.typeOfView = getQueryParam('type');
     this.sort = getQueryParam('sort');
-    checkTypeOfSort(this.sortByType);
+    checkTypeOfSort(this.typeOfView);
     
-    if (this.sortByType === SortByType.list && this.sort === SortByType.priceUp) {
-      const optionPriceUp = document.querySelector('.option1') as HTMLOptionElement;
-      optionPriceUp.selected = true;
-
-      const sortCatalog: IOptionsProducts[] = sortProducts(SortByType.priceUp);
-      changeSortingByType(sortCatalog);
-
-      const listItemContainer = document.querySelectorAll('.list-item-container') as NodeListOf<HTMLElement>;
-      const btnCartSortList = document.querySelectorAll('.btn-cart-sort-list') as NodeListOf<HTMLElement>;
-      loadSelectedFromLocalStorage(listItemContainer, btnCartSortList);
+    if (this.typeOfView === SortByType.list && this.sort === SortByType.priceUp) {
+      showSortProductListView('.option1', SortByType.priceUp);
     }
 
-    if (this.sortByType === SortByType.list && this.sort === SortByType.priceDown) {
-      const optionPriceDown = document.querySelector('.option2') as HTMLOptionElement;
-      optionPriceDown.selected = true;
-
-      const sortCatalog: IOptionsProducts[] = sortProducts(SortByType.priceDown);
-      changeSortingByType(sortCatalog);
-
-      const listItemContainer = document.querySelectorAll('.list-item-container') as NodeListOf<HTMLElement>;
-      const btnCartSortList = document.querySelectorAll('.btn-cart-sort-list') as NodeListOf<HTMLElement>;
-      loadSelectedFromLocalStorage(listItemContainer, btnCartSortList);
+    if (this.typeOfView === SortByType.list && this.sort === SortByType.priceDown) {
+      showSortProductListView('.option2', SortByType.priceDown);
     }
 
-    if (this.sortByType === SortByType.list && this.sort === SortByType.stockUp) {
-      const optionStockUp = document.querySelector('.option3') as HTMLOptionElement;
-      optionStockUp.selected = true;
-
-      const sortCatalog: IOptionsProducts[] = sortProducts(SortByType.stockUp);
-      changeSortingByType(sortCatalog);
-
-      const listItemContainer = document.querySelectorAll('.list-item-container') as NodeListOf<HTMLElement>;
-      const btnCartSortList = document.querySelectorAll('.btn-cart-sort-list') as NodeListOf<HTMLElement>;
-      loadSelectedFromLocalStorage(listItemContainer, btnCartSortList);
+    if (this.typeOfView === SortByType.list && this.sort === SortByType.stockUp) {
+      showSortProductListView('.option3', SortByType.stockUp);
     }
 
-    if (this.sortByType === SortByType.list && this.sort === SortByType.stockDown) {
-      const optionStockDown = document.querySelector('.option4') as HTMLOptionElement;
-      optionStockDown.selected = true;
-
-      const sortCatalog: IOptionsProducts[] = sortProducts(SortByType.stockDown);
-      changeSortingByType(sortCatalog);
-
-      const listItemContainer = document.querySelectorAll('.list-item-container') as NodeListOf<HTMLElement>;
-      const btnCartSortList = document.querySelectorAll('.btn-cart-sort-list') as NodeListOf<HTMLElement>;
-      loadSelectedFromLocalStorage(listItemContainer, btnCartSortList);
+    if (this.typeOfView === SortByType.list && this.sort === SortByType.stockDown) {
+      showSortProductListView('.option4', SortByType.stockDown);
     }
 
-    if (this.sortByType === SortByType.list && this.sort === SortByType.default) {
-      const optionDefault = document.querySelector('.option5') as HTMLOptionElement;
-      optionDefault.selected = true;
-
-      const sortCatalog: IOptionsProducts[] = sortProducts(SortByType.default);
-      changeSortingByType(sortCatalog);
-
-      const listItemContainer = document.querySelectorAll('.list-item-container') as NodeListOf<HTMLElement>;
-      const btnCartSortList = document.querySelectorAll('.btn-cart-sort-list') as NodeListOf<HTMLElement>;
-      loadSelectedFromLocalStorage(listItemContainer, btnCartSortList);
+    if (this.typeOfView === SortByType.list && this.sort === SortByType.default) {
+      showSortProductListView('.option5', SortByType.default);
     }
 
-    if (!this.sortByType || (this.sortByType === SortByType.bar && this.sort === SortByType.priceUp)) {
-      const optionPriceUp = document.querySelector('.option1') as HTMLOptionElement;
-      optionPriceUp.selected = true;
-
-      const sortCatalog: IOptionsProducts[] = sortProducts(SortByType.priceUp);
-      makeCardProduct(sortCatalog);
-
-      const itemContainer = document.querySelectorAll('.card-product') as NodeListOf<HTMLElement>;
-      const btnCart = document.querySelectorAll('.btn-cart') as NodeListOf<HTMLElement>;
-      loadSelectedFromLocalStorage(itemContainer, btnCart);
+    if ((!this.typeOfView && this.sort === SortByType.priceUp) ||
+        (this.typeOfView === SortByType.bar && this.sort === SortByType.priceUp)) {
+      showSortProductBarView('.option1', SortByType.priceUp);
     }
 
-    if (!this.sortByType || (this.sortByType === SortByType.bar && this.sort === SortByType.priceDown)) {
-      const optionPriceDown = document.querySelector('.option2') as HTMLOptionElement;
-      optionPriceDown.selected = true;
-
-      const sortCatalog: IOptionsProducts[] = sortProducts(SortByType.priceDown);
-      makeCardProduct(sortCatalog);
-
-      const itemContainer = document.querySelectorAll('.card-product') as NodeListOf<HTMLElement>;
-      const btnCart = document.querySelectorAll('.btn-cart') as NodeListOf<HTMLElement>;
-      loadSelectedFromLocalStorage(itemContainer, btnCart);
+    if ((!this.typeOfView && this.sort === SortByType.priceDown) ||
+        (this.typeOfView === SortByType.bar && this.sort === SortByType.priceDown)) {
+      showSortProductBarView('.option2', SortByType.priceDown);
     }
 
-    if (!this.sortByType || (this.sortByType === SortByType.bar && this.sort === SortByType.stockUp)) {
-      const optionStockUp = document.querySelector('.option3') as HTMLOptionElement;
-      optionStockUp.selected = true;
-
-      const sortCatalog: IOptionsProducts[] = sortProducts(SortByType.stockUp);
-      makeCardProduct(sortCatalog);
-
-      const itemContainer = document.querySelectorAll('.card-product') as NodeListOf<HTMLElement>;
-      const btnCart = document.querySelectorAll('.btn-cart') as NodeListOf<HTMLElement>;
-      loadSelectedFromLocalStorage(itemContainer, btnCart);
+    if ((!this.typeOfView && this.sort === SortByType.stockUp) || 
+        (this.typeOfView === SortByType.bar && this.sort === SortByType.stockUp)) {
+      showSortProductBarView('.option3', SortByType.stockUp);
     }
 
-    if (!this.sortByType || (this.sortByType === SortByType.bar && this.sort === SortByType.stockDown)) {
-      const optionStockDown = document.querySelector('.option4') as HTMLOptionElement;
-      optionStockDown.selected = true;
-
-      const sortCatalog: IOptionsProducts[] = sortProducts(SortByType.stockDown);
-      makeCardProduct(sortCatalog);
-
-      const itemContainer = document.querySelectorAll('.card-product') as NodeListOf<HTMLElement>;
-      const btnCart = document.querySelectorAll('.btn-cart') as NodeListOf<HTMLElement>;
-      loadSelectedFromLocalStorage(itemContainer, btnCart);
+    if ((!this.typeOfView && this.sort === SortByType.stockDown) || 
+        (this.typeOfView === SortByType.bar && this.sort === SortByType.stockDown)) {
+      showSortProductBarView('.option4', SortByType.stockDown);
     }
 
-    if (!this.sortByType || (this.sortByType === SortByType.bar && this.sort === SortByType.default)) {
-      const optionDefault = document.querySelector('.option5') as HTMLOptionElement;
-      optionDefault.selected = true;
+    if ((!this.typeOfView && this.sort === SortByType.default) || 
+        (this.typeOfView === SortByType.bar && this.sort === SortByType.default)) {
+      showSortProductBarView('.option5', SortByType.default);
+    }
 
-      const sortCatalog: IOptionsProducts[] = sortProducts(SortByType.default);
-      makeCardProduct(sortCatalog);
+    if (!this.typeOfView && !this.sort) {
+      showSortProductBarView('.option5', SortByType.default);
+    }
 
-      const itemContainer = document.querySelectorAll('.card-product') as NodeListOf<HTMLElement>;
-      const btnCart = document.querySelectorAll('.btn-cart') as NodeListOf<HTMLElement>;
-      loadSelectedFromLocalStorage(itemContainer, btnCart);
+    if ((this.typeOfView === SortByType.bar) && !this.sort) {
+      showSortProductBarView('.option5', SortByType.default);
+    }
+
+    if ((this.typeOfView === SortByType.list) && !this.sort) {
+      showSortProductListView('.option5', SortByType.default);
     }
 
     if (localStorage['totalPrice']) {

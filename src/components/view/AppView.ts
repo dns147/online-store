@@ -1,6 +1,6 @@
 import products from "../../assets/json/products.json";
 import { IOptionsProducts, Routes, SortByType, TypeOfClasses } from "../../utils/types";
-import { addQueryParam, changeSortingByType, getQueryParam, loadSelectedFromLocalStorage, makeCardProduct, removeSelectedToLocalStorage, saveSelectedToLocalStorage, sortProducts } from "../../utils/utils-catalog-page";
+import { addQueryParam, changeSortingByType, deleteSearchParams, getQueryParam, loadSelectedFromLocalStorage, makeCardProduct, removeSelectedToLocalStorage, saveSelectedToLocalStorage, showSortProductBarView, sortProducts } from "../../utils/utils-catalog-page";
 
 export default class AppView {
   container: HTMLElement;
@@ -135,7 +135,7 @@ export default class AppView {
           changeSortingByType(sortCatalog1);
         }
 
-        if (sort === SortByType.bar) {
+        if (!sort || (sort === SortByType.bar)) {
           makeCardProduct(sortCatalog1);
         }
 
@@ -149,7 +149,7 @@ export default class AppView {
           changeSortingByType(sortCatalog2);
         }
 
-        if (sort === SortByType.bar) {
+        if (!sort || (sort === SortByType.bar)) {
           makeCardProduct(sortCatalog2);
         }
 
@@ -163,7 +163,7 @@ export default class AppView {
           changeSortingByType(sortCatalog3);
         }
 
-        if (sort === SortByType.bar) {
+        if (!sort || (sort === SortByType.bar)) {
           makeCardProduct(sortCatalog3);
         }
         
@@ -177,7 +177,7 @@ export default class AppView {
           changeSortingByType(sortCatalog4);
         }
 
-        if (sort === SortByType.bar) {
+        if (!sort || (sort === SortByType.bar)) {
           makeCardProduct(sortCatalog4);
         }
         
@@ -191,7 +191,7 @@ export default class AppView {
           changeSortingByType(sortCatalog5);
         }
 
-        if (sort === SortByType.bar) {
+        if (!sort || (sort === SortByType.bar)) {
           makeCardProduct(sortCatalog5);
         }
         
@@ -200,5 +200,10 @@ export default class AppView {
       default:
         break;
     }
+  }
+
+  setDefaultParams(): void {
+    // deleteSearchParams(['id', 'type', 'sort']);
+    // showSortProductBarView('.option5', SortByType.default);
   }
 }

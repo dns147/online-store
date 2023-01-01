@@ -67,7 +67,7 @@ export function makeCardProduct(arrayProducts: IOptionsProducts[]): void {
   });
 }
 
-export function checkSearchParams(searchParams: string[]): void {
+export function deleteSearchParams(searchParams: string[]): void {
   const hashPageName: string = window.location.hash;
   const params = new URLSearchParams(window.location.search);
 
@@ -109,7 +109,7 @@ export function showAnimateImage(imageProduct: HTMLElement, imageParent: HTMLEle
   const cloneImage = imageProduct.cloneNode(true) as HTMLElement;
   const params = new URLSearchParams(window.location.search);
 
-  if (params.get('type') === SortByType.bar) {
+  if (!params.get('type') || (params.get('type') === SortByType.bar)) {
     cloneImage.classList.add('clone-image');
   }
 
@@ -303,6 +303,30 @@ export function sortProducts(typeSort: string): IOptionsProducts[] {
   return resultSort;
 }
 
+export function showSortProductBarView(classForSearch: string, typeOfSort: string): void {
+  const option = document.querySelector(classForSearch) as HTMLOptionElement;
+  option.selected = true;
+
+  const sortCatalog: IOptionsProducts[] = sortProducts(typeOfSort);
+  makeCardProduct(sortCatalog);
+
+  const itemContainer = document.querySelectorAll('.card-product') as NodeListOf<HTMLElement>;
+  const btnCart = document.querySelectorAll('.btn-cart') as NodeListOf<HTMLElement>;
+  loadSelectedFromLocalStorage(itemContainer, btnCart);
+}
+
+export function showSortProductListView(classForSearch: string, typeOfSort: string): void {
+  const option = document.querySelector(classForSearch) as HTMLOptionElement;
+  option.selected = true;
+
+  const sortCatalog: IOptionsProducts[] = sortProducts(typeOfSort);
+  changeSortingByType(sortCatalog);
+
+  const listItemContainer = document.querySelectorAll('.list-item-container') as NodeListOf<HTMLElement>;
+  const btnCartSortList = document.querySelectorAll('.btn-cart-sort-list') as NodeListOf<HTMLElement>;
+  loadSelectedFromLocalStorage(listItemContainer, btnCartSortList);
+}
+
 function getProductAmount(idProduct: string): string {
   let productAmount: string = '';
   const params = new URLSearchParams(window.location.search);
@@ -318,7 +342,7 @@ function getProductAmount(idProduct: string): string {
     }
   }
 
-  if (params.get('type') === SortByType.list) {
+  if (!params.get('type') || (params.get('type') === SortByType.list)) {
     productAmount = '1';
   }
 

@@ -108,4 +108,8 @@ export default class AppModel {
     const valueSelect: string = select.value;
     this.view.clickSelect(valueSelect);
   }
+
+  setDefaultParams(): void {
+    this.view.setDefaultParams();
+  }
 }
