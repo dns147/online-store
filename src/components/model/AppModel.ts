@@ -122,4 +122,11 @@ export default class AppModel {
   setDefaultParams(): void {
     this.view.setDefaultParams();
   }
+
+  clickSearch(): void {
+    const searchInput = document.getElementById('search') as HTMLInputElement;
+    const valueInput: string = searchInput.value;
+    
+    this.view.clickSearch(valueInput);
+  }
 }

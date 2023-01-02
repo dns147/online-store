@@ -1,6 +1,6 @@
 import products from "../../assets/json/products.json";
 import { IOptionsProducts, Routes, SortByType, TypeOfClasses } from "../../utils/types";
-import { addQueryParam, changeSortingByType, deleteSearchParams, getQueryParam, loadSelectedFromLocalStorage, makeCardProduct, removeSelectedToLocalStorage, saveSelectedToLocalStorage, showSortProductBarView, sortProducts } from "../../utils/utils-catalog-page";
+import { addQueryParam, changeSortingByType, clickSearchProducts, deleteSearchParams, getQueryParam, loadSelectedFromLocalStorage, makeCardProduct, removeSelectedToLocalStorage, saveSelectedToLocalStorage, searchProducts, showSortProductBarView, sortProducts } from "../../utils/utils-catalog-page";
 
 export default class AppView {
   container: HTMLElement;
@@ -82,6 +82,8 @@ export default class AppView {
   }
 
   changeSortByType(btnSortType: HTMLElement, typeOfSort: string | undefined): void {
+    const search = getQueryParam('search');
+
     if (!btnSortType.classList.contains('sort-type-active') && typeOfSort === SortByType.list) {
       btnSortType.classList.add('sort-type-active');
       (document.querySelector('[data-type="bar"]') as HTMLElement).classList.remove('sort-type-active');
@@ -91,7 +93,11 @@ export default class AppView {
       params.set('type', SortByType.list);
       window.history.replaceState({}, '', `${window.location.pathname}?${params}${hashPageName}`);
 
-      changeSortingByType(products);
+      if (search) {
+        clickSearchProducts(search);
+      } else {
+        changeSortingByType(products);
+      }
 
       const listItemContainer = document.querySelectorAll('.list-item-container') as NodeListOf<HTMLElement>;
       const btnCartSortList = document.querySelectorAll('.btn-cart-sort-list') as NodeListOf<HTMLElement>;
@@ -107,7 +113,11 @@ export default class AppView {
       params.set('type', SortByType.bar);
       window.history.replaceState({}, '', `${window.location.pathname}?${params}${hashPageName}`);
 
-      makeCardProduct(products);
+      if (search) {
+        clickSearchProducts(search);
+      } else {
+        makeCardProduct(products);
+      }
 
       const itemContainer = document.querySelectorAll('.card-product') as NodeListOf<HTMLElement>;
       const btnCart = document.querySelectorAll('.btn-cart') as NodeListOf<HTMLElement>;
@@ -124,18 +134,18 @@ export default class AppView {
   }
 
   clickSelect(valueSelect: string): void {
-    const sort = getQueryParam('type');
+    const view = getQueryParam('type');
 
     switch (valueSelect) {
       case '1':
         addQueryParam('sort', SortByType.priceUp);
         const sortCatalog1: IOptionsProducts[] = sortProducts(SortByType.priceUp);
 
-        if (sort === SortByType.list) {
+        if (view === SortByType.list) {
           changeSortingByType(sortCatalog1);
         }
 
-        if (!sort || (sort === SortByType.bar)) {
+        if (!view || (view === SortByType.bar)) {
           makeCardProduct(sortCatalog1);
         }
 
@@ -145,11 +155,11 @@ export default class AppView {
         addQueryParam('sort', SortByType.priceDown);
         const sortCatalog2: IOptionsProducts[] = sortProducts(SortByType.priceDown);
 
-        if (sort === SortByType.list) {
+        if (view === SortByType.list) {
           changeSortingByType(sortCatalog2);
         }
 
-        if (!sort || (sort === SortByType.bar)) {
+        if (!view || (view === SortByType.bar)) {
           makeCardProduct(sortCatalog2);
         }
 
@@ -159,11 +169,11 @@ export default class AppView {
         addQueryParam('sort', SortByType.stockUp);
         const sortCatalog3: IOptionsProducts[] = sortProducts(SortByType.stockUp);
 
-        if (sort === SortByType.list) {
+        if (view === SortByType.list) {
           changeSortingByType(sortCatalog3);
         }
 
-        if (!sort || (sort === SortByType.bar)) {
+        if (!view || (view === SortByType.bar)) {
           makeCardProduct(sortCatalog3);
         }
         
@@ -173,11 +183,11 @@ export default class AppView {
         addQueryParam('sort', SortByType.stockDown);
         const sortCatalog4: IOptionsProducts[] = sortProducts(SortByType.stockDown);
 
-        if (sort === SortByType.list) {
+        if (view === SortByType.list) {
           changeSortingByType(sortCatalog4);
         }
 
-        if (!sort || (sort === SortByType.bar)) {
+        if (!view || (view === SortByType.bar)) {
           makeCardProduct(sortCatalog4);
         }
         
@@ -187,11 +197,11 @@ export default class AppView {
         addQueryParam('sort', SortByType.default);
         const sortCatalog5: IOptionsProducts[] = sortProducts(SortByType.default);
 
-        if (sort === SortByType.list) {
+        if (view === SortByType.list) {
           changeSortingByType(sortCatalog5);
         }
 
-        if (!sort || (sort === SortByType.bar)) {
+        if (!view || (view === SortByType.bar)) {
           makeCardProduct(sortCatalog5);
         }
         
@@ -199,6 +209,24 @@ export default class AppView {
   
       default:
         break;
+    }
+  }
+
+  clickSearch(valueInput: string): void {
+    addQueryParam('search', valueInput);
+
+    const view = getQueryParam('type');
+    const searchCatalog: IOptionsProducts[] = searchProducts(valueInput);
+    const foundCount = document.querySelector('.found-count') as HTMLElement;
+
+    foundCount.innerHTML = String(searchCatalog.length);
+
+    if (view === SortByType.list) {
+      changeSortingByType(searchCatalog);
+    }
+
+    if (!view || (view === SortByType.bar)) {
+      makeCardProduct(searchCatalog);
     }
   }
 

@@ -331,6 +331,47 @@ export function showSortProductListView(classForSearch: string, typeOfSort: stri
   loadSelectedFromLocalStorage(listItemContainer, btnCartSortList);
 }
 
+export function searchProducts(valueInput: string): IOptionsProducts[] {
+  const valueInputLowerCase: string =  valueInput.toLowerCase();
+  let resultSearch: IOptionsProducts[] = [];
+
+  products.forEach((item: IOptionsProducts) => {
+    const title: string =  item.title.toLowerCase();
+    const description: string =  item.description.toLowerCase();
+    const price: string =  String(item.price);
+    const stock: string =  String(item.stock);
+    const brand: string =  item.brand.toLowerCase();
+    const category: string =  item.category.toLowerCase();
+
+    if (title.includes(valueInputLowerCase) ||
+        description.includes(valueInputLowerCase) ||
+        price.includes(valueInputLowerCase) ||
+        stock.includes(valueInputLowerCase) ||
+        brand.includes(valueInputLowerCase) ||
+        category.includes(valueInputLowerCase)) {
+      resultSearch.push(item);
+    }
+  });
+
+  return resultSearch;
+}
+
+export function clickSearchProducts(valueInput: string): void {
+  const view = getQueryParam('type');
+  const searchCatalog: IOptionsProducts[] = searchProducts(valueInput);
+  const foundCount = document.querySelector('.found-count') as HTMLElement;
+
+  foundCount.innerHTML = String(searchCatalog.length);
+
+  if (view === SortByType.list) {
+    changeSortingByType(searchCatalog);
+  }
+
+  if (!view || (view === SortByType.bar)) {
+    makeCardProduct(searchCatalog);
+  }
+}
+
 function getProductAmount(idProduct: string): string {
   let productAmount: string = '';
   const params = new URLSearchParams(window.location.search);

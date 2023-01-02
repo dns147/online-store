@@ -15,6 +15,7 @@ export default class AppController {
     this.getEventsMouseOver = this.getEventsMouseOver.bind(this);
     this.getEventsMouseOut = this.getEventsMouseOut.bind(this);
     this.getEventsChange = this.getEventsChange.bind(this);
+    this.getEventsInput = this.getEventsInput.bind(this);
 
     window.addEventListener('popstate', this.updateStateUrl);
     window.addEventListener('hashchange', this.updateState);
@@ -22,6 +23,7 @@ export default class AppController {
     document.addEventListener('mouseover', this.getEventsMouseOver);
     document.addEventListener('mouseout', this.getEventsMouseOut);
     document.addEventListener('change', this.getEventsChange);
+    document.addEventListener('input', this.getEventsInput);
 
     this.updateState();
     this.updateStateUrl();
@@ -151,6 +153,19 @@ export default class AppController {
       if (select) {
         event.preventDefault();
         that.model.clickSelect(select);
+      }
+    }
+  }
+
+  getEventsInput(event: Event): void {
+    const that = this;
+
+    if (event.target instanceof Element) {
+      const search = event.target.closest('.search-input') as HTMLInputElement;
+
+      if (search) {
+        event.preventDefault();
+        that.model.clickSearch();
       }
     }
   }

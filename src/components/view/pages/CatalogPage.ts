@@ -1,17 +1,19 @@
 import './styles/catalog-page.css';
 import products from "../../../assets/json/products.json";
 import { SortByType } from '../../../utils/types';
-import { deleteSearchParams, checkTypeOfSort, getQueryParam, showSortProductListView, showSortProductBarView } from '../../../utils/utils-catalog-page';
+import { deleteSearchParams, checkTypeOfSort, getQueryParam, showSortProductListView, showSortProductBarView, clickSearchProducts } from '../../../utils/utils-catalog-page';
 
 export default class CatalogPage {
   container: HTMLElement;
   typeOfView: string | null;
   sort: string | null;
+  search: string | null;
 
   constructor(container: HTMLElement) {
     this.container = container;
     this.typeOfView = null;
     this.sort = null;
+    this.search = null;
   }
 
   render(): string {
@@ -51,12 +53,15 @@ export default class CatalogPage {
 
   init(): void {
     //clearLocalStorage();
+    const searchInput = document.getElementById('search') as HTMLInputElement;
     deleteSearchParams(['id']);
 
     this.typeOfView = getQueryParam('type');
     this.sort = getQueryParam('sort');
+    this.search = getQueryParam('search');
+
     checkTypeOfSort(this.typeOfView);
-    
+   
     if (this.typeOfView === SortByType.list && this.sort === SortByType.priceUp) {
       showSortProductListView('.option1', SortByType.priceUp);
     }
@@ -120,6 +125,11 @@ export default class CatalogPage {
 
     if (localStorage['countBuy']) {
       (document.querySelector('.count-buy') as HTMLElement).innerHTML = localStorage['countBuy'];
+    }
+
+    if (this.search) {
+      searchInput.value = this.search;
+      clickSearchProducts(this.search);
     }
   }
 }

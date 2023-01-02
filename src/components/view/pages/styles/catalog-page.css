@@ -362,3 +362,8 @@
 .active-btn {
   background: #fbe9e7;
 }
+
+.found-count {
+  display: inline-block;
+  width: 30px;
+}
