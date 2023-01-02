@@ -20,18 +20,6 @@ const baseConfig = {
                 test: /\.js$/, 
                 loader: "source-map-loader" 
             },
-            {
-                test: [/\.svg$/, /\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/, /\.ico$/],
-                use: [
-                    {
-                        loader: 'file-loader',
-                        options: {
-                            publicPath: './',
-                            name: `./assets/[name].[ext]`,
-                        },
-                    },
-                ],
-            },
         ],
     },
     resolve: {
@@ -40,6 +28,7 @@ const baseConfig = {
     output: {
         filename: 'index.js',
         path: path.resolve(__dirname, 'dist'),
+        publicPath: '/',
     },
     plugins: [
         new HtmlWebpackPlugin({

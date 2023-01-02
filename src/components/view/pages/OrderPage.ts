@@ -1,4 +1,4 @@
-import { checkSearchParams } from "../../../utils/utils";
+import { deleteSearchParams } from "../../../utils/utils-catalog-page";
 
 export default class OrderPage {
   container: HTMLElement;
@@ -14,6 +14,6 @@ export default class OrderPage {
   }
 
   init(): void {
-    checkSearchParams(['id', 'type']);
+    deleteSearchParams(['id', 'type', 'sort']);
   }
 }

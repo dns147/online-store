@@ -1,9 +1,9 @@
 import { Header } from "../components/components";
-import CatalogPage from "../components/view/pages/CatalogPage";
 
 export type Routes = { [key: string]: typeof TypeOfClasses };
 export type Components = { [key: string]: typeof Header };
 export type InitSpa = { [key: string]: typeof Header };
+export type IdStorage = { [key: string]: string };
 
 export class TypeOfClasses {
   constructor(elem: HTMLElement) {}
@@ -33,4 +33,9 @@ export interface IOptionsProducts {
 export enum SortByType {
   list = 'list',
   bar = 'bar',
+  priceUp = 'price-up',
+  priceDown = 'price-down',
+  stockUp = 'stock-up',
+  stockDown = 'stock-down',
+  default = 'default'
 }

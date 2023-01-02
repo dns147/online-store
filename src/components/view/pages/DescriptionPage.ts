@@ -1,4 +1,4 @@
-import { getId } from "../../../utils/utils";
+import { getId } from "../../../utils/utils-catalog-page";
 
 export default class DescriptionPage {
   container: HTMLElement;

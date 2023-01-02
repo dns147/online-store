@@ -1,15 +1,19 @@
 import './styles/catalog-page.css';
 import products from "../../../assets/json/products.json";
-import { IOptionsProducts, SortByType } from '../../../utils/types';
-import { changeSortingByType, checkSearchParams, checkTypeOfSort, getType, makeCardProduct } from '../../../utils/utils';
+import { SortByType } from '../../../utils/types';
+import { deleteSearchParams, checkTypeOfSort, getQueryParam, showSortProductListView, showSortProductBarView, clickSearchProducts } from '../../../utils/utils-catalog-page';
 
 export default class CatalogPage {
   container: HTMLElement;
-  sortByType: string | null;
+  typeOfView: string | null;
+  sort: string | null;
+  search: string | null;
 
   constructor(container: HTMLElement) {
     this.container = container;
-    this.sortByType = null;
+    this.typeOfView = null;
+    this.sort = null;
+    this.search = null;
   }
 
   render(): string {
@@ -48,19 +52,84 @@ export default class CatalogPage {
   }
 
   init(): void {
-    checkSearchParams(['id']);
-    makeCardProduct();
+    //clearLocalStorage();
+    const searchInput = document.getElementById('search') as HTMLInputElement;
+    deleteSearchParams(['id']);
 
-    this.sortByType = getType();
-    checkTypeOfSort(this.sortByType);
-    
-    if (this.sortByType === SortByType.list) {
-      changeSortingByType();
+    this.typeOfView = getQueryParam('type');
+    this.sort = getQueryParam('sort');
+    this.search = getQueryParam('search');
+
+    checkTypeOfSort(this.typeOfView);
+   
+    if (this.typeOfView === SortByType.list && this.sort === SortByType.priceUp) {
+      showSortProductListView('.option1', SortByType.priceUp);
     }
 
-    if (this.sortByType === SortByType.bar) {
-      makeCardProduct();
+    if (this.typeOfView === SortByType.list && this.sort === SortByType.priceDown) {
+      showSortProductListView('.option2', SortByType.priceDown);
     }
-    // console.log(this.sortByType);
+
+    if (this.typeOfView === SortByType.list && this.sort === SortByType.stockUp) {
+      showSortProductListView('.option3', SortByType.stockUp);
+    }
+
+    if (this.typeOfView === SortByType.list && this.sort === SortByType.stockDown) {
+      showSortProductListView('.option4', SortByType.stockDown);
+    }
+
+    if (this.typeOfView === SortByType.list && this.sort === SortByType.default) {
+      showSortProductListView('.option5', SortByType.default);
+    }
+
+    if ((!this.typeOfView && this.sort === SortByType.priceUp) ||
+        (this.typeOfView === SortByType.bar && this.sort === SortByType.priceUp)) {
+      showSortProductBarView('.option1', SortByType.priceUp);
+    }
+
+    if ((!this.typeOfView && this.sort === SortByType.priceDown) ||
+        (this.typeOfView === SortByType.bar && this.sort === SortByType.priceDown)) {
+      showSortProductBarView('.option2', SortByType.priceDown);
+    }
+
+    if ((!this.typeOfView && this.sort === SortByType.stockUp) || 
+        (this.typeOfView === SortByType.bar && this.sort === SortByType.stockUp)) {
+      showSortProductBarView('.option3', SortByType.stockUp);
+    }
+
+    if ((!this.typeOfView && this.sort === SortByType.stockDown) || 
+        (this.typeOfView === SortByType.bar && this.sort === SortByType.stockDown)) {
+      showSortProductBarView('.option4', SortByType.stockDown);
+    }
+
+    if ((!this.typeOfView && this.sort === SortByType.default) || 
+        (this.typeOfView === SortByType.bar && this.sort === SortByType.default)) {
+      showSortProductBarView('.option5', SortByType.default);
+    }
+
+    if (!this.typeOfView && !this.sort) {
+      showSortProductBarView('.option5', SortByType.default);
+    }
+
+    if ((this.typeOfView === SortByType.bar) && !this.sort) {
+      showSortProductBarView('.option5', SortByType.default);
+    }
+
+    if ((this.typeOfView === SortByType.list) && !this.sort) {
+      showSortProductListView('.option5', SortByType.default);
+    }
+
+    if (localStorage['totalPrice']) {
+      (document.querySelector('.total-price') as HTMLElement).innerHTML = localStorage['totalPrice'];
+    }
+
+    if (localStorage['countBuy']) {
+      (document.querySelector('.count-buy') as HTMLElement).innerHTML = localStorage['countBuy'];
+    }
+
+    if (this.search) {
+      searchInput.value = this.search;
+      clickSearchProducts(this.search);
+    }
   }
 }
