@@ -1,6 +1,6 @@
 import AppView from "../view/AppView";
 import products from "../../assets/json/products.json";
-import { showAnimateImage } from "../../utils/utils-catalog-page";
+import { addQueryParam, showAnimateImage } from "../../utils/utils-catalog-page";
 import { IdStorage } from "../../utils/types";
 
 export default class AppModel {
@@ -25,12 +25,11 @@ export default class AppModel {
 
   showDescription(element: HTMLElement): void {
     const id: string | undefined = element.dataset.id;
-    //const params = new URLSearchParams(window.location.search);
 
+    // if (id) {
+    //   addQueryParam('id', id);
+    // }
     window.history.replaceState({}, '', `/description/${id}`);
-
-    //params.set('id', `${id}`);
-    //window.history.replaceState({}, '', `${window.location.pathname}?${params}`);
     window.location.hash = 'description';
   }
 

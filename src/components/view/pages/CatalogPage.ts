@@ -1,7 +1,7 @@
 import './styles/catalog-page.css';
 import products from "../../../assets/json/products.json";
 import { SortByType } from '../../../utils/types';
-import { deleteSearchParams, checkTypeOfSort, getQueryParam, showSortProductListView, showSortProductBarView, clickSearchProducts } from '../../../utils/utils-catalog-page';
+import { deleteSearchParams, checkTypeOfSort, getQueryParam, showSortProductListView, showSortProductBarView, clickSearchProducts, addFilterCategory, makePriceSlider, makeStockSlider } from '../../../utils/utils-catalog-page';
 
 export default class CatalogPage {
   container: HTMLElement;
@@ -20,6 +20,26 @@ export default class CatalogPage {
     return `
       <article class="main-container">
         <aside class="filter-container">
+          <div class="btn-filters">
+            <button class="reset">Reset Filters</button>
+            <button class="copy">Copy Link</button>
+          </div>
+          <div class="category-container">
+            <h3 class="category-name">Category</h3>
+            <div class="category-filters"></div>
+          </div>
+          <div class="brand-container">
+            <h3 class="category-name">Brand</h3>
+            <div class="brand-filters"></div>
+          </div>
+          <div class="price-container">
+            <h3 class="category-name">Price</h3>
+            <div class="price-slider"></div>
+          </div>
+          <div class="stock-container">
+            <h3 class="category-name">Stock</h3>
+            <div class="stock-slider"></div>
+          </div>
         </aside>
         <section class="catalog-container">
           <div class="catalog-header">
@@ -54,6 +74,15 @@ export default class CatalogPage {
   init(): void {
     //clearLocalStorage();
     const searchInput = document.getElementById('search') as HTMLInputElement;
+    const categoryFilters = document.querySelector('.category-filters') as HTMLElement;
+    const brandFilters = document.querySelector('.brand-filters') as HTMLElement;
+    const priceSlider = document.querySelector('.price-slider') as HTMLElement;
+    const stockSlider = document.querySelector('.stock-slider') as HTMLElement;
+
+    addFilterCategory(categoryFilters, 'category');
+    addFilterCategory(brandFilters, 'brand');
+    makePriceSlider(priceSlider);
+    makeStockSlider(stockSlider);
     deleteSearchParams(['id']);
 
     this.typeOfView = getQueryParam('type');

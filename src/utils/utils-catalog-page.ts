@@ -1,5 +1,44 @@
+import noUiSlider from 'nouislider';
+import 'nouislider/dist/nouislider.css';
+import wNumb from 'wnumb';
 import products from "../assets/json/products.json";
-import { IdStorage, IOptionsProducts, SortByType } from "./types";
+import { DataCategories, IdStorage, IOptionsProducts, SortByType } from "./types";
+
+export function addFilterCategory(container: HTMLElement, nameItem: string): void {
+  //const categoryFilters = document.querySelector('.category-filters') as HTMLElement;
+  const dataCategories: DataCategories = getDataCategories(nameItem);
+  let index: number = 1;
+
+  for (let key in dataCategories) {
+    const categoryItem: HTMLDivElement = document.createElement('div');
+    const categoryItemDiv: HTMLDivElement = document.createElement('div');
+    const input: HTMLInputElement = document.createElement('input');
+    const label: HTMLLabelElement = document.createElement('label');
+    const name = document.createElement('span');
+    const numberCategory = document.createElement('span');
+
+    categoryItem.classList.add(`${nameItem}-item`);
+    input.type = 'checkbox';
+    input.name = nameItem;
+    input.id = `${nameItem}${index}`;
+    input.classList.add(`${nameItem}${index}`, `${nameItem}-input`);
+    name.innerHTML = key;
+    name.classList.add(`${nameItem}-name`);
+    label.setAttribute('for', `${nameItem}${index}`);
+    numberCategory.innerHTML = `(<span class="${nameItem}${index}-find-count">${dataCategories[key]}</span>/<span class="${nameItem}${index}-full-count">${dataCategories[key]}</span>)`;
+    index += 1;
+
+    categoryItemDiv.append(input);
+    categoryItemDiv.append(name);
+    categoryItemDiv.append(label);
+    categoryItem.append(categoryItemDiv);
+    categoryItem.append(numberCategory);
+
+    container.append(categoryItem);
+  }
+
+  console.log(dataCategories);
+}
 
 export function makeCardProduct(arrayProducts: IOptionsProducts[]): void {
   const contentsContainer = document.querySelector('.catalog-list') as HTMLElement;
@@ -370,6 +409,69 @@ export function clickSearchProducts(valueInput: string): void {
   if (!view || (view === SortByType.bar)) {
     makeCardProduct(searchCatalog);
   }
+}
+
+export function makePriceSlider(priceSlider: HTMLElement): void {
+  noUiSlider.create(priceSlider, {
+    start: [5, 65],
+    connect: true,
+    tooltips: [true, true],
+    step: 1,
+    range: {
+        'min': 5,
+        'max': 65
+    },
+    format: wNumb({
+        decimals: 0
+    }),
+  });
+}
+
+export function makeStockSlider(stockSlider: HTMLElement): void {
+  noUiSlider.create(stockSlider, {
+    start: [1, 44],
+    connect: true,
+    tooltips: [true, true],
+    step: 1,
+    range: {
+        'min': 1,
+        'max': 44
+    },
+    format: wNumb({
+        decimals: 0
+    }),
+  });
+}
+
+function getDataCategories(name: string): DataCategories {
+  const dataCatogories: DataCategories = {};
+  const fullCategories: string[] = [];
+
+  products.forEach((item: IOptionsProducts) => {
+    if (name === 'category') {
+      fullCategories.push(item.category);
+    }
+
+    if (name === 'brand') {
+      fullCategories.push(item.brand);
+    }
+  });
+
+  const categories: Set<string> = new Set(fullCategories);
+
+  categories.forEach((categoryName: string) => {
+    let sumCategory = 0;
+
+    fullCategories.forEach((itemCategory: string) => {
+      if (categoryName === itemCategory) {
+        sumCategory += 1;
+      }
+    });
+
+    dataCatogories[categoryName] = sumCategory;
+  });
+
+  return dataCatogories;
 }
 
 function getProductAmount(idProduct: string): string {
