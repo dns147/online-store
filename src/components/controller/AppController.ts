@@ -9,12 +9,14 @@ export default class AppController {
     this.model = model;
     this.container = container;
 
+    this.updateStateUrl = this.updateStateUrl.bind(this);
     this.updateState = this.updateState.bind(this);
     this.getEventsClick = this.getEventsClick.bind(this);
     this.getEventsMouseOver = this.getEventsMouseOver.bind(this);
     this.getEventsMouseOut = this.getEventsMouseOut.bind(this);
     this.getEventsChange = this.getEventsChange.bind(this);
 
+    window.addEventListener('popstate', this.updateStateUrl);
     window.addEventListener('hashchange', this.updateState);
     document.addEventListener('click', this.getEventsClick);
     document.addEventListener('mouseover', this.getEventsMouseOver);
@@ -22,6 +24,12 @@ export default class AppController {
     document.addEventListener('change', this.getEventsChange);
 
     this.updateState();
+    this.updateStateUrl();
+  }
+
+  updateStateUrl(): void {
+    const that = this;
+    that.model.updateStateUrl();
   }
 
   updateState(): void {
@@ -41,9 +49,11 @@ export default class AppController {
       const listItem = event.target.closest('.list-item-container') as HTMLElement;
       const btnCartSortList = event.target.closest('.btn-cart-sort-list') as HTMLButtonElement;
       const logoName = event.target.closest('.logo-name') as HTMLElement;
+      const order = event.target.closest('.order') as HTMLElement;
       
       if (product || listItem) {
-        that.model.showProductDescription(product || listItem);
+        //window.history.replaceState({}, '', `/description`);
+        that.model.showDescription(product || listItem);
       }
 
       if (plus) {
@@ -94,7 +104,12 @@ export default class AppController {
       }
 
       if (logoName) {
-        that.model.setDefaultParams();
+        //that.model.setDefaultParams();
+        window.history.replaceState({}, '', `/`);
+      }
+
+      if (order) {
+        window.history.replaceState({}, '', `/`);
       }
     }
   }

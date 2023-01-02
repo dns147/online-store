@@ -80,8 +80,12 @@ export function deleteSearchParams(searchParams: string[]): void {
 }
 
 export function getId(): string | null {
-  const params = new URLSearchParams(window.location.search);
-  const id: string | null = params.get('id');
+  // const params = new URLSearchParams(window.location.search);
+  // const id: string | null = params.get('id');
+
+  const fullPathName: string = window.location.pathname;
+  const fullPathNameArr: string[] = fullPathName.split('/');
+  const id: string | null = fullPathNameArr[2];
   
   return id;
 };

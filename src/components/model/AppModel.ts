@@ -10,17 +10,27 @@ export default class AppModel {
     this.view = view;
   }
 
+  updateStateUrl(): void {
+    const fullPathName: string = window.location.pathname;
+    const fullPathNameArr: string[] = fullPathName.split('/');
+    const pathName: string = fullPathNameArr[1];
+
+    this.view.renderContent(pathName);
+  }
+
   updateState(): void {
     const hashPageName: string = window.location.hash.slice(1);
     this.view.renderContent(hashPageName);
   }
 
-  showProductDescription(element: HTMLElement): void {
+  showDescription(element: HTMLElement): void {
     const id: string | undefined = element.dataset.id;
-    const params = new URLSearchParams(window.location.search);
+    //const params = new URLSearchParams(window.location.search);
 
-    params.set('id', `${id}`);
-    window.history.replaceState({}, '', `${window.location.pathname}?${params}`);
+    window.history.replaceState({}, '', `/description/${id}`);
+
+    //params.set('id', `${id}`);
+    //window.history.replaceState({}, '', `${window.location.pathname}?${params}`);
     window.location.hash = 'description';
   }
 
