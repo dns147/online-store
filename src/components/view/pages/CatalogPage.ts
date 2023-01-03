@@ -25,19 +25,19 @@ export default class CatalogPage {
             <button class="copy">Copy Link</button>
           </div>
           <div class="category-container">
-            <h3 class="category-name">Category</h3>
+            <h3 class="category-header">Category</h3>
             <div class="category-filters"></div>
           </div>
           <div class="brand-container">
-            <h3 class="category-name">Brand</h3>
+            <h3 class="category-header">Brand</h3>
             <div class="brand-filters"></div>
           </div>
           <div class="price-container">
-            <h3 class="category-name">Price</h3>
+            <h3 class="category-header">Price</h3>
             <div class="price-slider"></div>
           </div>
           <div class="stock-container">
-            <h3 class="category-name">Stock</h3>
+            <h3 class="category-header">Stock</h3>
             <div class="stock-slider"></div>
           </div>
         </aside>

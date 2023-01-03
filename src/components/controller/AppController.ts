@@ -149,10 +149,20 @@ export default class AppController {
 
     if (event.target instanceof Element) {
       const select = event.target.closest('.search-select') as HTMLInputElement;
+      const category1 = event.target.closest('.category1') as HTMLInputElement;
 
       if (select) {
         event.preventDefault();
         that.model.clickSelect(select);
+      }
+
+      if (category1) {
+        console.log('eeeee');
+        if (category1.checked) {
+          console.log('checked');
+        } else {
+          console.log('unchecked');
+        }
       }
     }
   }

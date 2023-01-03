@@ -5,7 +5,6 @@ import products from "../assets/json/products.json";
 import { DataCategories, IdStorage, IOptionsProducts, SortByType } from "./types";
 
 export function addFilterCategory(container: HTMLElement, nameItem: string): void {
-  //const categoryFilters = document.querySelector('.category-filters') as HTMLElement;
   const dataCategories: DataCategories = getDataCategories(nameItem);
   let index: number = 1;
 
@@ -24,6 +23,7 @@ export function addFilterCategory(container: HTMLElement, nameItem: string): voi
     input.classList.add(`${nameItem}${index}`, `${nameItem}-input`);
     name.innerHTML = key;
     name.classList.add(`${nameItem}-name`);
+    label.classList.add('label');
     label.setAttribute('for', `${nameItem}${index}`);
     numberCategory.innerHTML = `(<span class="${nameItem}${index}-find-count">${dataCategories[key]}</span>/<span class="${nameItem}${index}-full-count">${dataCategories[key]}</span>)`;
     index += 1;
