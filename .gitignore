@@ -102,14 +102,3 @@ dist
 
 # TernJS port file
 .tern-port
-
-# my files
-.eslintrc.json
-.prettierrc
-package-lock.json
-package.json
-README.md
-tsconfig.json
-webpack.config.js
-webpack.dev.config.js
-webpack.prod.config.js
