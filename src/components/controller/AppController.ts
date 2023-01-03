@@ -38,6 +38,38 @@ export default class AppController {
       const btnSortType = event.target.closest('.sort-type') as HTMLElement;
       const listItem = event.target.closest('.list-item-container') as HTMLElement;
       const btnCartSortList = event.target.closest('.btn-cart-sort-list') as HTMLElement;
+
+
+      // for description page
+      const productPic = event.target.closest('.product-info-pictures-main') as HTMLElement;
+      const descriptionPopup = event.target.closest('.product-picture-popup') as HTMLElement;
+      const productAdPic = event.target.closest('.product-info-pictures-item') as HTMLElement
+      if (productPic) {
+        const popup = document.querySelector('.product-picture-popup') as HTMLElement;
+        const pic = productPic.firstElementChild as HTMLElement;
+        const clone = pic.cloneNode() as HTMLElement;
+
+        popup.innerHTML = '';
+
+        clone.classList.remove('description-img');
+        clone.classList.add('product-picture-popup__img');
+        
+        popup.append(clone);
+        popup.classList.add('product-picture-popup_open');
+      }
+      if(descriptionPopup) {
+        descriptionPopup.classList.remove('product-picture-popup_open');
+      }
+      if(productAdPic) {
+        const pic = productAdPic.firstElementChild as HTMLImageElement;
+        const mainPic = document.querySelector('.product-info-pictures-main .description-img') as HTMLImageElement;
+        const srcForMain = pic.src;
+
+        pic.src = mainPic.src;
+        mainPic.src = srcForMain;
+      }
+      // for description page
+
       
       if (product || listItem) {
         that.model.showProductDescription(product || listItem);
