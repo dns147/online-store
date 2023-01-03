@@ -57,7 +57,7 @@ export default class AppModel {
     const price: number = Number(priceProduct);
     const currentTotalPrice: number = Number(totalPrice.innerHTML);
     const countProduct: number = Number(input?.value);
-    const savedCountProduct: number = Number(btnCart.dataset.count);
+    const savedCountProduct: number = Number(btnCart.dataset.count ?? 1);
     let newTotalPrice: string = '';
 
     if (input && btnCart.classList.contains('active-btn')) {
@@ -125,7 +125,11 @@ export default class AppModel {
   clickSearch(): void {
     const searchInput = document.getElementById('search') as HTMLInputElement;
     const valueInput: string = searchInput.value;
-    
     this.view.clickSearch(valueInput);
+  }
+
+  sortCategory(category1: HTMLInputElement): void {
+    const categoryName: string = category1.name;
+    this.view.sortCategory(categoryName);
   }
 }

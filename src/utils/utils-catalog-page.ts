@@ -18,7 +18,7 @@ export function addFilterCategory(container: HTMLElement, nameItem: string): voi
 
     categoryItem.classList.add(`${nameItem}-item`);
     input.type = 'checkbox';
-    input.name = nameItem;
+    input.name = key;
     input.id = `${nameItem}${index}`;
     input.classList.add(`${nameItem}${index}`, `${nameItem}-input`);
     name.innerHTML = key;
@@ -36,8 +36,6 @@ export function addFilterCategory(container: HTMLElement, nameItem: string): voi
 
     container.append(categoryItem);
   }
-
-  console.log(dataCategories);
 }
 
 export function makeCardProduct(arrayProducts: IOptionsProducts[]): void {
@@ -45,7 +43,6 @@ export function makeCardProduct(arrayProducts: IOptionsProducts[]): void {
 
   if (contentsContainer.classList.contains('catalog-sorting-by-list')) {
     contentsContainer.classList.remove('catalog-sorting-by-list');
-    //contentsContainer.innerHTML = '';
   }
 
   contentsContainer.innerHTML = '';
@@ -101,6 +98,8 @@ export function makeCardProduct(arrayProducts: IOptionsProducts[]): void {
 
     cardMain.append(cardProduct);
     cardMain.append(cartContainer);
+
+    cardAnimate(cardMain); 
 
     contentsContainer.append(cardMain);
   });
@@ -395,6 +394,12 @@ export function searchProducts(valueInput: string): IOptionsProducts[] {
   return resultSearch;
 }
 
+export function sortingCatalog(categoryName: string): IOptionsProducts[] {
+  const resultSearch: IOptionsProducts[] = products.filter((item: IOptionsProducts) => item.category === categoryName);
+  
+  return resultSearch;
+}
+
 export function clickSearchProducts(valueInput: string): void {
   const view = getQueryParam('type');
   const searchCatalog: IOptionsProducts[] = searchProducts(valueInput);
@@ -494,4 +499,17 @@ function getProductAmount(idProduct: string): string {
   }
 
   return productAmount;
+}
+
+function cardAnimate(item: HTMLDivElement): void {
+  item.animate(
+    [
+      { transform: `translate(300px, 300px) scale(0.1, 0.1)` },
+      { transform: 'none' },
+    ],
+    {
+      duration: 600,
+      easing: 'ease-out',
+    }
+  );
 }

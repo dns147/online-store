@@ -1,6 +1,6 @@
 import products from "../../assets/json/products.json";
 import { IOptionsProducts, Routes, SortByType, TypeOfClasses } from "../../utils/types";
-import { addQueryParam, changeSortingByType, clickSearchProducts, deleteSearchParams, getQueryParam, loadSelectedFromLocalStorage, makeCardProduct, removeSelectedToLocalStorage, saveSelectedToLocalStorage, searchProducts, showSortProductBarView, sortProducts } from "../../utils/utils-catalog-page";
+import { addQueryParam, changeSortingByType, clickSearchProducts, deleteSearchParams, getQueryParam, loadSelectedFromLocalStorage, makeCardProduct, removeSelectedToLocalStorage, saveSelectedToLocalStorage, searchProducts, showSortProductBarView, sortingCatalog, sortProducts } from "../../utils/utils-catalog-page";
 
 export default class AppView {
   container: HTMLElement;
@@ -228,6 +228,26 @@ export default class AppView {
     if (!view || (view === SortByType.bar)) {
       makeCardProduct(searchCatalog);
     }
+  }
+
+  sortCategory(categoryName: string): void {
+    addQueryParam('category', categoryName);
+
+    const view = getQueryParam('type');
+    const sortCatalog: IOptionsProducts[] = sortingCatalog(categoryName);
+    const foundCount = document.querySelector('.found-count') as HTMLElement;
+
+    foundCount.innerHTML = String(sortCatalog.length);
+
+    if (view === SortByType.list) {
+      changeSortingByType(sortCatalog);
+    }
+
+    if (!view || (view === SortByType.bar)) {
+      makeCardProduct(sortCatalog);
+    }
+
+    console.log(sortCatalog);
   }
 
   setDefaultParams(): void {

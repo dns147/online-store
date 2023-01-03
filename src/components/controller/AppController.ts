@@ -157,9 +157,8 @@ export default class AppController {
       }
 
       if (category1) {
-        console.log('eeeee');
         if (category1.checked) {
-          console.log('checked');
+          that.model.sortCategory(category1);
         } else {
           console.log('unchecked');
         }
