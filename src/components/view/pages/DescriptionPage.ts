@@ -1,6 +1,6 @@
 import './styles/description-page.css';
-import { getId } from "../../../utils/utils";
 import products from "../../../assets/json/products.json";
+import { getId } from "../../../utils/utils-catalog-page";
 
 export default class DescriptionPage {
   container: HTMLElement;
