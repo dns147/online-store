@@ -230,11 +230,11 @@ export default class AppView {
     }
   }
 
-  sortCategory(categoryName: string): void {
-    addQueryParam('category', categoryName);
+  sortCategory(categoryName: string, name: string): void {
+    addQueryParam(name, categoryName);
 
     const view = getQueryParam('type');
-    const sortCatalog: IOptionsProducts[] = sortingCatalog(categoryName);
+    const sortCatalog: IOptionsProducts[] = sortingCatalog(categoryName, name);
     const foundCount = document.querySelector('.found-count') as HTMLElement;
 
     foundCount.innerHTML = String(sortCatalog.length);
@@ -246,8 +246,22 @@ export default class AppView {
     if (!view || (view === SortByType.bar)) {
       makeCardProduct(sortCatalog);
     }
+  }
 
-    console.log(sortCatalog);
+  unSortCategory(name: string): void {
+    deleteSearchParams([name]);
+
+    const view = getQueryParam('type');
+    const foundCount = document.querySelector('.found-count') as HTMLElement;
+    foundCount.innerHTML = String(products.length);
+
+    if (view === SortByType.list) {
+      changeSortingByType(products);
+    }
+
+    if (!view || (view === SortByType.bar)) {
+      makeCardProduct(products);
+    }
   }
 
   setDefaultParams(): void {

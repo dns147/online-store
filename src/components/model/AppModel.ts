@@ -135,8 +135,12 @@ export default class AppModel {
     this.view.clickSearch(valueInput);
   }
 
-  sortCategory(category1: HTMLInputElement): void {
-    const categoryName: string = category1.name;
-    this.view.sortCategory(categoryName);
+  sortCategory(category: HTMLInputElement, name: string): void {
+    const productName: string = category.name;
+    this.view.sortCategory(productName, name);
+  }
+
+  unSortCategory(name: string): void {
+    this.view.unSortCategory(name);
   }
 }

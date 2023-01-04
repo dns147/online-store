@@ -183,6 +183,14 @@ export default class AppController {
     if (event.target instanceof Element) {
       const select = event.target.closest('.search-select') as HTMLInputElement;
       const category1 = event.target.closest('.category1') as HTMLInputElement;
+      const category2 = event.target.closest('.category2') as HTMLInputElement;
+      const category3 = event.target.closest('.category3') as HTMLInputElement;
+      const category4 = event.target.closest('.category4') as HTMLInputElement;
+
+      const brand1 = event.target.closest('.brand1') as HTMLInputElement;
+      const brand2 = event.target.closest('.brand2') as HTMLInputElement;
+      const brand3 = event.target.closest('.brand3') as HTMLInputElement;
+      const brand4 = event.target.closest('.brand4') as HTMLInputElement;
 
       if (select) {
         event.preventDefault();
@@ -191,9 +199,65 @@ export default class AppController {
 
       if (category1) {
         if (category1.checked) {
-          that.model.sortCategory(category1);
+          that.model.sortCategory(category1, 'category');
         } else {
-          console.log('unchecked');
+          that.model.unSortCategory('category');
+        }
+      }
+
+      if (category2) {
+        if (category2.checked) {
+          that.model.sortCategory(category2, 'category');
+        } else {
+          that.model.unSortCategory('category');
+        }
+      }
+
+      if (category3) {
+        if (category3.checked) {
+          that.model.sortCategory(category3, 'category');
+        } else {
+          that.model.unSortCategory('category');
+        }
+      }
+
+      if (category4) {
+        if (category4.checked) {
+          that.model.sortCategory(category4, 'category');
+        } else {
+          that.model.unSortCategory('category');
+        }
+      }
+
+      if (brand1) {
+        if (brand1.checked) {
+          that.model.sortCategory(brand1, 'brand');
+        } else {
+          that.model.unSortCategory('brand');
+        }
+      }
+
+      if (brand2) {
+        if (brand2.checked) {
+          that.model.sortCategory(brand2, 'brand');
+        } else {
+          that.model.unSortCategory('brand');
+        }
+      }
+
+      if (brand3) {
+        if (brand3.checked) {
+          that.model.sortCategory(brand3, 'brand');
+        } else {
+          that.model.unSortCategory('brand');
+        }
+      }
+
+      if (brand4) {
+        if (brand4.checked) {
+          that.model.sortCategory(brand4, 'brand');
+        } else {
+          that.model.unSortCategory('brand');
         }
       }
     }

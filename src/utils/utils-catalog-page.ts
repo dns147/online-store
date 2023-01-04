@@ -394,8 +394,16 @@ export function searchProducts(valueInput: string): IOptionsProducts[] {
   return resultSearch;
 }
 
-export function sortingCatalog(categoryName: string): IOptionsProducts[] {
-  const resultSearch: IOptionsProducts[] = products.filter((item: IOptionsProducts) => item.category === categoryName);
+export function sortingCatalog(categoryName: string, name: string): IOptionsProducts[] {
+  let resultSearch: IOptionsProducts[] = [];
+  
+  if (name === 'category') {
+    resultSearch = products.filter((item: IOptionsProducts) => item.category === categoryName);
+  }
+
+  if (name === 'brand') {
+    resultSearch = products.filter((item: IOptionsProducts) => item.brand === categoryName);
+  }
   
   return resultSearch;
 }
