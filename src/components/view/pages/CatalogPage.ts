@@ -56,7 +56,7 @@ export default class CatalogPage {
               <p>Found: <span class="found-count">20</span></p>
             </div>
             <form class="search-form">
-              <input type="search" name="search" class="search-input" id="search" placeholder="Search" autocomplete="off" autofocus="">
+              <input type="search" name="search" class="search-input" id="search" placeholder="Search" autocomplete="off">
               <button type="submit" class="search-btn"></button>
             </form>
             <div class="sort-type-container">

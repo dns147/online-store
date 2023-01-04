@@ -145,9 +145,6 @@ export default class AppController {
 
       if (order) {
         window.history.replaceState({}, '', '/');
-        // const url = window.location.pathname.split('/')[0]
-        // console.log(url);
-        // window.history.replaceState({}, '', url);
       }
     }
   }

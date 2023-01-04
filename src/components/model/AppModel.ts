@@ -5,21 +5,27 @@ import { IdStorage } from "../../utils/types";
 
 export default class AppModel {
   view: AppView;
+  hashPageName: string;
 
   constructor(view: AppView) {
     this.view = view;
+    this.hashPageName = '';
   }
 
   updateStateUrl(): void {
     const fullPathName: string = window.location.pathname;
     const fullPathNameArr: string[] = fullPathName.split('/');
     const pathName: string = fullPathNameArr[1];
-
-    this.view.renderContent(pathName);
+    
+    if (!this.hashPageName) {
+      console.log(pathName);
+      this.view.renderContent(pathName);
+    }
   }
 
   updateState(): void {
     const hashPageName: string = window.location.hash.slice(1);
+    this.hashPageName = hashPageName;
     this.view.renderContent(hashPageName);
   }
 
@@ -30,7 +36,8 @@ export default class AppModel {
     //   addQueryParam('id', id);
     // }
     window.history.replaceState({}, '', `/description/${id}`);
-    window.location.hash = 'description';
+    history.go();
+    //window.location.hash = 'description';
   }
 
   plusAmountProduct(btnCart: HTMLElement, input: HTMLInputElement): void {
