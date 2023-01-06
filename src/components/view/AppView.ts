@@ -61,6 +61,18 @@ export default class AppView {
     }
   }
 
+  changeStyleBtnCartDescription(btnCart: HTMLButtonElement, idProduct: string): void {
+    if (btnCart.classList.contains('active-btn')) {
+      btnCart.innerHTML = 'ADD TO CART';
+      btnCart.classList.remove('active-btn');
+      removeSelectedToLocalStorage(idProduct);
+    } else {
+      btnCart.innerHTML = 'DROP FROM CART';
+      btnCart.classList.add('active-btn');
+      saveSelectedToLocalStorage(idProduct);
+    }
+  }
+
   showNewTotalPrice(totalPrice: HTMLElement, newTotalPrice: string) {
     totalPrice.innerHTML = newTotalPrice;
     localStorage.setItem('totalPrice', newTotalPrice);
@@ -75,17 +87,18 @@ export default class AppView {
       newCountBuy = String(currentCountBuy + countProduct);
     } else {
       newCountBuy = String(currentCountBuy - countProduct);
+      btnCart.removeAttribute('data-count');
     }
     
     countBuy.innerHTML = newCountBuy;
     localStorage.setItem('countBuy', newCountBuy);
   }
 
-  changeSortByType(btnSortType: HTMLElement, typeOfSort: string | undefined): void {
+  changeViewType(btnViewType: HTMLElement, typeOfView: string | undefined): void {
     const search = getQueryParam('search');
 
-    if (!btnSortType.classList.contains('sort-type-active') && typeOfSort === SortByType.list) {
-      btnSortType.classList.add('sort-type-active');
+    if (!btnViewType.classList.contains('sort-type-active') && typeOfView === SortByType.list) {
+      btnViewType.classList.add('sort-type-active');
       (document.querySelector('[data-type="bar"]') as HTMLElement).classList.remove('sort-type-active');
 
       const hashPageName: string = window.location.hash;
@@ -104,8 +117,8 @@ export default class AppView {
       loadSelectedFromLocalStorage(listItemContainer, btnCartSortList);
     }
 
-    if (!btnSortType.classList.contains('sort-type-active') && typeOfSort === SortByType.bar) {
-      btnSortType.classList.add('sort-type-active');
+    if (!btnViewType.classList.contains('sort-type-active') && typeOfView === SortByType.bar) {
+      btnViewType.classList.add('sort-type-active');
       (document.querySelector('[data-type="list"]') as HTMLElement).classList.remove('sort-type-active');
 
       const hashPageName: string = window.location.hash;

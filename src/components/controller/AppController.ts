@@ -1,4 +1,4 @@
-import { getPrice } from "../../utils/utils-catalog-page";
+import { getId, getPrice } from "../../utils/utils-catalog-page";
 import AppModel from "../model/AppModel";
 
 export default class AppController {
@@ -17,7 +17,7 @@ export default class AppController {
     this.getEventsChange = this.getEventsChange.bind(this);
     this.getEventsInput = this.getEventsInput.bind(this);
 
-    window.addEventListener('popstate', this.updateStateUrl);
+    //window.addEventListener('popstate', this.updateStateUrl);
     window.addEventListener('hashchange', this.updateState);
     document.addEventListener('click', this.getEventsClick);
     document.addEventListener('mouseover', this.getEventsMouseOver);
@@ -26,7 +26,7 @@ export default class AppController {
     document.addEventListener('input', this.getEventsInput);
 
     this.updateState();
-    this.updateStateUrl();
+    //this.updateStateUrl();
   }
 
   updateStateUrl(): void {
@@ -47,7 +47,7 @@ export default class AppController {
       const plus = event.target.closest('.plus') as HTMLElement;
       const minus = event.target.closest('.minus') as HTMLElement;
       const btnCart = event.target.closest('.btn-cart') as HTMLButtonElement;
-      const btnSortType = event.target.closest('.sort-type') as HTMLElement;
+      const btnViewType = event.target.closest('.sort-type') as HTMLElement;
       const listItem = event.target.closest('.list-item-container') as HTMLElement;
       const btnCartSortList = event.target.closest('.btn-cart-sort-list') as HTMLButtonElement;
       const logoName = event.target.closest('.logo-name') as HTMLElement;
@@ -57,6 +57,7 @@ export default class AppController {
       const productPic = event.target.closest('.product-info-pictures-main') as HTMLElement;
       const descriptionPopup = event.target.closest('.product-picture-popup') as HTMLElement;
       const productAdPic = event.target.closest('.product-info-pictures-item') as HTMLElement
+      const btnCartDescription = event.target.closest('.btn-cart-description') as HTMLButtonElement;
       
       if (productPic) {
         const popup = document.querySelector('.product-picture-popup') as HTMLElement;
@@ -83,6 +84,16 @@ export default class AppController {
 
         pic.src = mainPic.src;
         mainPic.src = srcForMain;
+      }
+
+      if (btnCartDescription) {
+        const idProduct: number | undefined = Number(getId());
+        const priceProduct: string | null = getPrice(idProduct);
+        const totalPrice = document.querySelector('.total-price') as HTMLElement;
+        
+        that.model.changeStyleBtnCartDescription(btnCartDescription, String(idProduct));
+        that.model.getTotalPrice(btnCartDescription, totalPrice, priceProduct);
+        that.model.addToCartFromDescription(btnCartDescription);
       }
       // for description page
       
@@ -121,8 +132,8 @@ export default class AppController {
         that.model.addToCart(btnCart, imageProduct, imageParent, inputAmountProduct);
       }
 
-      if (btnSortType) {
-        that.model.changeSortByType(btnSortType);
+      if (btnViewType) {
+        that.model.changeViewType(btnViewType);
       }
 
       if (btnCartSortList) {
@@ -140,11 +151,11 @@ export default class AppController {
 
       if (logoName) {
         //that.model.setDefaultParams();
-        window.history.replaceState({}, '', '/');
+        //window.history.replaceState({}, '', '/');
       }
 
       if (order) {
-        window.history.replaceState({}, '', '/');
+        //window.history.replaceState({}, '', '/');
       }
     }
   }

@@ -14,6 +14,6 @@ export default class OrderPage {
   }
 
   init(): void {
-    deleteSearchParams(['id', 'type', 'sort']);
+    deleteSearchParams(['id', 'sort']);
   }
 }

@@ -32,12 +32,12 @@ export default class AppModel {
   showDescription(element: HTMLElement): void {
     const id: string | undefined = element.dataset.id;
 
-    // if (id) {
-    //   addQueryParam('id', id);
-    // }
-    window.history.replaceState({}, '', `/description/${id}`);
-    history.go();
-    //window.location.hash = 'description';
+    if (id) {
+      addQueryParam('id', id);
+    }
+    // window.history.replaceState({}, '', `/description/${id}`);
+    // history.go();
+    window.location.hash = 'description';
   }
 
   plusAmountProduct(btnCart: HTMLElement, input: HTMLInputElement): void {
@@ -58,6 +58,10 @@ export default class AppModel {
 
   changeStyleCard(btnCart: HTMLButtonElement, imageParent: HTMLElement, parentBtn: HTMLElement, idProduct: string): void {
     this.view.changeStyleCard(btnCart, imageParent, parentBtn, idProduct);
+  }
+
+  changeStyleBtnCartDescription(btnCart: HTMLButtonElement, idProduct: string): void {
+    this.view.changeStyleBtnCartDescription(btnCart, idProduct);
   }
 
   getTotalPrice(btnCart: HTMLButtonElement, totalPrice: HTMLElement, priceProduct: string | null, input?: HTMLInputElement): void {
@@ -106,10 +110,14 @@ export default class AppModel {
     }
   }
 
-  changeSortByType(btnSortType: HTMLElement):void {
-    const typeOfSort: string | undefined = btnSortType.dataset.type;
+  addToCartFromDescription(btnCart: HTMLButtonElement): void {
+    const savedCountProduct = Number(btnCart.dataset?.count) ? Number(btnCart.dataset?.count) : 1;
+    this.view.addToCart(btnCart, savedCountProduct);
+  }
 
-    this.view.changeSortByType(btnSortType, typeOfSort);
+  changeViewType(btnViewType: HTMLElement):void {
+    const typeOfView: string | undefined = btnViewType.dataset.type;
+    this.view.changeViewType(btnViewType, typeOfView);
   }
 
   addStyleBtn(listItemContainer: HTMLElement): void {
