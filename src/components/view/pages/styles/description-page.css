@@ -10,6 +10,8 @@
 }
 
 .description-wrapper {
+  background: url(https://i.ibb.co/T47zS1M/falcon.jpg);
+  background-size: cover;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -33,6 +35,10 @@
   color: #000000;
 }
 
+.breadcrumbs-container__link:hover {
+  color: #004eff;
+}
+
 .breadcrumbs-container img{
   height: 25px;
   transform: rotate(90deg);
@@ -45,6 +51,7 @@
 
 .product-info-details {
   display: flex;
+  column-gap: 15px;
 }
 
 .product-title-container {
@@ -93,6 +100,9 @@
 .description-container {
   width: 35%;
   padding: 10px 20px;
+  font-family: monospace;
+  color: #f0f8ff;
+  background: #373636;
 }
 
 .description-stock,
@@ -117,7 +127,7 @@
   height: fit-content;
   padding: 10px;
   border-radius: 5px;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+  box-shadow: rgb(0 0 0) 0px 2px 5px 1px, rgb(0 0 0) 0px 0px 15px 1px;
 }
 
 .product-picture-popup {

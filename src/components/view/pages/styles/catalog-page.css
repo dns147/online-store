@@ -448,6 +448,7 @@
   opacity: 0;
   width: 20px;
   height: 20px;
+  cursor: pointer;
 }
 
 .category-name,
@@ -491,4 +492,8 @@
 .category-input:focus + .category-name::before,
 .brand-input:focus + .brand-name::before {
   box-shadow: 0 0 0 0.2rem rgb(0 123 255 / 25%);
+}
+
+.hide-name {
+  color: gray;
 }

@@ -1,7 +1,7 @@
 import AppView from "../view/AppView";
 import products from "../../assets/json/products.json";
-import { addQueryParam, showAnimateImage } from "../../utils/utils-catalog-page";
-import { IdStorage } from "../../utils/types";
+import { setQueryParam, getDataCategories, showAnimateImage, sortingCatalog, checkOtherCategory } from "../../utils/utils-catalog-page";
+import { DataCategories, IOptionsProducts } from "../../utils/types";
 
 export default class AppModel {
   view: AppView;
@@ -18,7 +18,6 @@ export default class AppModel {
     const pathName: string = fullPathNameArr[1];
     
     if (!this.hashPageName) {
-      console.log(pathName);
       this.view.renderContent(pathName);
     }
   }
@@ -33,7 +32,7 @@ export default class AppModel {
     const id: string | undefined = element.dataset.id;
 
     if (id) {
-      addQueryParam('id', id);
+      setQueryParam('id', id);
     }
     // window.history.replaceState({}, '', `/description/${id}`);
     // history.go();
@@ -145,10 +144,61 @@ export default class AppModel {
 
   sortCategory(category: HTMLInputElement, name: string): void {
     const productName: string = category.name;
-    this.view.sortCategory(productName, name);
+    const parentCategory = category.parentElement as HTMLElement;
+    const nameCategoryBrand = parentCategory.querySelector('.brand-name') as HTMLElement;
+    const nameCategory = parentCategory.querySelector('.category-name') as HTMLElement;
+    let stateHideElement: boolean = true;
+
+    if (nameCategoryBrand?.classList.contains('hide-name') || nameCategory?.classList.contains('hide-name')) {
+      stateHideElement = true;
+    } else {
+      stateHideElement = false;
+    }
+
+    this.view.sortCategory(productName, name, stateHideElement);
   }
 
-  unSortCategory(name: string): void {
-    this.view.unSortCategory(name);
+  unSortCategory(category: HTMLInputElement, name: string): void {
+    //const productName: string = category.name;
+    this.view.unSortCategory(category, name);
+  }
+
+  checkOtherCategory(category: HTMLInputElement, name: string): void {
+    const productName: string = category.name;
+    const dataCategories: DataCategories = getDataCategories('category');
+    const dataBrands: DataCategories = getDataCategories('brand');
+    let filterCatalog: IOptionsProducts[] = [];
+
+    if (localStorage['filterCatalog']) {
+      filterCatalog = JSON.parse(localStorage['filterCatalog']);
+    } else {
+      filterCatalog = sortingCatalog(productName, name);
+    }
+    
+    checkOtherCategory(dataCategories, dataBrands, filterCatalog);
+  }
+
+  resetOtherCategory(category: HTMLInputElement, name: string): void {
+    const productName: string = category.name;
+    const dataCategories: DataCategories = getDataCategories('category');
+    const dataBrands: DataCategories = getDataCategories('brand');
+    let filterCatalog: IOptionsProducts[] = [];
+
+    if (localStorage['filterCatalog']) {
+      filterCatalog = JSON.parse(localStorage['filterCatalog']);
+    } else {
+      filterCatalog = sortingCatalog(productName, name);
+    }
+
+    this.view.resetOtherCategory(dataCategories, dataBrands, filterCatalog);
+  }
+
+  resetFilters(): void {
+    this.view.resetFilters();
+  }
+
+  copyUrlToBuffer(): void {
+    const url: string = window.location.href;
+    navigator.clipboard.writeText(url);
   }
 }

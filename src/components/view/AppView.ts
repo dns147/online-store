@@ -1,6 +1,6 @@
 import products from "../../assets/json/products.json";
-import { IOptionsProducts, Routes, SortByType, TypeOfClasses } from "../../utils/types";
-import { addQueryParam, changeSortingByType, clickSearchProducts, deleteSearchParams, getQueryParam, loadSelectedFromLocalStorage, makeCardProduct, removeSelectedToLocalStorage, saveSelectedToLocalStorage, searchProducts, showSortProductBarView, sortingCatalog, sortProducts } from "../../utils/utils-catalog-page";
+import { DataCategories, IOptionsProducts, Routes, SortByType, TypeOfClasses } from "../../utils/types";
+import { setQueryParam, changeSortingByType, clickSearchProducts, getQueryParam, loadSelectedFromLocalStorage, makeCardProduct, removeSelectedToLocalStorage, saveSelectedToLocalStorage, searchProducts, sortingCatalog, sortProducts, addQueryParam, deleteQueryParam, findSumCategory, findSumBrand, resetInput, resetHideStyle, getDataCategories, deleteSearchParams } from "../../utils/utils-catalog-page";
 
 export default class AppView {
   container: HTMLElement;
@@ -151,7 +151,7 @@ export default class AppView {
 
     switch (valueSelect) {
       case '1':
-        addQueryParam('sort', SortByType.priceUp);
+        setQueryParam('sort', SortByType.priceUp);
         const sortCatalog1: IOptionsProducts[] = sortProducts(SortByType.priceUp);
 
         if (view === SortByType.list) {
@@ -165,7 +165,7 @@ export default class AppView {
         break;
 
       case '2':
-        addQueryParam('sort', SortByType.priceDown);
+        setQueryParam('sort', SortByType.priceDown);
         const sortCatalog2: IOptionsProducts[] = sortProducts(SortByType.priceDown);
 
         if (view === SortByType.list) {
@@ -179,7 +179,7 @@ export default class AppView {
         break;
 
       case '3':
-        addQueryParam('sort', SortByType.stockUp);
+        setQueryParam('sort', SortByType.stockUp);
         const sortCatalog3: IOptionsProducts[] = sortProducts(SortByType.stockUp);
 
         if (view === SortByType.list) {
@@ -193,7 +193,7 @@ export default class AppView {
         break;
       
       case '4':
-        addQueryParam('sort', SortByType.stockDown);
+        setQueryParam('sort', SortByType.stockDown);
         const sortCatalog4: IOptionsProducts[] = sortProducts(SortByType.stockDown);
 
         if (view === SortByType.list) {
@@ -207,7 +207,7 @@ export default class AppView {
         break;
       
       case '5':
-        addQueryParam('sort', SortByType.default);
+        setQueryParam('sort', SortByType.default);
         const sortCatalog5: IOptionsProducts[] = sortProducts(SortByType.default);
 
         if (view === SortByType.list) {
@@ -226,7 +226,7 @@ export default class AppView {
   }
 
   clickSearch(valueInput: string): void {
-    addQueryParam('search', valueInput);
+    setQueryParam('search', valueInput);
 
     const view = getQueryParam('type');
     const searchCatalog: IOptionsProducts[] = searchProducts(valueInput);
@@ -243,30 +243,154 @@ export default class AppView {
     }
   }
 
-  sortCategory(categoryName: string, name: string): void {
+  sortCategory(categoryName: string, name: string, stateHideElement: boolean): void {
     addQueryParam(name, categoryName);
 
     const view = getQueryParam('type');
-    const sortCatalog: IOptionsProducts[] = sortingCatalog(categoryName, name);
+    let filterCatalog: IOptionsProducts[] = [];
     const foundCount = document.querySelector('.found-count') as HTMLElement;
 
-    foundCount.innerHTML = String(sortCatalog.length);
+    if (localStorage['filterCatalog'] && JSON.parse(localStorage['filterCatalog']).length !== 0 && !stateHideElement) {
+      filterCatalog = JSON.parse(localStorage['filterCatalog']);
+    } else if (localStorage['filterCatalog'] && JSON.parse(localStorage['filterCatalog']).length !== 0 && stateHideElement) {
+      filterCatalog = JSON.parse(localStorage['filterCatalog']).concat(sortingCatalog(categoryName, name));
+    } else {
+      filterCatalog = sortingCatalog(categoryName, name);
+    }
+
+    localStorage.setItem('filterCatalog', JSON.stringify(filterCatalog));
+    foundCount.innerHTML = String(filterCatalog.length);
 
     if (view === SortByType.list) {
-      changeSortingByType(sortCatalog);
+      changeSortingByType(filterCatalog);
     }
 
     if (!view || (view === SortByType.bar)) {
-      makeCardProduct(sortCatalog);
+      makeCardProduct(filterCatalog);
     }
   }
 
-  unSortCategory(name: string): void {
-    deleteSearchParams([name]);
+  unSortCategory(category: HTMLInputElement, name: string): void {
+    const productName: string = category.name;
+    const numberCategory: string | undefined = category.dataset.num;
+    let inputCategory = null;
+    
+    deleteQueryParam(productName, name);
 
-    const view = getQueryParam('type');
+    if (name === 'category') {
+      inputCategory = document.querySelector(`.brand${numberCategory}`) as HTMLInputElement;
+    }
+
+    if (name === 'brand') {
+      inputCategory = document.querySelector(`.category${numberCategory}`) as HTMLInputElement;
+    }
+
+    const productsLocalStorage: IOptionsProducts[] = JSON.parse(localStorage['filterCatalog']);
+    let filterProduct: IOptionsProducts[] = [];
+  
+    if (name === 'category' && !inputCategory?.checked) {
+      filterProduct = productsLocalStorage.filter((item: IOptionsProducts) => item.category !== productName);
+    } else if (name === 'category' && inputCategory?.checked) {
+      filterProduct = productsLocalStorage;
+    }
+
+    if (name === 'brand' && !inputCategory?.checked) {
+      filterProduct = productsLocalStorage.filter((item: IOptionsProducts) => item.brand !== productName);
+    } else if (inputCategory?.checked) {
+      filterProduct = productsLocalStorage;
+    }
+
+    localStorage.setItem('filterCatalog', JSON.stringify(filterProduct));
+    const resultFilter = filterProduct.length ? filterProduct : products;
     const foundCount = document.querySelector('.found-count') as HTMLElement;
-    foundCount.innerHTML = String(products.length);
+    foundCount.innerHTML = String(resultFilter.length);
+    const view = getQueryParam('type');
+
+    if (view === SortByType.list) {
+      changeSortingByType(resultFilter);
+    }
+
+    if (!view || (view === SortByType.bar)) {
+      makeCardProduct(resultFilter);
+    }
+  }
+
+  resetOtherCategory(dataCategories: DataCategories, dataBrands: DataCategories, filterCatalog: IOptionsProducts[]): void {
+    const nameCategories = document.querySelectorAll('.category-name') as NodeListOf<Element>;
+    const countCategories = document.querySelectorAll('.category-find') as NodeListOf<Element>;
+    const nameBrands = document.querySelectorAll('.brand-name') as NodeListOf<Element>;
+    const countBrands = document.querySelectorAll('.brand-find') as NodeListOf<Element>;
+    let sumCategories: number[] = [];
+    let sumBrands: number[] = [];
+
+    if (filterCatalog.length === 0) {
+      sumCategories = findSumCategory(dataCategories, products);
+      sumBrands = findSumBrand(dataBrands, products);
+
+      nameCategories.forEach((nameCategory) => {
+        if (nameCategory.classList.contains('hide-name')) {
+          nameCategory.classList.remove('hide-name');
+        }
+      });
+
+      nameBrands.forEach((nameBrand) => {
+        if (nameBrand.classList.contains('hide-name')) {
+          nameBrand.classList.remove('hide-name');
+        }
+      });
+    } else {
+      sumCategories = findSumCategory(dataCategories, filterCatalog);
+      sumBrands = findSumBrand(dataBrands, filterCatalog);
+    }
+
+    countCategories.forEach((countCategory, index) => {
+      countCategory.innerHTML = String(sumCategories[index]);
+
+      if (sumCategories[index] === 0) {
+        nameCategories[index].classList.add('hide-name');
+      }
+    });
+
+    countBrands.forEach((countBrand, index) => {
+      countBrand.innerHTML = String(sumBrands[index]);
+
+      if (sumBrands[index] === 0) {
+        nameBrands[index].classList.add('hide-name');
+      }
+    });
+  }
+
+  resetFilters(): void {
+    const categoryInputs = document.querySelectorAll('.category-input') as NodeListOf<HTMLInputElement>;
+    const brandInputs = document.querySelectorAll('.brand-input') as NodeListOf<HTMLInputElement>;
+    const nameCategories = document.querySelectorAll('.category-name') as NodeListOf<Element>;
+    const countCategories = document.querySelectorAll('.category-find') as NodeListOf<Element>;
+    const nameBrands = document.querySelectorAll('.brand-name') as NodeListOf<Element>;
+    const countBrands = document.querySelectorAll('.brand-find') as NodeListOf<Element>;
+    const foundCount = document.querySelector('.found-count') as HTMLElement;
+
+    resetInput(categoryInputs);
+    resetInput(brandInputs);
+    resetHideStyle(nameCategories);
+    resetHideStyle(nameBrands);
+    deleteSearchParams(['category']);
+    deleteSearchParams(['brand']);
+
+    const dataCategories: DataCategories = getDataCategories('category');
+    const dataBrands: DataCategories = getDataCategories('brand');
+    let index1: number = 0;
+    let index2: number = 0;
+    const view = getQueryParam('type');
+
+    for (let key in dataCategories) {
+      countCategories[index1].innerHTML = String(dataCategories[key]);
+      index1 += 1;
+    }
+
+    for (let key in dataBrands) {
+      countBrands[index2].innerHTML = String(dataBrands[key]);
+      index2 += 1;
+    }
 
     if (view === SortByType.list) {
       changeSortingByType(products);
@@ -275,6 +399,8 @@ export default class AppView {
     if (!view || (view === SortByType.bar)) {
       makeCardProduct(products);
     }
+
+    foundCount.innerHTML = String(products.length);
   }
 
   setDefaultParams(): void {

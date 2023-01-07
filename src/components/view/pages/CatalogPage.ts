@@ -1,19 +1,23 @@
 import './styles/catalog-page.css';
 import products from "../../../assets/json/products.json";
 import { SortByType } from '../../../utils/types';
-import { deleteSearchParams, checkTypeOfSort, getQueryParam, showSortProductListView, showSortProductBarView, clickSearchProducts, addFilterCategory, makePriceSlider, makeStockSlider } from '../../../utils/utils-catalog-page';
+import { deleteSearchParams, checkTypeOfSort, getQueryParam, showSortProductListView, showSortProductBarView, clickSearchProducts, addFilterCategory, makePriceSlider, makeStockSlider, checkQueryParams } from '../../../utils/utils-catalog-page';
 
 export default class CatalogPage {
   container: HTMLElement;
   typeOfView: string | null;
   sort: string | null;
   search: string | null;
+  category: string | null;
+  brand: string | null;
 
   constructor(container: HTMLElement) {
     this.container = container;
     this.typeOfView = null;
     this.sort = null;
     this.search = null;
+    this.category = null;
+    this.brand = null;
   }
 
   render(): string {
@@ -88,6 +92,8 @@ export default class CatalogPage {
     this.typeOfView = getQueryParam('type');
     this.sort = getQueryParam('sort');
     this.search = getQueryParam('search');
+    this.category = getQueryParam('category');
+    this.brand = getQueryParam('brand');
 
     checkTypeOfSort(this.typeOfView);
    
@@ -159,6 +165,10 @@ export default class CatalogPage {
     if (this.search) {
       searchInput.value = this.search;
       clickSearchProducts(this.search);
+    }
+
+    if (this.category || this.brand) {
+      checkQueryParams();
     }
   }
 }

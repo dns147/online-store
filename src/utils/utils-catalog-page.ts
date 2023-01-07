@@ -21,11 +21,14 @@ export function addFilterCategory(container: HTMLElement, nameItem: string): voi
     input.name = key;
     input.id = `${nameItem}${index}`;
     input.classList.add(`${nameItem}${index}`, `${nameItem}-input`);
+    input.setAttribute('data-num', String(index));
     name.innerHTML = key;
     name.classList.add(`${nameItem}-name`);
     label.classList.add('label');
     label.setAttribute('for', `${nameItem}${index}`);
-    numberCategory.innerHTML = `(<span class="${nameItem}${index}-find-count">${dataCategories[key]}</span>/<span class="${nameItem}${index}-full-count">${dataCategories[key]}</span>)`;
+    numberCategory.innerHTML = `
+      (<span class="${nameItem}-find ${nameItem}${index}-find-count${nameItem}${index}-find-count">${dataCategories[key]}</span>/<span class="${nameItem}${index}-full-count">${dataCategories[key]}</span>)
+    `;
     index += 1;
 
     categoryItemDiv.append(input);
@@ -251,7 +254,7 @@ export function loadSelectedFromLocalStorage(itemContainer: NodeListOf<HTMLEleme
           btnCart[index].setAttribute('data-count', idProductToCart[key]);
         }
 
-        if (key === idProduct && sortByType === SortByType.bar) {
+        if ((!sortByType && key === idProduct) || (key === idProduct && sortByType === SortByType.bar)) {
           itemContainer[index].classList.add('active-card');
           btnCart[index].innerHTML = 'DROP FROM CART';
           btnCart[index].classList.add('active-btn');
@@ -279,6 +282,7 @@ export function saveSelectedToLocalStorage(idProduct: string): void {
     idStorage[idProduct] = productAmount;
     localStorage.setItem('idProductToCart', JSON.stringify(idStorage));
   } else {
+    
     const idProductToCart: IdStorage = JSON.parse(localStorage['idProductToCart']);
     idProductToCart[idProduct] = productAmount;
     localStorage.setItem('idProductToCart', JSON.stringify(idProductToCart));
@@ -296,11 +300,37 @@ export function clearLocalStorage(): void {
   localStorage.removeItem('idProductToCart');
 }
 
-export function addQueryParam(typeSort: string, param: string): void {
+export function setQueryParam(productName: string, param: string): void {
   const hashPageName: string = window.location.hash;
   const params = new URLSearchParams(window.location.search);
-  params.set(typeSort, param);
+
+  params.set(productName, param);
   window.history.replaceState({}, '', `${window.location.pathname}?${params}${hashPageName}`);
+}
+
+export function addQueryParam(productName: string, param: string): void {
+  const hashPageName: string = window.location.hash;
+  const params = new URLSearchParams(window.location.search);
+
+  if (params.has(productName)) {
+    params.append(productName, param);
+  } else {
+    params.set(productName, param);
+  }
+  
+  window.history.replaceState({}, '', `${window.location.pathname}?${params}${hashPageName}`);
+}
+
+export function deleteQueryParam(productName: string, categoryName: string): void {
+  const params = new URLSearchParams(window.location.search);
+  const valueParam: string[] = params.getAll(categoryName);
+  const newValueParam: string[] = valueParam.filter((item) => item !== productName);
+
+  deleteSearchParams([categoryName]);
+
+  newValueParam.forEach((value) => {
+    addQueryParam(categoryName, value);
+  });
 }
 
 export function sortProducts(typeSort: string): IOptionsProducts[] {
@@ -456,7 +486,7 @@ export function makeStockSlider(stockSlider: HTMLElement): void {
   });
 }
 
-function getDataCategories(name: string): DataCategories {
+export function getDataCategories(name: string): DataCategories {
   const dataCatogories: DataCategories = {};
   const fullCategories: string[] = [];
 
@@ -487,8 +517,143 @@ function getDataCategories(name: string): DataCategories {
   return dataCatogories;
 }
 
+export function findSumCategory(dataCategories: DataCategories, filterCatalog: IOptionsProducts[]): number[] {
+  const findSum: number[] = [];
+
+  for (let nameCategory in dataCategories) {
+    let sum: number = 0;
+
+    filterCatalog.forEach((item: IOptionsProducts) => {
+      if (item.category === nameCategory) {
+        sum += 1;
+      }
+    });
+
+    findSum.push(sum);
+  }
+
+  return findSum;
+}
+
+export function findSumBrand(dataBrands: DataCategories, filterCatalog: IOptionsProducts[]): number[] {
+  const findSum: number[] = [];
+
+  for (let nameBrands in dataBrands) {
+    let sum: number = 0;
+
+    filterCatalog.forEach((item: IOptionsProducts) => {
+      if (item.brand === nameBrands) {
+        sum += 1;
+      }
+    });
+
+    findSum.push(sum);
+  }
+
+  return findSum;
+}
+
+export function resetInput(inputs: NodeListOf<HTMLInputElement>): void {
+  inputs.forEach((input) => {
+    if (input.checked) {
+      input.checked = false;
+    }
+  });
+}
+
+export function resetHideStyle(categories: NodeListOf<Element>): void {
+  categories.forEach((item) => {
+    if (item.classList.contains('hide-name')) {
+      item.classList.remove('hide-name');
+    }
+  });
+}
+
+export function checkOtherCategory(dataCategories: DataCategories, dataBrands: DataCategories, filterCatalog: IOptionsProducts[]): void {
+  const countCategories = document.querySelectorAll('.category-find') as NodeListOf<Element>;
+  const nameCategories = document.querySelectorAll('.category-name') as NodeListOf<Element>;
+  const countBrands = document.querySelectorAll('.brand-find') as NodeListOf<Element>;
+  const nameBrands = document.querySelectorAll('.brand-name') as NodeListOf<Element>;
+  
+  const sumCategories: number[] = findSumCategory(dataCategories, filterCatalog);
+  const sumBrands: number[] = findSumBrand(dataBrands, filterCatalog);
+  
+  countCategories.forEach((countCategory, index) => {
+    countCategory.innerHTML = String(sumCategories[index]);
+
+    if (sumCategories[index] === 0) {
+      nameCategories[index].classList.add('hide-name');
+    } else if (nameCategories[index].classList.contains('hide-name')) {
+      nameCategories[index].classList.remove('hide-name');
+    }
+  });
+
+  countBrands.forEach((countBrand, index) => {
+    countBrand.innerHTML = String(sumBrands[index]);
+
+    if (sumBrands[index] === 0) {
+      nameBrands[index].classList.add('hide-name');
+    } else if (nameBrands[index].classList.contains('hide-name')) {
+      nameBrands[index].classList.remove('hide-name');
+    }
+  });
+}
+
+export function checkQueryParams(): void {
+  const params = new URLSearchParams(window.location.search);
+  const valueParamCategory: string[] = params.getAll('category');
+  const valueParamBrand: string[] = params.getAll('brand');
+  const foundCount = document.querySelector('.found-count') as HTMLElement;
+  const dataCategories: DataCategories = getDataCategories('category');
+  const dataBrands: DataCategories = getDataCategories('brand');
+  const view = getQueryParam('type');
+  
+  valueParamCategory.forEach((value) => {
+    const inputCategory = document.querySelector(`[name="${value}`) as HTMLInputElement;
+    inputCategory.checked = true;
+  });
+  
+  valueParamBrand.forEach((value) => {
+    const inputBrand = document.querySelector(`[name="${value}`) as HTMLInputElement;
+    inputBrand.checked = true;
+  });
+
+  const inputCategories = document.querySelectorAll('.category-input') as NodeListOf<HTMLInputElement>;
+  const inputBrands = document.querySelectorAll('.brand-input') as NodeListOf<HTMLInputElement>;
+  let filterCatalog: IOptionsProducts[] = [];
+
+  inputCategories.forEach((input: HTMLInputElement, index: number) => {
+    const inputBrand = document.querySelector(`.brand${index + 1}`) as HTMLInputElement;
+
+    if (input.checked && inputBrand.checked) {
+      filterCatalog = filterCatalog.concat(sortingCatalog(input.name, 'category'));
+    }
+
+    if (input.checked && !inputBrand.checked) {
+      filterCatalog = filterCatalog.concat(sortingCatalog(input.name, 'category'));
+    }
+
+    if (!input.checked && inputBrand.checked) {
+      filterCatalog = filterCatalog.concat(sortingCatalog(inputBrand.name, 'brand'));
+    }
+  });
+
+  localStorage.setItem('filterCatalog', JSON.stringify(filterCatalog));
+  foundCount.innerHTML = String(filterCatalog.length);
+
+  if (view === SortByType.list) {
+    changeSortingByType(filterCatalog);
+  }
+
+  if (!view || (view === SortByType.bar)) {
+    makeCardProduct(filterCatalog);
+  }
+  
+  checkOtherCategory(dataCategories, dataBrands, filterCatalog);
+}
+
 function getProductAmount(idProduct: string): string {
-  let productAmount: string = '';
+  let productAmount: string = '1';
   const params = new URLSearchParams(window.location.search);
 
   if (params.get('type') === SortByType.bar) {

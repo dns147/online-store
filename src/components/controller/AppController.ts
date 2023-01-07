@@ -9,7 +9,7 @@ export default class AppController {
     this.model = model;
     this.container = container;
 
-    this.updateStateUrl = this.updateStateUrl.bind(this);
+    //this.updateStateUrl = this.updateStateUrl.bind(this);
     this.updateState = this.updateState.bind(this);
     this.getEventsClick = this.getEventsClick.bind(this);
     this.getEventsMouseOver = this.getEventsMouseOver.bind(this);
@@ -29,10 +29,10 @@ export default class AppController {
     //this.updateStateUrl();
   }
 
-  updateStateUrl(): void {
-    const that = this;
-    that.model.updateStateUrl();
-  }
+  // updateStateUrl(): void {
+  //   const that = this;
+  //   that.model.updateStateUrl();
+  // }
 
   updateState(): void {
     const that = this;
@@ -50,8 +50,10 @@ export default class AppController {
       const btnViewType = event.target.closest('.sort-type') as HTMLElement;
       const listItem = event.target.closest('.list-item-container') as HTMLElement;
       const btnCartSortList = event.target.closest('.btn-cart-sort-list') as HTMLButtonElement;
-      const logoName = event.target.closest('.logo-name') as HTMLElement;
-      const order = event.target.closest('.order') as HTMLElement;
+      // const logoName = event.target.closest('.logo-name') as HTMLElement;
+      // const order = event.target.closest('.order') as HTMLElement;
+      const btnReset = event.target.closest('.reset') as HTMLButtonElement;
+      const btnCopy = event.target.closest('.copy') as HTMLButtonElement;
 
       // for description page
       const productPic = event.target.closest('.product-info-pictures-main') as HTMLElement;
@@ -149,14 +151,22 @@ export default class AppController {
         that.model.addToCart(btnCartSortList, imageProduct, listItemContainer);
       }
 
-      if (logoName) {
-        //that.model.setDefaultParams();
-        //window.history.replaceState({}, '', '/');
+      if (btnReset) {
+        that.model.resetFilters();
       }
 
-      if (order) {
-        //window.history.replaceState({}, '', '/');
+      if (btnCopy) {
+        that.model.copyUrlToBuffer();
       }
+
+      //if (logoName) {
+        //that.model.setDefaultParams();
+        //window.history.replaceState({}, '', '/');
+      //}
+
+      //if (order) {
+        //window.history.replaceState({}, '', '/');
+      //}
     }
   }
 
@@ -211,64 +221,80 @@ export default class AppController {
       if (category1) {
         if (category1.checked) {
           that.model.sortCategory(category1, 'category');
+          that.model.checkOtherCategory(category1, 'category');
         } else {
-          that.model.unSortCategory('category');
+          that.model.unSortCategory(category1, 'category');
+          that.model.resetOtherCategory(category1, 'category');
         }
       }
 
       if (category2) {
         if (category2.checked) {
           that.model.sortCategory(category2, 'category');
+          that.model.checkOtherCategory(category2, 'category');
         } else {
-          that.model.unSortCategory('category');
+          that.model.unSortCategory(category2, 'category');
+          that.model.resetOtherCategory(category2, 'category');
         }
       }
 
       if (category3) {
         if (category3.checked) {
           that.model.sortCategory(category3, 'category');
+          that.model.checkOtherCategory(category3, 'category');
         } else {
-          that.model.unSortCategory('category');
+          that.model.unSortCategory(category3, 'category');
+          that.model.resetOtherCategory(category3, 'category');
         }
       }
 
       if (category4) {
         if (category4.checked) {
           that.model.sortCategory(category4, 'category');
+          that.model.checkOtherCategory(category4, 'category');
         } else {
-          that.model.unSortCategory('category');
+          that.model.unSortCategory(category4, 'category');
+          that.model.resetOtherCategory(category4, 'category');
         }
       }
 
       if (brand1) {
         if (brand1.checked) {
           that.model.sortCategory(brand1, 'brand');
+          that.model.checkOtherCategory(brand1, 'brand');
         } else {
-          that.model.unSortCategory('brand');
+          that.model.unSortCategory(brand1, 'brand');
+          that.model.resetOtherCategory(brand1, 'brand');
         }
       }
 
       if (brand2) {
         if (brand2.checked) {
           that.model.sortCategory(brand2, 'brand');
+          that.model.checkOtherCategory(brand2, 'brand');
         } else {
-          that.model.unSortCategory('brand');
+          that.model.unSortCategory(brand2, 'brand');
+          that.model.resetOtherCategory(brand2, 'brand');
         }
       }
 
       if (brand3) {
         if (brand3.checked) {
           that.model.sortCategory(brand3, 'brand');
+          that.model.checkOtherCategory(brand3, 'brand');
         } else {
-          that.model.unSortCategory('brand');
+          that.model.unSortCategory(brand3, 'brand');
+          that.model.resetOtherCategory(brand3, 'brand');
         }
       }
 
       if (brand4) {
         if (brand4.checked) {
           that.model.sortCategory(brand4, 'brand');
+          that.model.checkOtherCategory(brand4, 'brand');
         } else {
-          that.model.unSortCategory('brand');
+          that.model.unSortCategory(brand4, 'brand');
+          that.model.resetOtherCategory(brand4, 'brand');
         }
       }
     }
