@@ -1,6 +1,8 @@
+import * as noUiSlider from 'nouislider';
+import 'nouislider/dist/nouislider.css';
 import products from "../../assets/json/products.json";
-import { DataCategories, IOptionsProducts, Routes, SortByType, TypeOfClasses } from "../../utils/types";
-import { setQueryParam, changeSortingByType, clickSearchProducts, getQueryParam, loadSelectedFromLocalStorage, makeCardProduct, removeSelectedToLocalStorage, saveSelectedToLocalStorage, searchProducts, sortingCatalog, sortProducts, addQueryParam, deleteQueryParam, findSumCategory, findSumBrand, resetInput, resetHideStyle, getDataCategories, deleteSearchParams } from "../../utils/utils-catalog-page";
+import { DataCategories, GetResult, IOptionsProducts, Routes, SortByType, TypeOfClasses } from "../../utils/types";
+import { setQueryParam, changeSortingByType, clickSearchProducts, getQueryParam, loadSelectedFromLocalStorage, makeCardProduct, removeSelectedToLocalStorage, saveSelectedToLocalStorage, searchProducts, sortingCatalog, sortProducts, addQueryParam, deleteQueryParam, findSumCategory, findSumBrand, resetInput, resetHideStyle, getDataCategories, deleteSearchParams, checkOtherCategory, changeSliderPrice, changeSliderStock } from "../../utils/utils-catalog-page";
 
 export default class AppView {
   container: HTMLElement;
@@ -268,6 +270,9 @@ export default class AppView {
     if (!view || (view === SortByType.bar)) {
       makeCardProduct(filterCatalog);
     }
+
+    changeSliderPrice(filterCatalog);
+    changeSliderStock(filterCatalog);
   }
 
   unSortCategory(category: HTMLInputElement, name: string): void {
@@ -313,6 +318,9 @@ export default class AppView {
     if (!view || (view === SortByType.bar)) {
       makeCardProduct(resultFilter);
     }
+
+    changeSliderPrice(resultFilter);
+    changeSliderStock(resultFilter);
   }
 
   resetOtherCategory(dataCategories: DataCategories, dataBrands: DataCategories, filterCatalog: IOptionsProducts[]): void {
@@ -373,8 +381,7 @@ export default class AppView {
     resetInput(brandInputs);
     resetHideStyle(nameCategories);
     resetHideStyle(nameBrands);
-    deleteSearchParams(['category']);
-    deleteSearchParams(['brand']);
+    deleteSearchParams(['category', 'brand', 'price', 'stock']);
 
     const dataCategories: DataCategories = getDataCategories('category');
     const dataBrands: DataCategories = getDataCategories('brand');
@@ -401,6 +408,49 @@ export default class AppView {
     }
 
     foundCount.innerHTML = String(products.length);
+    localStorage.removeItem('filterCatalog');
+
+    changeSliderPrice(products);
+    changeSliderStock(products);
+  }
+
+  sortSlider(valueSlider: GetResult | undefined, nameSlider: string): void {
+    const valueSliderString: string | undefined = valueSlider?.toString();
+
+    if (valueSliderString && nameSlider === 'price') {
+      setQueryParam('price', valueSliderString);
+    }
+
+    if (valueSliderString && nameSlider === 'stock') {
+      setQueryParam('stock', valueSliderString);
+    }
+
+    const view = getQueryParam('type');
+    const foundCount = document.querySelector('.found-count') as HTMLElement;
+    let filterCatalog: IOptionsProducts[] = sortingCatalog(JSON.stringify(valueSlider), nameSlider);
+    
+    localStorage.setItem('filterCatalog', JSON.stringify(filterCatalog));
+    foundCount.innerHTML = String(filterCatalog.length);
+
+    if (view === SortByType.list) {
+      changeSortingByType(filterCatalog);
+    }
+
+    if (!view || (view === SortByType.bar)) {
+      makeCardProduct(filterCatalog);
+    }
+
+    if (nameSlider === 'price') {
+      changeSliderStock(filterCatalog, true);
+    }
+
+    if (nameSlider === 'stock') {
+      changeSliderPrice(filterCatalog, true);
+    }
+
+    const dataCategories: DataCategories = getDataCategories('category');
+    const dataBrands: DataCategories = getDataCategories('brand');
+    checkOtherCategory(dataCategories, dataBrands, filterCatalog);
   }
 
   setDefaultParams(): void {

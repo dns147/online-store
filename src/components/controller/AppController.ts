@@ -1,3 +1,6 @@
+import * as noUiSlider from 'nouislider';
+import 'nouislider/dist/nouislider.css';
+import { GetResult } from '../../utils/types';
 import { getId, getPrice } from "../../utils/utils-catalog-page";
 import AppModel from "../model/AppModel";
 
@@ -54,6 +57,8 @@ export default class AppController {
       // const order = event.target.closest('.order') as HTMLElement;
       const btnReset = event.target.closest('.reset') as HTMLButtonElement;
       const btnCopy = event.target.closest('.copy') as HTMLButtonElement;
+      const priceSlider = event.target.closest('.price-slider') as noUiSlider.target;
+      const stockSlider = event.target.closest('.stock-slider') as noUiSlider.target;
 
       // for description page
       const productPic = event.target.closest('.product-info-pictures-main') as HTMLElement;
@@ -157,6 +162,14 @@ export default class AppController {
 
       if (btnCopy) {
         that.model.copyUrlToBuffer();
+      }
+
+      if (priceSlider) {
+        this.model.sortSlider(priceSlider, 'price');
+      }
+
+      if (stockSlider) {
+        this.model.sortSlider(stockSlider, 'stock');
       }
 
       //if (logoName) {

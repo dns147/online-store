@@ -10,6 +10,8 @@ export default class CatalogPage {
   search: string | null;
   category: string | null;
   brand: string | null;
+  price: string | null;
+  stock: string | null;
 
   constructor(container: HTMLElement) {
     this.container = container;
@@ -18,6 +20,8 @@ export default class CatalogPage {
     this.search = null;
     this.category = null;
     this.brand = null;
+    this.price = null;
+    this.stock = null;
   }
 
   render(): string {
@@ -94,7 +98,10 @@ export default class CatalogPage {
     this.search = getQueryParam('search');
     this.category = getQueryParam('category');
     this.brand = getQueryParam('brand');
+    this.price = getQueryParam('price');
+    this.stock = getQueryParam('stock');
 
+    localStorage.removeItem('filterCatalog');
     checkTypeOfSort(this.typeOfView);
    
     if (this.typeOfView === SortByType.list && this.sort === SortByType.priceUp) {
@@ -167,7 +174,7 @@ export default class CatalogPage {
       clickSearchProducts(this.search);
     }
 
-    if (this.category || this.brand) {
+    if (this.category || this.brand || this.price || this.stock) {
       checkQueryParams();
     }
   }

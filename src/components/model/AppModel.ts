@@ -1,7 +1,9 @@
+import * as noUiSlider from 'nouislider';
+import 'nouislider/dist/nouislider.css';
 import AppView from "../view/AppView";
 import products from "../../assets/json/products.json";
-import { setQueryParam, getDataCategories, showAnimateImage, sortingCatalog, checkOtherCategory } from "../../utils/utils-catalog-page";
-import { DataCategories, IOptionsProducts } from "../../utils/types";
+import { setQueryParam, getDataCategories, showAnimateImage, sortingCatalog, checkOtherCategory, deleteSearchParams } from "../../utils/utils-catalog-page";
+import { DataCategories, GetResult, IOptionsProducts } from "../../utils/types";
 
 export default class AppModel {
   view: AppView;
@@ -159,7 +161,6 @@ export default class AppModel {
   }
 
   unSortCategory(category: HTMLInputElement, name: string): void {
-    //const productName: string = category.name;
     this.view.unSortCategory(category, name);
   }
 
@@ -200,5 +201,11 @@ export default class AppModel {
   copyUrlToBuffer(): void {
     const url: string = window.location.href;
     navigator.clipboard.writeText(url);
+  }
+
+  sortSlider(slider: noUiSlider.target, nameSlider: string): void {
+    deleteSearchParams([nameSlider]);
+    const valueSlider: GetResult | undefined = slider.noUiSlider?.get();
+    this.view.sortSlider(valueSlider, nameSlider);
   }
 }

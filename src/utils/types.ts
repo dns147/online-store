@@ -5,6 +5,7 @@ export type Components = { [key: string]: typeof Header };
 export type InitSpa = { [key: string]: typeof Header };
 export type IdStorage = { [key: string]: string };
 export type DataCategories = { [key: string]: number };
+export type GetResult = number | string | (string | number)[];
 
 export class TypeOfClasses {
   constructor(elem: HTMLElement) {}

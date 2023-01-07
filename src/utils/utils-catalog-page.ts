@@ -1,4 +1,4 @@
-import noUiSlider from 'nouislider';
+import * as noUiSlider from 'nouislider';
 import 'nouislider/dist/nouislider.css';
 import wNumb from 'wnumb';
 import products from "../assets/json/products.json";
@@ -434,6 +434,18 @@ export function sortingCatalog(categoryName: string, name: string): IOptionsProd
   if (name === 'brand') {
     resultSearch = products.filter((item: IOptionsProducts) => item.brand === categoryName);
   }
+
+  if (name === 'price') {
+    const price: string[] = JSON.parse(categoryName);
+    const resultStartPrice: IOptionsProducts[] = products.filter((item: IOptionsProducts) => item.price >= Number(price[0]));
+    resultSearch = resultStartPrice.filter((item: IOptionsProducts) => item.price <= Number(price[1]));
+  }
+
+  if (name === 'stock') {
+    const stock: string[] = JSON.parse(categoryName);
+    const resultStartStock: IOptionsProducts[] = products.filter((item: IOptionsProducts) => item.stock >= Number(stock[0]));
+    resultSearch = resultStartStock.filter((item: IOptionsProducts) => item.stock <= Number(stock[1]));
+  }
   
   return resultSearch;
 }
@@ -603,6 +615,10 @@ export function checkQueryParams(): void {
   const params = new URLSearchParams(window.location.search);
   const valueParamCategory: string[] = params.getAll('category');
   const valueParamBrand: string[] = params.getAll('brand');
+  const valueParamPrice: string | null = params.get('price');
+  const valueParamPriceArr: string[] | undefined = valueParamPrice?.split(',');
+  // const valueParamStock: string | null = params.get('stock');
+  // const valueParamStockArr: string[] | undefined = valueParamStock?.split(',');
   const foundCount = document.querySelector('.found-count') as HTMLElement;
   const dataCategories: DataCategories = getDataCategories('category');
   const dataBrands: DataCategories = getDataCategories('brand');
@@ -619,7 +635,6 @@ export function checkQueryParams(): void {
   });
 
   const inputCategories = document.querySelectorAll('.category-input') as NodeListOf<HTMLInputElement>;
-  const inputBrands = document.querySelectorAll('.brand-input') as NodeListOf<HTMLInputElement>;
   let filterCatalog: IOptionsProducts[] = [];
 
   inputCategories.forEach((input: HTMLInputElement, index: number) => {
@@ -638,6 +653,13 @@ export function checkQueryParams(): void {
     }
   });
 
+  const priceSlider = document.querySelector('.price-slider') as noUiSlider.target;
+
+  if (valueParamPriceArr) {
+    priceSlider.noUiSlider?.set([valueParamPriceArr[0], valueParamPriceArr[1]]);
+    filterCatalog = sortingCatalog(JSON.stringify(valueParamPriceArr), 'price');
+  }
+
   localStorage.setItem('filterCatalog', JSON.stringify(filterCatalog));
   foundCount.innerHTML = String(filterCatalog.length);
 
@@ -650,6 +672,53 @@ export function checkQueryParams(): void {
   }
   
   checkOtherCategory(dataCategories, dataBrands, filterCatalog);
+  changeSliderPrice(filterCatalog);
+  changeSliderStock(filterCatalog);
+}
+
+export function changeSliderPrice(filterProducts: IOptionsProducts[], state?: boolean): void {
+  const sortPriceCatalog: IOptionsProducts[] = sortFilterProducts(filterProducts, 'price');
+  const startPrice: number = sortPriceCatalog[0].price;
+  const endPrice: number = sortPriceCatalog[sortPriceCatalog.length - 1].price;
+  const priceSlider = document.querySelector('.price-slider') as noUiSlider.target;
+  
+  priceSlider.noUiSlider?.set([startPrice, endPrice]);
+
+  if (state) {
+    setQueryParam('price', `${startPrice},${endPrice}`);
+  }
+}
+
+export function changeSliderStock(filterProducts: IOptionsProducts[], state?: boolean): void {
+  const sortStockCatalog: IOptionsProducts[] = sortFilterProducts(filterProducts, 'stock');
+  const startStock: number = sortStockCatalog[0].stock;
+  const endStock: number = sortStockCatalog[sortStockCatalog.length - 1].stock;
+  const stockSlider = document.querySelector('.stock-slider') as noUiSlider.target;
+  
+  stockSlider.noUiSlider?.set([startStock, endStock]);
+
+  if (state) {
+    setQueryParam('stock', `${startStock},${endStock}`);
+  }
+}
+
+export function sortFilterProducts(filterProducts: IOptionsProducts[], nameSort: string): IOptionsProducts[] {
+  const copyProducts: IOptionsProducts[] = filterProducts.slice();
+  let resultSort: IOptionsProducts[] = [];
+  
+  if (nameSort === 'price') {
+    resultSort = copyProducts.sort((a, b) => {
+      return a.price - b.price;
+    });
+  }
+
+  if (nameSort === 'stock') {
+    resultSort = copyProducts.sort((a, b) => {
+      return a.stock - b.stock;
+    });
+  }
+
+  return resultSort;
 }
 
 function getProductAmount(idProduct: string): string {
