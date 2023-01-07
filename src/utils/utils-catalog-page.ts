@@ -334,35 +334,36 @@ export function deleteQueryParam(productName: string, categoryName: string): voi
 }
 
 export function sortProducts(typeSort: string): IOptionsProducts[] {
+  const filterCatalog: IOptionsProducts[] = localStorage['filterCatalog'] ? JSON.parse(localStorage['filterCatalog']) : products;
   let resultSort: IOptionsProducts[] = [];
 
   switch (typeSort) {
     case SortByType.priceUp:
-      resultSort = products.sort((a, b) => {
+      resultSort = filterCatalog.sort((a, b) => {
         return a.price - b.price;
       });
       break;
     
     case SortByType.priceDown:
-      resultSort = products.sort((a, b) => {
+      resultSort = filterCatalog.sort((a, b) => {
         return b.price - a.price;
       });
       break;
     
     case SortByType.stockUp:
-      resultSort = products.sort((a, b) => {
+      resultSort = filterCatalog.sort((a, b) => {
         return a.stock - b.stock;
       });
       break;
 
     case SortByType.stockDown:
-      resultSort = products.sort((a, b) => {
+      resultSort = filterCatalog.sort((a, b) => {
         return b.stock - a.stock;
       });
       break;
 
     case SortByType.default:
-      resultSort = products.sort((a, b) => {
+      resultSort = filterCatalog.sort((a, b) => {
         return a.id - b.id;
       });
       break;
@@ -401,9 +402,10 @@ export function showSortProductListView(classForSearch: string, typeOfSort: stri
 
 export function searchProducts(valueInput: string): IOptionsProducts[] {
   const valueInputLowerCase: string =  valueInput.toLowerCase();
+  const filterCatalog: IOptionsProducts[] = localStorage['filterCatalog'] ? JSON.parse(localStorage['filterCatalog']) : products;
   let resultSearch: IOptionsProducts[] = [];
 
-  products.forEach((item: IOptionsProducts) => {
+  filterCatalog.forEach((item: IOptionsProducts) => {
     const title: string =  item.title.toLowerCase();
     const description: string =  item.description.toLowerCase();
     const price: string =  String(item.price);
@@ -617,8 +619,8 @@ export function checkQueryParams(): void {
   const valueParamBrand: string[] = params.getAll('brand');
   const valueParamPrice: string | null = params.get('price');
   const valueParamPriceArr: string[] | undefined = valueParamPrice?.split(',');
-  // const valueParamStock: string | null = params.get('stock');
-  // const valueParamStockArr: string[] | undefined = valueParamStock?.split(',');
+  const valueParamStock: string | null = params.get('stock');
+  const valueParamStockArr: string[] | undefined = valueParamStock?.split(',');
   const foundCount = document.querySelector('.found-count') as HTMLElement;
   const dataCategories: DataCategories = getDataCategories('category');
   const dataBrands: DataCategories = getDataCategories('brand');
@@ -654,9 +656,11 @@ export function checkQueryParams(): void {
   });
 
   const priceSlider = document.querySelector('.price-slider') as noUiSlider.target;
+  const stockSlider = document.querySelector('.stock-slider') as noUiSlider.target;
 
-  if (valueParamPriceArr) {
+  if (valueParamPriceArr && valueParamStockArr) {
     priceSlider.noUiSlider?.set([valueParamPriceArr[0], valueParamPriceArr[1]]);
+    stockSlider.noUiSlider?.set([valueParamStockArr[0], valueParamStockArr[1]]);
     filterCatalog = sortingCatalog(JSON.stringify(valueParamPriceArr), 'price');
   }
 
@@ -672,14 +676,14 @@ export function checkQueryParams(): void {
   }
   
   checkOtherCategory(dataCategories, dataBrands, filterCatalog);
-  changeSliderPrice(filterCatalog);
-  changeSliderStock(filterCatalog);
+  // changeSliderPrice(filterCatalog);
+  // changeSliderStock(filterCatalog);
 }
 
 export function changeSliderPrice(filterProducts: IOptionsProducts[], state?: boolean): void {
   const sortPriceCatalog: IOptionsProducts[] = sortFilterProducts(filterProducts, 'price');
-  const startPrice: number = sortPriceCatalog[0].price;
-  const endPrice: number = sortPriceCatalog[sortPriceCatalog.length - 1].price;
+  const startPrice: number = sortPriceCatalog[0]?.price;
+  const endPrice: number = sortPriceCatalog[sortPriceCatalog.length - 1]?.price;
   const priceSlider = document.querySelector('.price-slider') as noUiSlider.target;
   
   priceSlider.noUiSlider?.set([startPrice, endPrice]);
@@ -691,8 +695,8 @@ export function changeSliderPrice(filterProducts: IOptionsProducts[], state?: bo
 
 export function changeSliderStock(filterProducts: IOptionsProducts[], state?: boolean): void {
   const sortStockCatalog: IOptionsProducts[] = sortFilterProducts(filterProducts, 'stock');
-  const startStock: number = sortStockCatalog[0].stock;
-  const endStock: number = sortStockCatalog[sortStockCatalog.length - 1].stock;
+  const startStock: number = sortStockCatalog[0]?.stock;
+  const endStock: number = sortStockCatalog[sortStockCatalog.length - 1]?.stock;
   const stockSlider = document.querySelector('.stock-slider') as noUiSlider.target;
   
   stockSlider.noUiSlider?.set([startStock, endStock]);

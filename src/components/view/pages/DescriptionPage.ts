@@ -58,19 +58,19 @@ export default class DescriptionPage {
                 </div>
                 <div class="description-container">
                   <div class="description-stock">
-                    <span class="description-stock__heading">items in stock:</span>
+                    <span class="description-stock__heading">Items in stock:</span>
                     <span class="description-stock__value">${products[id].stock}</span>
                   </div>
                   <div class="description-brand">
-                    <span>brand:</span>
+                    <span class="description-stock__heading">Brand:</span>
                     <span>${products[id].brand}</span>
                   </div>
                   <div class="description-category">
-                    <span>category:</span>
+                    <span class="description-stock__heading">Category:</span>
                     <span>${products[id].category}</span>
                   </div>
                   <div class="description-text">
-                    <h4 class="description-text__heading">description:</h4>
+                    <h4 class="description-text__heading">Description:</h4>
                     <p>${products[id].description}</p>
                   </div>
                 </div>

@@ -58,6 +58,7 @@
   margin: 0 0 10px;
   font-family: monospace;
   text-align: center;
+  font-size: 18px;
 }
 
 .product-info-pictures {
@@ -192,6 +193,11 @@
 .btn-cart-description:active,
 .buy-cart:active {
   background: linear-gradient(0deg, rgba(233, 115, 79) 0%, rgba(255,193,7,1) 100%);
+}
+
+.description-stock__heading,
+.description-text__heading {
+  color: #ffe4c4;
 }
 
 @media (max-width: 1024px) {

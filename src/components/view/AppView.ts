@@ -243,6 +243,15 @@ export default class AppView {
     if (!view || (view === SortByType.bar)) {
       makeCardProduct(searchCatalog);
     }
+
+    console.log(searchCatalog)
+
+    const dataCategories: DataCategories = getDataCategories('category');
+    const dataBrands: DataCategories = getDataCategories('brand');
+    checkOtherCategory(dataCategories, dataBrands, searchCatalog);
+
+    changeSliderPrice(searchCatalog);
+    changeSliderStock(searchCatalog);
   }
 
   sortCategory(categoryName: string, name: string, stateHideElement: boolean): void {
@@ -381,7 +390,7 @@ export default class AppView {
     resetInput(brandInputs);
     resetHideStyle(nameCategories);
     resetHideStyle(nameBrands);
-    deleteSearchParams(['category', 'brand', 'price', 'stock']);
+    deleteSearchParams(['category', 'brand', 'price', 'stock', 'sort', 'search']);
 
     const dataCategories: DataCategories = getDataCategories('category');
     const dataBrands: DataCategories = getDataCategories('brand');
