@@ -1,4 +1,6 @@
+import { IOptionsProducts } from "../../../utils/types";
 import { deleteSearchParams } from "../../../utils/utils-catalog-page";
+import { getOrderProducts } from "../../../utils/utils-order-page";
 
 export default class OrderPage {
   container: HTMLElement;
@@ -15,5 +17,9 @@ export default class OrderPage {
 
   init(): void {
     deleteSearchParams(['id', 'sort']);
+
+    const orderProducts: IOptionsProducts[] = getOrderProducts();
+
+    console.log(orderProducts);
   }
 }
