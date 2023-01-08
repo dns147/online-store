@@ -120,10 +120,12 @@ export default class OrderPage {
     
     if (localStorage['totalPrice']) {
       (document.querySelector('.total-price') as HTMLElement).innerHTML = localStorage['totalPrice'];
+      (document.querySelector('.count-total-price') as HTMLElement).innerHTML = localStorage['totalPrice'];
     }
 
     if (localStorage['countBuy']) {
       (document.querySelector('.count-buy') as HTMLElement).innerHTML = localStorage['countBuy'];
+      (document.querySelector('.order-total-number') as HTMLElement).innerHTML = localStorage['countBuy'];
     }
 
     if (this.popup === 'true') {

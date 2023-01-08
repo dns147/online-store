@@ -426,6 +426,99 @@ export default class AppController {
 
     if (event.target instanceof Element) {
       const search = event.target.closest('.search-input') as HTMLInputElement;
+      // for order popup 
+      const phoneNum = event.target.closest('.order-form__tel') as HTMLInputElement;
+      const cardNum = event.target.closest('.order-form__card') as HTMLInputElement;
+      const cardFirstNum = event.target.closest('.first-numbers') as HTMLInputElement;
+      const cardCvv = event.target.closest('.order-form__cvv') as HTMLInputElement;
+      const cardValid = event.target.closest('.order-form__valid') as HTMLInputElement;
+
+      if (phoneNum) {
+        const regexFirstSym = /[+]/;
+        const regexNum = /[0-9]/;
+
+        if (!regexFirstSym.test(phoneNum.value[0])) {
+          phoneNum.value = '';
+        } else if (phoneNum.value.length > 1) {
+          if (!regexNum.test(phoneNum.value[phoneNum.value.length - 1])) {
+            phoneNum.value = phoneNum.value.slice(0, -1);
+          }
+        }
+      }
+
+      if (cardNum) {
+        if (cardNum.value.length > 4) {
+          cardNum.value = cardNum.value.slice(0, -1);
+        }
+      }
+
+      if (cardFirstNum) {
+        const systemsImg: {'3': string, '4': string, '5': string} = {
+          '3': 'https://i.ibb.co/5cd0r7D/express.png',
+          '4': 'https://i.ibb.co/SdrfhSy/visa.png',
+          '5': 'https://i.ibb.co/Sc8dDpj/mastercard.png',
+        }
+        const img = document.querySelector('.order-form__payment-img') as HTMLImageElement;
+        const firstInt = cardFirstNum.value[0];
+        img.src = systemsImg[firstInt as keyof typeof systemsImg] || '';
+      }
+
+      if (cardCvv) {
+        if (cardCvv.value.length > 3) {
+          cardCvv.value = cardCvv.value.slice(0, -1);
+        }
+      }
+
+      if (cardValid) {
+        const regexNum = /[0-9]/;
+        const regexFirstNum = /[0-1]/;
+        const regexFourthNum = /[2-9]/;
+
+        if (!regexFirstNum.test(cardValid.value[0])) {
+          cardValid.value = cardValid.value.slice(0, -1);
+        }
+
+        if (cardValid.value.length === 2) {
+          if (!regexNum.test(cardValid.value[1])) {
+            cardValid.value = cardValid.value.slice(0, -1);
+          } else {
+            if (!cardValid.value.includes('/')) {
+              cardValid.value = cardValid.value + '/';
+            } else {
+              cardValid.value = cardValid.value.replace('/', '');
+            }
+          }
+        }
+
+        if (+cardValid.value[0] === 1 && +cardValid.value[1] > 2) {
+          cardValid.value = cardValid.value.slice(0, -2);
+        }
+
+        if (+cardValid.value[0] > 1) {
+          cardValid.value = cardValid.value.slice(0, -1);
+        }
+
+        if (cardValid.value.length === 4) {
+          if (!regexFourthNum.test(cardValid.value[3])) {
+            cardValid.value = cardValid.value.slice(0, -1);
+          }
+        }
+
+        if (cardValid.value.length === 5) {
+          if (!regexNum.test(cardValid.value[4])) {
+            cardValid.value = cardValid.value.slice(0, -1);
+          } else {
+            if (+cardValid.value[3] === 2 && +cardValid.value[4] < 3) {
+              cardValid.value = cardValid.value.slice(0, -1);
+            }
+          }
+        }
+        
+        if (cardValid.value.length > 5) {
+          cardValid.value = cardValid.value.slice(0, -1);
+        }
+      }
+      // 
 
       if (search) {
         event.preventDefault();

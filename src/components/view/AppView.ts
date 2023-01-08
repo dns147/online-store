@@ -472,6 +472,7 @@ export default class AppView {
     const upParentInput = parentInput.parentElement as HTMLElement;
     const itemStock = upParentInput.querySelector('.item-stock') as HTMLElement;
     const itemPrice = upParentInput.querySelector('.item-price') as HTMLElement;
+    const summaryTotalNumber = document.querySelector('.order-total-number') as HTMLElement;
     
     const currentCountBuy = Number(countBuy.innerHTML);
     const newCountBuy = currentCountBuy + 1;
@@ -489,6 +490,7 @@ export default class AppView {
     const newPrice: number = currentPrice + Number(price);
     itemPrice.innerHTML = String(newPrice);
 
+    summaryTotalNumber.innerHTML = String(newCountBuy);
     localStorage.setItem('countBuy', String(newCountBuy));
     localStorage.setItem('totalPrice', String(newTotalPrice));
   }

@@ -187,9 +187,16 @@
   border-radius: 10px;
 }
 
+.total-number,
+.order-total-price {
+  align-self: flex-start;
+}
+
 .order-total-number,
 .count-total-price {
+  display: inline-block;
   font-size: 20px;
+  width: 45px;
 }
 
 .promo-code {
