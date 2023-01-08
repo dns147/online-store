@@ -2,6 +2,7 @@ const path = require('path');
 const { merge } = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const EslingPlugin = require('eslint-webpack-plugin');
 
 const baseConfig = {
     entry: path.resolve(__dirname, './src/index.ts'),
@@ -20,6 +21,18 @@ const baseConfig = {
                 test: /\.js$/, 
                 loader: "source-map-loader" 
             },
+            {
+                test: [/\.svg$/, /\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/, /\.ico$/],
+                use: [
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            publicPath: './',
+                            name: `./assets/[name].[ext]`,
+                        },
+                    },
+                ],
+            },
         ],
     },
     resolve: {
@@ -28,7 +41,6 @@ const baseConfig = {
     output: {
         filename: 'index.js',
         path: path.resolve(__dirname, 'dist'),
-        publicPath: '/',
     },
     plugins: [
         new HtmlWebpackPlugin({
@@ -36,6 +48,9 @@ const baseConfig = {
             filename: 'index.html',
         }),
         new CleanWebpackPlugin(),
+        new EslingPlugin({
+            extensions: 'ts',
+        }),
     ],
 };
 
