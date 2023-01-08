@@ -2,8 +2,9 @@ import * as noUiSlider from 'nouislider';
 import 'nouislider/dist/nouislider.css';
 import AppView from "../view/AppView";
 import products from "../../assets/json/products.json";
-import { setQueryParam, getDataCategories, showAnimateImage, sortingCatalog, checkOtherCategory, deleteSearchParams } from "../../utils/utils-catalog-page";
+import { setQueryParam, getDataCategories, showAnimateImage, sortingCatalog, checkOtherCategory, deleteSearchParams, getPrice } from "../../utils/utils-catalog-page";
 import { DataCategories, GetResult, IOptionsProducts } from "../../utils/types";
+import { getStock } from '../../utils/utils-order-page';
 
 export default class AppModel {
   view: AppView;
@@ -41,11 +42,14 @@ export default class AppModel {
     window.location.hash = 'description';
   }
 
-  plusAmountProduct(btnCart: HTMLElement, input: HTMLInputElement): void {
+  plusAmountProduct(btnCart: HTMLElement, input: HTMLInputElement, cardMain: HTMLElement): void {
     const value: number = Number(input.value);
+    const id: number = Number(cardMain.dataset.id);
+    const stock: number = Number(getStock(id));
+    const newValue: number = ((value + 1) > stock) ? stock : value + 1;
 
     if (!btnCart.classList.contains('active-btn')) {
-      input.value = String(value + 1);
+      input.value = String(newValue);
     }
   }
 
@@ -207,5 +211,37 @@ export default class AppModel {
     deleteSearchParams([nameSlider]);
     const valueSlider: GetResult | undefined = slider.noUiSlider?.get();
     this.view.sortSlider(valueSlider, nameSlider);
+  }
+
+  plusAmountOrder(input: HTMLInputElement): void {
+    const id: number | undefined = Number(input.dataset.id);
+    let price: string | null = null;
+    const value: number = Number(input.value);
+    const newValue: string = String(value + 1);
+    const stock: string | null = getStock(id);
+
+    if (id >= 0) {
+      price = getPrice(id);
+    }
+
+    this.view.plusAmountOrder(input, newValue, price, stock);
+  }
+
+  minusAmountOrder(input: HTMLInputElement): void {
+    const id: number | undefined = Number(input.dataset.id);
+    let price: string | null = null;
+    const value: number = Number(input.value);
+    const newValue: string = String(value - 1);
+    const stock: string | null = getStock(id);
+
+    if (id >= 0) {
+      price = getPrice(id);
+    }
+
+    if (Number(newValue) === 0) {
+      this.view.removeFromOrder(id);
+    }
+
+    this.view.minusAmountOrder(input, newValue, price, stock);
   }
 }

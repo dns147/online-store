@@ -59,6 +59,8 @@ export default class AppController {
       const btnCopy = event.target.closest('.copy') as HTMLButtonElement;
       const priceSlider = event.target.closest('.price-slider') as noUiSlider.target;
       const stockSlider = event.target.closest('.stock-slider') as noUiSlider.target;
+      const plusOrder = event.target.closest('.order-plus') as HTMLElement;
+      const minusOrder = event.target.closest('.order-minus') as HTMLElement;
 
       // for description page
       const productPic = event.target.closest('.product-info-pictures-main') as HTMLElement;
@@ -113,8 +115,9 @@ export default class AppController {
         const parentPlus = plus.parentElement as HTMLElement;
         const inputAmountProduct = parentPlus.querySelector('.product-amount') as HTMLInputElement;
         const parentInput = parentPlus.parentElement as HTMLElement;
+        const upParentInput = parentInput.parentElement as HTMLElement;
         const btnCart = parentInput.querySelector('.btn-cart') as HTMLElement;
-        that.model.plusAmountProduct(btnCart, inputAmountProduct);
+        that.model.plusAmountProduct(btnCart, inputAmountProduct, upParentInput);
       }
 
       if (minus) {
@@ -170,6 +173,18 @@ export default class AppController {
 
       if (stockSlider) {
         this.model.sortSlider(stockSlider, 'stock');
+      }
+
+      if (plusOrder) {
+        const parentPlus = plusOrder.parentElement as HTMLElement;
+        const inputAmountProduct = parentPlus.querySelector('.order-input-amount') as HTMLInputElement;
+        that.model.plusAmountOrder(inputAmountProduct);
+      }
+
+      if (minusOrder) {
+        const parentMinus = minusOrder.parentElement as HTMLElement;
+        const inputAmountProduct = parentMinus.querySelector('.order-input-amount') as HTMLInputElement;
+        that.model.minusAmountOrder(inputAmountProduct);
       }
 
       //if (logoName) {

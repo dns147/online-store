@@ -1,5 +1,5 @@
 import './styles/order-page.css';
-import { IOptionsProducts } from "../../../utils/types";
+import { IdStorage, IOptionsProducts } from "../../../utils/types";
 import { deleteSearchParams } from "../../../utils/utils-catalog-page";
 import { fillProductItems, getOrderProducts } from "../../../utils/utils-order-page";
 
@@ -19,7 +19,7 @@ export default class OrderPage {
             <div class="page-control">
               <div class="limit"> 
                 <span>LIMIT: </span> 
-                <input type="number" min="1" max="2" class="limit-input">
+                <input type="number" value="1" min="1" max="99" class="limit-input">
               </div>
               <div class="page-numbers">
                 <span>PAGE: </span>
@@ -56,11 +56,21 @@ export default class OrderPage {
   init(): void {
     deleteSearchParams(['id', 'sort']);
 
-    const orderProducts: IOptionsProducts[] = getOrderProducts();
+    if (localStorage['idProductToCart']) {
+      const idProducts: IdStorage = JSON.parse(localStorage['idProductToCart']);
+      const orderProducts: IOptionsProducts[] = getOrderProducts(idProducts);
 
-    const productItemsContainer = this.container.querySelector('.product-items') as HTMLElement;
-    fillProductItems(orderProducts, productItemsContainer);
+      const productItemsContainer = this.container.querySelector('.product-items') as HTMLElement;
+      fillProductItems(orderProducts, productItemsContainer);
+    }
+    
 
-    console.log(orderProducts);
+    if (localStorage['totalPrice']) {
+      (document.querySelector('.total-price') as HTMLElement).innerHTML = localStorage['totalPrice'];
+    }
+
+    if (localStorage['countBuy']) {
+      (document.querySelector('.count-buy') as HTMLElement).innerHTML = localStorage['countBuy'];
+    }
   }
 }

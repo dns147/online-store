@@ -1,8 +1,9 @@
 import * as noUiSlider from 'nouislider';
 import 'nouislider/dist/nouislider.css';
 import products from "../../assets/json/products.json";
-import { DataCategories, GetResult, IOptionsProducts, Routes, SortByType, TypeOfClasses } from "../../utils/types";
+import { DataCategories, GetResult, IdStorage, IOptionsProducts, Routes, SortByType, TypeOfClasses } from "../../utils/types";
 import { setQueryParam, changeSortingByType, clickSearchProducts, getQueryParam, loadSelectedFromLocalStorage, makeCardProduct, removeSelectedToLocalStorage, saveSelectedToLocalStorage, searchProducts, sortingCatalog, sortProducts, addQueryParam, deleteQueryParam, findSumCategory, findSumBrand, resetInput, resetHideStyle, getDataCategories, deleteSearchParams, checkOtherCategory, changeSliderPrice, changeSliderStock } from "../../utils/utils-catalog-page";
+import { fillProductItems, getOrderProducts, getStock } from '../../utils/utils-order-page';
 
 export default class AppView {
   container: HTMLElement;
@@ -460,6 +461,80 @@ export default class AppView {
     const dataCategories: DataCategories = getDataCategories('category');
     const dataBrands: DataCategories = getDataCategories('brand');
     checkOtherCategory(dataCategories, dataBrands, filterCatalog);
+  }
+
+  plusAmountOrder(input: HTMLInputElement, newValue: string, price: string | null, stock: string | null): void {
+    input.value = newValue;
+    const totalPrice = document.querySelector('.total-price') as HTMLElement;
+    const countBuy = document.querySelector('.count-buy') as HTMLElement;
+    
+    const parentInput = input.parentElement as HTMLElement;
+    const upParentInput = parentInput.parentElement as HTMLElement;
+    const itemStock = upParentInput.querySelector('.item-stock') as HTMLElement;
+    const itemPrice = upParentInput.querySelector('.item-price') as HTMLElement;
+    
+    const currentCountBuy = Number(countBuy.innerHTML);
+    const newCountBuy = currentCountBuy + 1;
+    countBuy.innerHTML = String(newCountBuy);
+
+    const currentTotalPrice = Number(totalPrice.innerHTML);
+    const newTotalPrice = currentTotalPrice + Number(price);
+    totalPrice.innerHTML = String(newTotalPrice);
+
+    const currentStock = Number(itemStock.innerHTML);
+    const newStock: number = currentStock - 1;
+    //const newStock: number = ((currentStock - 1) > Number(stock)) ? Number(stock) : currentStock - 1;
+    itemStock.innerHTML = String(newStock);
+
+    const currentPrice = Number(itemPrice.innerHTML);
+    const newPrice: number = currentPrice + Number(price);
+    itemPrice.innerHTML = String(newPrice);
+
+    localStorage.setItem('countBuy', String(newCountBuy));
+    localStorage.setItem('totalPrice', String(newTotalPrice));
+  }
+
+  minusAmountOrder(input: HTMLInputElement, newValue: string, price: string | null, stock: string | null): void {
+    input.value = newValue;
+    const totalPrice = document.querySelector('.total-price') as HTMLElement;
+    const countBuy = document.querySelector('.count-buy') as HTMLElement;
+
+    const parentInput = input.parentElement as HTMLElement;
+    const upParentInput = parentInput.parentElement as HTMLElement;
+    const itemStock = upParentInput.querySelector('.item-stock') as HTMLElement;
+    const itemPrice = upParentInput.querySelector('.item-price') as HTMLElement;
+
+    const currentCountBuy = Number(countBuy.innerHTML);
+    const newCountBuy = currentCountBuy - 1;
+    countBuy.innerHTML = String(newCountBuy);
+
+    const currentTotalPrice = Number(totalPrice.innerHTML);
+    const newTotalPrice = currentTotalPrice - Number(price);
+    totalPrice.innerHTML = String(newTotalPrice);
+
+    const currentStock = Number(itemStock.innerHTML);
+    const newStock: number = currentStock + 1;
+    //const newStock: number = ((currentStock + 1) > Number(stock)) ? Number(stock) : currentStock + 1;
+    itemStock.innerHTML = String(newStock);
+
+    const currentPrice = Number(itemPrice.innerHTML);
+    const newPrice: number = currentPrice - Number(price);
+    itemPrice.innerHTML = String(newPrice);
+
+    localStorage.setItem('countBuy', String(newCountBuy));
+    localStorage.setItem('totalPrice', String(newTotalPrice));
+  }
+
+  removeFromOrder(id: number): void {
+    const idProducts: IdStorage = JSON.parse(localStorage['idProductToCart']);
+
+    delete idProducts[id];
+    localStorage.setItem('idProductToCart', JSON.stringify(idProducts));
+
+    const orderProducts: IOptionsProducts[] = getOrderProducts(idProducts);
+    const productItemsContainer = this.container.querySelector('.product-items') as HTMLElement;
+    productItemsContainer.innerHTML = '';
+    fillProductItems(orderProducts, productItemsContainer);
   }
 
   setDefaultParams(): void {

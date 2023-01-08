@@ -729,9 +729,9 @@ function getProductAmount(idProduct: string): string {
   let productAmount: string = '1';
   const params = new URLSearchParams(window.location.search);
 
-  if (params.get('type') === SortByType.bar) {
+  if (!params.get('type') || params.get('type') === SortByType.bar) {
     const cardsMain = document.querySelectorAll('.card-main') as NodeListOf<HTMLElement>;
-   
+    
     for (let i = 0; i < cardsMain.length; i++) {
       if (cardsMain[i].dataset.id === idProduct) {
         const input = cardsMain[i].querySelector('.product-amount') as HTMLInputElement;
@@ -740,7 +740,7 @@ function getProductAmount(idProduct: string): string {
     }
   }
 
-  if (!params.get('type') || (params.get('type') === SortByType.list)) {
+  if ((params.get('type') === SortByType.list)) {
     productAmount = '1';
   }
 
