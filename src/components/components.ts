@@ -49,7 +49,7 @@ export const Footer = {
             <a href="https://github.com/Tatiana-Shylovich" class="footer-link">Tatiana-Shylovich</a>
           </li>
           <li class="footer-item">
-            <span class="copy">2023</span>
+            <span>2023</span>
           </li>
           <li class="footer-item">
             <a href="https://rs.school/js/" target="_blank">

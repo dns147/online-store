@@ -1,36 +1,43 @@
+import * as noUiSlider from 'nouislider';
+import 'nouislider/dist/nouislider.css';
 import AppView from "../view/AppView";
 import products from "../../assets/json/products.json";
-import { showAnimateImage } from "../../utils/utils-catalog-page";
-import { IdStorage } from "../../utils/types";
+import { setQueryParam, getDataCategories, showAnimateImage, sortingCatalog, checkOtherCategory, deleteSearchParams } from "../../utils/utils-catalog-page";
+import { DataCategories, GetResult, IOptionsProducts } from "../../utils/types";
 
 export default class AppModel {
   view: AppView;
+  hashPageName: string;
 
   constructor(view: AppView) {
     this.view = view;
+    this.hashPageName = '';
   }
 
   updateStateUrl(): void {
     const fullPathName: string = window.location.pathname;
     const fullPathNameArr: string[] = fullPathName.split('/');
     const pathName: string = fullPathNameArr[1];
-
-    this.view.renderContent(pathName);
+    
+    if (!this.hashPageName) {
+      this.view.renderContent(pathName);
+    }
   }
 
   updateState(): void {
     const hashPageName: string = window.location.hash.slice(1);
+    this.hashPageName = hashPageName;
     this.view.renderContent(hashPageName);
   }
 
   showDescription(element: HTMLElement): void {
     const id: string | undefined = element.dataset.id;
-    //const params = new URLSearchParams(window.location.search);
 
-    window.history.replaceState({}, '', `/description/${id}`);
-
-    //params.set('id', `${id}`);
-    //window.history.replaceState({}, '', `${window.location.pathname}?${params}`);
+    if (id) {
+      setQueryParam('id', id);
+    }
+    // window.history.replaceState({}, '', `/description/${id}`);
+    // history.go();
     window.location.hash = 'description';
   }
 
@@ -54,11 +61,15 @@ export default class AppModel {
     this.view.changeStyleCard(btnCart, imageParent, parentBtn, idProduct);
   }
 
+  changeStyleBtnCartDescription(btnCart: HTMLButtonElement, idProduct: string): void {
+    this.view.changeStyleBtnCartDescription(btnCart, idProduct);
+  }
+
   getTotalPrice(btnCart: HTMLButtonElement, totalPrice: HTMLElement, priceProduct: string | null, input?: HTMLInputElement): void {
     const price: number = Number(priceProduct);
     const currentTotalPrice: number = Number(totalPrice.innerHTML);
     const countProduct: number = Number(input?.value);
-    const savedCountProduct: number = Number(btnCart.dataset.count);
+    const savedCountProduct: number = Number(btnCart.dataset.count ?? 1);
     let newTotalPrice: string = '';
 
     if (input && btnCart.classList.contains('active-btn')) {
@@ -100,10 +111,14 @@ export default class AppModel {
     }
   }
 
-  changeSortByType(btnSortType: HTMLElement):void {
-    const typeOfSort: string | undefined = btnSortType.dataset.type;
+  addToCartFromDescription(btnCart: HTMLButtonElement): void {
+    const savedCountProduct = Number(btnCart.dataset?.count) ? Number(btnCart.dataset?.count) : 1;
+    this.view.addToCart(btnCart, savedCountProduct);
+  }
 
-    this.view.changeSortByType(btnSortType, typeOfSort);
+  changeViewType(btnViewType: HTMLElement):void {
+    const typeOfView: string | undefined = btnViewType.dataset.type;
+    this.view.changeViewType(btnViewType, typeOfView);
   }
 
   addStyleBtn(listItemContainer: HTMLElement): void {
@@ -126,7 +141,71 @@ export default class AppModel {
   clickSearch(): void {
     const searchInput = document.getElementById('search') as HTMLInputElement;
     const valueInput: string = searchInput.value;
-    
     this.view.clickSearch(valueInput);
+  }
+
+  sortCategory(category: HTMLInputElement, name: string): void {
+    const productName: string = category.name;
+    const parentCategory = category.parentElement as HTMLElement;
+    const nameCategoryBrand = parentCategory.querySelector('.brand-name') as HTMLElement;
+    const nameCategory = parentCategory.querySelector('.category-name') as HTMLElement;
+    let stateHideElement: boolean = true;
+
+    if (nameCategoryBrand?.classList.contains('hide-name') || nameCategory?.classList.contains('hide-name')) {
+      stateHideElement = true;
+    } else {
+      stateHideElement = false;
+    }
+
+    this.view.sortCategory(productName, name, stateHideElement);
+  }
+
+  unSortCategory(category: HTMLInputElement, name: string): void {
+    this.view.unSortCategory(category, name);
+  }
+
+  checkOtherCategory(category: HTMLInputElement, name: string): void {
+    const productName: string = category.name;
+    const dataCategories: DataCategories = getDataCategories('category');
+    const dataBrands: DataCategories = getDataCategories('brand');
+    let filterCatalog: IOptionsProducts[] = [];
+
+    if (localStorage['filterCatalog']) {
+      filterCatalog = JSON.parse(localStorage['filterCatalog']);
+    } else {
+      filterCatalog = sortingCatalog(productName, name);
+    }
+    
+    checkOtherCategory(dataCategories, dataBrands, filterCatalog);
+  }
+
+  resetOtherCategory(category: HTMLInputElement, name: string): void {
+    const productName: string = category.name;
+    const dataCategories: DataCategories = getDataCategories('category');
+    const dataBrands: DataCategories = getDataCategories('brand');
+    let filterCatalog: IOptionsProducts[] = [];
+
+    if (localStorage['filterCatalog']) {
+      filterCatalog = JSON.parse(localStorage['filterCatalog']);
+    } else {
+      filterCatalog = sortingCatalog(productName, name);
+    }
+
+    this.view.resetOtherCategory(dataCategories, dataBrands, filterCatalog);
+  }
+
+  resetFilters(): void {
+    this.view.resetFilters();
+  }
+
+  copyUrlToBuffer(): void {
+    const url: string = window.location.href;
+    navigator.clipboard.writeText(url);
+  }
+
+  sortSlider(slider: noUiSlider.target, nameSlider: string): void {
+    deleteSearchParams([nameSlider]);
+    const valueSlider: GetResult | undefined = slider.noUiSlider?.get();
+    this.view.sortSlider(valueSlider, nameSlider);
   }
 }

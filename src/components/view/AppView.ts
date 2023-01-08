@@ -1,6 +1,8 @@
+import * as noUiSlider from 'nouislider';
+import 'nouislider/dist/nouislider.css';
 import products from "../../assets/json/products.json";
-import { IOptionsProducts, Routes, SortByType, TypeOfClasses } from "../../utils/types";
-import { addQueryParam, changeSortingByType, clickSearchProducts, deleteSearchParams, getQueryParam, loadSelectedFromLocalStorage, makeCardProduct, removeSelectedToLocalStorage, saveSelectedToLocalStorage, searchProducts, showSortProductBarView, sortProducts } from "../../utils/utils-catalog-page";
+import { DataCategories, GetResult, IOptionsProducts, Routes, SortByType, TypeOfClasses } from "../../utils/types";
+import { setQueryParam, changeSortingByType, clickSearchProducts, getQueryParam, loadSelectedFromLocalStorage, makeCardProduct, removeSelectedToLocalStorage, saveSelectedToLocalStorage, searchProducts, sortingCatalog, sortProducts, addQueryParam, deleteQueryParam, findSumCategory, findSumBrand, resetInput, resetHideStyle, getDataCategories, deleteSearchParams, checkOtherCategory, changeSliderPrice, changeSliderStock } from "../../utils/utils-catalog-page";
 
 export default class AppView {
   container: HTMLElement;
@@ -61,6 +63,18 @@ export default class AppView {
     }
   }
 
+  changeStyleBtnCartDescription(btnCart: HTMLButtonElement, idProduct: string): void {
+    if (btnCart.classList.contains('active-btn')) {
+      btnCart.innerHTML = 'ADD TO CART';
+      btnCart.classList.remove('active-btn');
+      removeSelectedToLocalStorage(idProduct);
+    } else {
+      btnCart.innerHTML = 'DROP FROM CART';
+      btnCart.classList.add('active-btn');
+      saveSelectedToLocalStorage(idProduct);
+    }
+  }
+
   showNewTotalPrice(totalPrice: HTMLElement, newTotalPrice: string) {
     totalPrice.innerHTML = newTotalPrice;
     localStorage.setItem('totalPrice', newTotalPrice);
@@ -75,17 +89,18 @@ export default class AppView {
       newCountBuy = String(currentCountBuy + countProduct);
     } else {
       newCountBuy = String(currentCountBuy - countProduct);
+      btnCart.removeAttribute('data-count');
     }
     
     countBuy.innerHTML = newCountBuy;
     localStorage.setItem('countBuy', newCountBuy);
   }
 
-  changeSortByType(btnSortType: HTMLElement, typeOfSort: string | undefined): void {
+  changeViewType(btnViewType: HTMLElement, typeOfView: string | undefined): void {
     const search = getQueryParam('search');
 
-    if (!btnSortType.classList.contains('sort-type-active') && typeOfSort === SortByType.list) {
-      btnSortType.classList.add('sort-type-active');
+    if (!btnViewType.classList.contains('sort-type-active') && typeOfView === SortByType.list) {
+      btnViewType.classList.add('sort-type-active');
       (document.querySelector('[data-type="bar"]') as HTMLElement).classList.remove('sort-type-active');
 
       const hashPageName: string = window.location.hash;
@@ -104,8 +119,8 @@ export default class AppView {
       loadSelectedFromLocalStorage(listItemContainer, btnCartSortList);
     }
 
-    if (!btnSortType.classList.contains('sort-type-active') && typeOfSort === SortByType.bar) {
-      btnSortType.classList.add('sort-type-active');
+    if (!btnViewType.classList.contains('sort-type-active') && typeOfView === SortByType.bar) {
+      btnViewType.classList.add('sort-type-active');
       (document.querySelector('[data-type="list"]') as HTMLElement).classList.remove('sort-type-active');
 
       const hashPageName: string = window.location.hash;
@@ -138,7 +153,7 @@ export default class AppView {
 
     switch (valueSelect) {
       case '1':
-        addQueryParam('sort', SortByType.priceUp);
+        setQueryParam('sort', SortByType.priceUp);
         const sortCatalog1: IOptionsProducts[] = sortProducts(SortByType.priceUp);
 
         if (view === SortByType.list) {
@@ -152,7 +167,7 @@ export default class AppView {
         break;
 
       case '2':
-        addQueryParam('sort', SortByType.priceDown);
+        setQueryParam('sort', SortByType.priceDown);
         const sortCatalog2: IOptionsProducts[] = sortProducts(SortByType.priceDown);
 
         if (view === SortByType.list) {
@@ -166,7 +181,7 @@ export default class AppView {
         break;
 
       case '3':
-        addQueryParam('sort', SortByType.stockUp);
+        setQueryParam('sort', SortByType.stockUp);
         const sortCatalog3: IOptionsProducts[] = sortProducts(SortByType.stockUp);
 
         if (view === SortByType.list) {
@@ -180,7 +195,7 @@ export default class AppView {
         break;
       
       case '4':
-        addQueryParam('sort', SortByType.stockDown);
+        setQueryParam('sort', SortByType.stockDown);
         const sortCatalog4: IOptionsProducts[] = sortProducts(SortByType.stockDown);
 
         if (view === SortByType.list) {
@@ -194,7 +209,7 @@ export default class AppView {
         break;
       
       case '5':
-        addQueryParam('sort', SortByType.default);
+        setQueryParam('sort', SortByType.default);
         const sortCatalog5: IOptionsProducts[] = sortProducts(SortByType.default);
 
         if (view === SortByType.list) {
@@ -213,7 +228,7 @@ export default class AppView {
   }
 
   clickSearch(valueInput: string): void {
-    addQueryParam('search', valueInput);
+    setQueryParam('search', valueInput);
 
     const view = getQueryParam('type');
     const searchCatalog: IOptionsProducts[] = searchProducts(valueInput);
@@ -228,6 +243,223 @@ export default class AppView {
     if (!view || (view === SortByType.bar)) {
       makeCardProduct(searchCatalog);
     }
+
+    console.log(searchCatalog)
+
+    const dataCategories: DataCategories = getDataCategories('category');
+    const dataBrands: DataCategories = getDataCategories('brand');
+    checkOtherCategory(dataCategories, dataBrands, searchCatalog);
+
+    changeSliderPrice(searchCatalog);
+    changeSliderStock(searchCatalog);
+  }
+
+  sortCategory(categoryName: string, name: string, stateHideElement: boolean): void {
+    addQueryParam(name, categoryName);
+
+    const view = getQueryParam('type');
+    let filterCatalog: IOptionsProducts[] = [];
+    const foundCount = document.querySelector('.found-count') as HTMLElement;
+
+    if (localStorage['filterCatalog'] && JSON.parse(localStorage['filterCatalog']).length !== 0 && !stateHideElement) {
+      filterCatalog = JSON.parse(localStorage['filterCatalog']);
+    } else if (localStorage['filterCatalog'] && JSON.parse(localStorage['filterCatalog']).length !== 0 && stateHideElement) {
+      filterCatalog = JSON.parse(localStorage['filterCatalog']).concat(sortingCatalog(categoryName, name));
+    } else {
+      filterCatalog = sortingCatalog(categoryName, name);
+    }
+
+    localStorage.setItem('filterCatalog', JSON.stringify(filterCatalog));
+    foundCount.innerHTML = String(filterCatalog.length);
+
+    if (view === SortByType.list) {
+      changeSortingByType(filterCatalog);
+    }
+
+    if (!view || (view === SortByType.bar)) {
+      makeCardProduct(filterCatalog);
+    }
+
+    changeSliderPrice(filterCatalog);
+    changeSliderStock(filterCatalog);
+  }
+
+  unSortCategory(category: HTMLInputElement, name: string): void {
+    const productName: string = category.name;
+    const numberCategory: string | undefined = category.dataset.num;
+    let inputCategory = null;
+    
+    deleteQueryParam(productName, name);
+
+    if (name === 'category') {
+      inputCategory = document.querySelector(`.brand${numberCategory}`) as HTMLInputElement;
+    }
+
+    if (name === 'brand') {
+      inputCategory = document.querySelector(`.category${numberCategory}`) as HTMLInputElement;
+    }
+
+    const productsLocalStorage: IOptionsProducts[] = JSON.parse(localStorage['filterCatalog']);
+    let filterProduct: IOptionsProducts[] = [];
+  
+    if (name === 'category' && !inputCategory?.checked) {
+      filterProduct = productsLocalStorage.filter((item: IOptionsProducts) => item.category !== productName);
+    } else if (name === 'category' && inputCategory?.checked) {
+      filterProduct = productsLocalStorage;
+    }
+
+    if (name === 'brand' && !inputCategory?.checked) {
+      filterProduct = productsLocalStorage.filter((item: IOptionsProducts) => item.brand !== productName);
+    } else if (inputCategory?.checked) {
+      filterProduct = productsLocalStorage;
+    }
+
+    localStorage.setItem('filterCatalog', JSON.stringify(filterProduct));
+    const resultFilter = filterProduct.length ? filterProduct : products;
+    const foundCount = document.querySelector('.found-count') as HTMLElement;
+    foundCount.innerHTML = String(resultFilter.length);
+    const view = getQueryParam('type');
+
+    if (view === SortByType.list) {
+      changeSortingByType(resultFilter);
+    }
+
+    if (!view || (view === SortByType.bar)) {
+      makeCardProduct(resultFilter);
+    }
+
+    changeSliderPrice(resultFilter);
+    changeSliderStock(resultFilter);
+  }
+
+  resetOtherCategory(dataCategories: DataCategories, dataBrands: DataCategories, filterCatalog: IOptionsProducts[]): void {
+    const nameCategories = document.querySelectorAll('.category-name') as NodeListOf<Element>;
+    const countCategories = document.querySelectorAll('.category-find') as NodeListOf<Element>;
+    const nameBrands = document.querySelectorAll('.brand-name') as NodeListOf<Element>;
+    const countBrands = document.querySelectorAll('.brand-find') as NodeListOf<Element>;
+    let sumCategories: number[] = [];
+    let sumBrands: number[] = [];
+
+    if (filterCatalog.length === 0) {
+      sumCategories = findSumCategory(dataCategories, products);
+      sumBrands = findSumBrand(dataBrands, products);
+
+      nameCategories.forEach((nameCategory) => {
+        if (nameCategory.classList.contains('hide-name')) {
+          nameCategory.classList.remove('hide-name');
+        }
+      });
+
+      nameBrands.forEach((nameBrand) => {
+        if (nameBrand.classList.contains('hide-name')) {
+          nameBrand.classList.remove('hide-name');
+        }
+      });
+    } else {
+      sumCategories = findSumCategory(dataCategories, filterCatalog);
+      sumBrands = findSumBrand(dataBrands, filterCatalog);
+    }
+
+    countCategories.forEach((countCategory, index) => {
+      countCategory.innerHTML = String(sumCategories[index]);
+
+      if (sumCategories[index] === 0) {
+        nameCategories[index].classList.add('hide-name');
+      }
+    });
+
+    countBrands.forEach((countBrand, index) => {
+      countBrand.innerHTML = String(sumBrands[index]);
+
+      if (sumBrands[index] === 0) {
+        nameBrands[index].classList.add('hide-name');
+      }
+    });
+  }
+
+  resetFilters(): void {
+    const categoryInputs = document.querySelectorAll('.category-input') as NodeListOf<HTMLInputElement>;
+    const brandInputs = document.querySelectorAll('.brand-input') as NodeListOf<HTMLInputElement>;
+    const nameCategories = document.querySelectorAll('.category-name') as NodeListOf<Element>;
+    const countCategories = document.querySelectorAll('.category-find') as NodeListOf<Element>;
+    const nameBrands = document.querySelectorAll('.brand-name') as NodeListOf<Element>;
+    const countBrands = document.querySelectorAll('.brand-find') as NodeListOf<Element>;
+    const foundCount = document.querySelector('.found-count') as HTMLElement;
+
+    resetInput(categoryInputs);
+    resetInput(brandInputs);
+    resetHideStyle(nameCategories);
+    resetHideStyle(nameBrands);
+    deleteSearchParams(['category', 'brand', 'price', 'stock', 'sort', 'search']);
+
+    const dataCategories: DataCategories = getDataCategories('category');
+    const dataBrands: DataCategories = getDataCategories('brand');
+    let index1: number = 0;
+    let index2: number = 0;
+    const view = getQueryParam('type');
+
+    for (let key in dataCategories) {
+      countCategories[index1].innerHTML = String(dataCategories[key]);
+      index1 += 1;
+    }
+
+    for (let key in dataBrands) {
+      countBrands[index2].innerHTML = String(dataBrands[key]);
+      index2 += 1;
+    }
+
+    if (view === SortByType.list) {
+      changeSortingByType(products);
+    }
+
+    if (!view || (view === SortByType.bar)) {
+      makeCardProduct(products);
+    }
+
+    foundCount.innerHTML = String(products.length);
+    localStorage.removeItem('filterCatalog');
+
+    changeSliderPrice(products);
+    changeSliderStock(products);
+  }
+
+  sortSlider(valueSlider: GetResult | undefined, nameSlider: string): void {
+    const valueSliderString: string | undefined = valueSlider?.toString();
+
+    if (valueSliderString && nameSlider === 'price') {
+      setQueryParam('price', valueSliderString);
+    }
+
+    if (valueSliderString && nameSlider === 'stock') {
+      setQueryParam('stock', valueSliderString);
+    }
+
+    const view = getQueryParam('type');
+    const foundCount = document.querySelector('.found-count') as HTMLElement;
+    let filterCatalog: IOptionsProducts[] = sortingCatalog(JSON.stringify(valueSlider), nameSlider);
+    
+    localStorage.setItem('filterCatalog', JSON.stringify(filterCatalog));
+    foundCount.innerHTML = String(filterCatalog.length);
+
+    if (view === SortByType.list) {
+      changeSortingByType(filterCatalog);
+    }
+
+    if (!view || (view === SortByType.bar)) {
+      makeCardProduct(filterCatalog);
+    }
+
+    if (nameSlider === 'price') {
+      changeSliderStock(filterCatalog, true);
+    }
+
+    if (nameSlider === 'stock') {
+      changeSliderPrice(filterCatalog, true);
+    }
+
+    const dataCategories: DataCategories = getDataCategories('category');
+    const dataBrands: DataCategories = getDataCategories('brand');
+    checkOtherCategory(dataCategories, dataBrands, filterCatalog);
   }
 
   setDefaultParams(): void {

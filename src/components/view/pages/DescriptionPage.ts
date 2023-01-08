@@ -1,6 +1,7 @@
 import './styles/description-page.css';
 import products from "../../../assets/json/products.json";
 import { getId } from "../../../utils/utils-catalog-page";
+import { checkFromLocalStorage } from '../../../utils/utils-description-page';
 
 export default class DescriptionPage {
   container: HTMLElement;
@@ -11,13 +12,21 @@ export default class DescriptionPage {
     this.id = null;
   }
 
-  init(): number {
+  init(): void {
     this.id = getId();
-    return this.id ? +this.id : 0;
+    checkFromLocalStorage(this.id);
+
+    if (localStorage['totalPrice']) {
+      (document.querySelector('.total-price') as HTMLElement).innerHTML = localStorage['totalPrice'];
+    }
+
+    if (localStorage['countBuy']) {
+      (document.querySelector('.count-buy') as HTMLElement).innerHTML = localStorage['countBuy'];
+    }
   }
 
   render(): string {
-    const id = this.init();
+    const id: number = Number(getId()) ?? 0;
     
     return `
       <div class="description-wrapper">
@@ -49,26 +58,26 @@ export default class DescriptionPage {
                 </div>
                 <div class="description-container">
                   <div class="description-stock">
-                    <span class="description-stock__heading">items in stock:</span>
+                    <span class="description-stock__heading">Items in stock:</span>
                     <span class="description-stock__value">${products[id].stock}</span>
                   </div>
                   <div class="description-brand">
-                    <span>brand:</span>
+                    <span class="description-stock__heading">Brand:</span>
                     <span>${products[id].brand}</span>
                   </div>
                   <div class="description-category">
-                    <span>category:</span>
+                    <span class="description-stock__heading">Category:</span>
                     <span>${products[id].category}</span>
                   </div>
                   <div class="description-text">
-                    <h4 class="description-text__heading">description:</h4>
+                    <h4 class="description-text__heading">Description:</h4>
                     <p>${products[id].description}</p>
                   </div>
                 </div>
                 <div class="payment-container">
                   <span>$${products[id].price}</span>
-                  <button class="btn-cart">add to cart</button>
-                  <button><a href="#order">buy now</a></button>
+                  <button class="btn-cart-description">add to cart</button>
+                  <button class="buy-cart"><a href="#order">buy now</a></button>
                 </div>
               </div>
             </div>

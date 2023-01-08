@@ -1,25 +1,53 @@
 import './styles/catalog-page.css';
 import products from "../../../assets/json/products.json";
 import { SortByType } from '../../../utils/types';
-import { deleteSearchParams, checkTypeOfSort, getQueryParam, showSortProductListView, showSortProductBarView, clickSearchProducts } from '../../../utils/utils-catalog-page';
+import { deleteSearchParams, checkTypeOfSort, getQueryParam, showSortProductListView, showSortProductBarView, clickSearchProducts, addFilterCategory, makePriceSlider, makeStockSlider, checkQueryParams } from '../../../utils/utils-catalog-page';
 
 export default class CatalogPage {
   container: HTMLElement;
   typeOfView: string | null;
   sort: string | null;
   search: string | null;
+  category: string | null;
+  brand: string | null;
+  price: string | null;
+  stock: string | null;
 
   constructor(container: HTMLElement) {
     this.container = container;
     this.typeOfView = null;
     this.sort = null;
     this.search = null;
+    this.category = null;
+    this.brand = null;
+    this.price = null;
+    this.stock = null;
   }
 
   render(): string {
     return `
       <article class="main-container">
         <aside class="filter-container">
+          <div class="btn-filters">
+            <button class="reset">Reset Filters</button>
+            <button class="copy">Copy Link</button>
+          </div>
+          <div class="category-container">
+            <h3 class="category-header">Category</h3>
+            <div class="category-filters"></div>
+          </div>
+          <div class="brand-container">
+            <h3 class="category-header">Brand</h3>
+            <div class="brand-filters"></div>
+          </div>
+          <div class="price-container">
+            <h3 class="category-header">Price</h3>
+            <div class="price-slider"></div>
+          </div>
+          <div class="stock-container">
+            <h3 class="category-header">Stock</h3>
+            <div class="stock-slider"></div>
+          </div>
         </aside>
         <section class="catalog-container">
           <div class="catalog-header">
@@ -36,7 +64,7 @@ export default class CatalogPage {
               <p>Found: <span class="found-count">20</span></p>
             </div>
             <form class="search-form">
-              <input type="search" name="search" class="search-input" id="search" placeholder="Search" autocomplete="off" autofocus="">
+              <input type="search" name="search" class="search-input" id="search" placeholder="Search" autocomplete="off">
               <button type="submit" class="search-btn"></button>
             </form>
             <div class="sort-type-container">
@@ -54,12 +82,26 @@ export default class CatalogPage {
   init(): void {
     //clearLocalStorage();
     const searchInput = document.getElementById('search') as HTMLInputElement;
+    const categoryFilters = document.querySelector('.category-filters') as HTMLElement;
+    const brandFilters = document.querySelector('.brand-filters') as HTMLElement;
+    const priceSlider = document.querySelector('.price-slider') as HTMLElement;
+    const stockSlider = document.querySelector('.stock-slider') as HTMLElement;
+
+    addFilterCategory(categoryFilters, 'category');
+    addFilterCategory(brandFilters, 'brand');
+    makePriceSlider(priceSlider);
+    makeStockSlider(stockSlider);
     deleteSearchParams(['id']);
 
     this.typeOfView = getQueryParam('type');
     this.sort = getQueryParam('sort');
     this.search = getQueryParam('search');
+    this.category = getQueryParam('category');
+    this.brand = getQueryParam('brand');
+    this.price = getQueryParam('price');
+    this.stock = getQueryParam('stock');
 
+    localStorage.removeItem('filterCatalog');
     checkTypeOfSort(this.typeOfView);
    
     if (this.typeOfView === SortByType.list && this.sort === SortByType.priceUp) {
@@ -130,6 +172,10 @@ export default class CatalogPage {
     if (this.search) {
       searchInput.value = this.search;
       clickSearchProducts(this.search);
+    }
+
+    if (this.category || this.brand || this.price || this.stock) {
+      checkQueryParams();
     }
   }
 }
