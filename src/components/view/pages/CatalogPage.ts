@@ -90,7 +90,7 @@ export default class CatalogPage {
     addFilterCategory(brandFilters, 'brand');
     makePriceSlider(priceSlider);
     makeStockSlider(stockSlider);
-    deleteSearchParams(['id', 'popup']);
+    deleteSearchParams(['id', 'popup', 'limit', 'page']);
 
     this.typeOfView = getQueryParam('type');
     this.sort = getQueryParam('sort');

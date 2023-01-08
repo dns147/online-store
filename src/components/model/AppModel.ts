@@ -286,4 +286,16 @@ export default class AppModel {
   dropDiscount(btn: HTMLButtonElement): void {
     this.view.dropDiscount(btn);
   }
+
+  addLimitPage(limitInput: HTMLInputElement): void {
+    setQueryParam('limit', limitInput.value);
+  }
+
+  changePageUp(): void {
+    this.view.changePageUp();
+  }
+
+  changePageDown(): void {
+    this.view.changePageDown();
+  }
 }

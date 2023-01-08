@@ -55,6 +55,8 @@ export default class AppController {
       const orderBtnBuy = event.target.closest('.order-btn-buy') as HTMLElement;
       const applyBtnDiscount = event.target.closest('.apply-discount') as HTMLButtonElement;
       const btnDropDiscount = event.target.closest('.drop-discount') as HTMLButtonElement;
+      const btnPageRight = event.target.closest('.page-right') as HTMLButtonElement;
+      const btnPageLeft = event.target.closest('.page-left') as HTMLButtonElement;
       
       // for description page
       const productPic = event.target.closest('.product-info-pictures-main') as HTMLElement;
@@ -298,6 +300,14 @@ export default class AppController {
       if (btnDropDiscount) {
         that.model.dropDiscount(btnDropDiscount);
       }
+
+      if (btnPageRight) {
+        that.model.changePageUp();
+      }
+
+      if (btnPageLeft) {
+        that.model.changePageDown();
+      }
     }
   }
 
@@ -437,7 +447,8 @@ export default class AppController {
     if (event.target instanceof Element) {
       const search = event.target.closest('.search-input') as HTMLInputElement;
       const promoCode = event.target.closest('.promo-code-input') as HTMLInputElement;
-
+      const limitInput = event.target.closest('.limit-input') as HTMLInputElement;
+      
       // for order popup 
       const phoneNum = event.target.closest('.order-form__tel') as HTMLInputElement;
       const cardNum = event.target.closest('.order-form__card') as HTMLInputElement;
@@ -540,6 +551,10 @@ export default class AppController {
       if (promoCode) {
         event.preventDefault();
         that.model.enterPromoCode(promoCode);
+      }
+
+      if (limitInput) {
+        that.model.addLimitPage(limitInput);
       }
     }
   }

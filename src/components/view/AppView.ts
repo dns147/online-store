@@ -545,6 +545,7 @@ export default class AppView {
 
   removeFromOrder(id: number): void {
     const idProducts: IdStorage = JSON.parse(localStorage['idProductToCart']);
+    const limitPage = Number(getQueryParam('limit'));
 
     delete idProducts[id];
     localStorage.setItem('idProductToCart', JSON.stringify(idProducts));
@@ -552,7 +553,7 @@ export default class AppView {
     const orderProducts: IOptionsProducts[] = getOrderProducts(idProducts);
     const productItemsContainer = this.container.querySelector('.product-items') as HTMLElement;
     productItemsContainer.innerHTML = '';
-    fillProductItems(orderProducts, productItemsContainer);
+    fillProductItems(orderProducts, productItemsContainer, limitPage);
   }
 
   sendOrder(): void {
@@ -696,5 +697,19 @@ export default class AppView {
       newPriceContainer.remove();
       currentPriceContainer.classList.remove('old-price');
     }
+  }
+
+  changePageUp(): void {
+    const countPageDom = document.querySelector('.count-page') as HTMLElement;
+    const countPage = Number(countPageDom.innerHTML);
+    const newCountPage = countPage + 1;
+    countPageDom.innerHTML = String(newCountPage);
+  }
+
+  changePageDown(): void {
+    const countPageDom = document.querySelector('.count-page') as HTMLElement;
+    const countPage = Number(countPageDom.innerHTML);
+    const newCountPage = ((countPage - 1) > 0) ? (countPage - 1) : 1;
+    countPageDom.innerHTML = String(newCountPage);
   }
 }

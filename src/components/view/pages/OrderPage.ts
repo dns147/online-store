@@ -1,7 +1,7 @@
 import './styles/order-page.css';
 import './styles/popup-order.css';
 import { IdStorage, IOptionsProducts } from "../../../utils/types";
-import { deleteSearchParams, getQueryParam } from "../../../utils/utils-catalog-page";
+import { deleteSearchParams, getQueryParam, setQueryParam } from "../../../utils/utils-catalog-page";
 import { fillProductItems, getOrderProducts } from "../../../utils/utils-order-page";
 
 export default class OrderPage {
@@ -27,7 +27,7 @@ export default class OrderPage {
               <div class="page-numbers">
                 <span>PAGE: </span>
                 <button class="page-left"> &lt; </button>
-                <span>1</span>
+                <span class="count-page">1</span>
                 <button class="page-right"> &gt; </button>
               </div>
             </div>
@@ -109,12 +109,17 @@ export default class OrderPage {
     deleteSearchParams(['id', 'sort']);
     this.popup = getQueryParam('popup');
 
+    const limitPageInput = document.querySelector('.limit-input') as HTMLInputElement;
+    const limitPage = Number(limitPageInput.value);
+    setQueryParam('limit', String(limitPage));
+    setQueryParam('page', String(1));
+
     if (localStorage['idProductToCart']) {
       const idProducts: IdStorage = JSON.parse(localStorage['idProductToCart']);
       const orderProducts: IOptionsProducts[] = getOrderProducts(idProducts);
 
       const productItemsContainer = this.container.querySelector('.product-items') as HTMLElement;
-      fillProductItems(orderProducts, productItemsContainer);
+      fillProductItems(orderProducts, productItemsContainer, limitPage);
     }
     
     if (localStorage['totalPrice']) {
