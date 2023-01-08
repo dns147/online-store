@@ -1,0 +1,259 @@
+:root {
+  --main-font-color: #f44336;
+  --btn-font: #9e430e;
+  --hover-color: #ffc107;
+  --white-font: #ffffff;
+  --amount-border: #d4cccc;
+  --card-border: #008000;
+  --minus-plus-background: #fbfbfb;
+  --black-color: #000000;
+}
+
+.main-cart-container {
+  background: url("https://i.ibb.co/T47zS1M/falcon.jpg");
+  background-size: cover;
+  display: flex;
+  padding: 20px;
+  justify-content: space-around;
+}
+
+.product-in-cart {
+  font-family: monospace;
+  width: 50vw;
+}
+
+.title-and-page-control {
+  display: flex;
+  justify-content: space-between;
+}
+
+.page-control {
+  align-items: center;
+  display: flex;
+  column-gap: 20px;
+}
+
+.limit-input {
+  border: 1px solid var(--amount-border);
+  border-radius: 15px;
+  outline: none;
+  font-size: 12px;
+  height: 27px;
+  padding: 0 7px;
+  text-align: center;
+  width: 50px;
+}
+
+.page-left,
+.page-right {
+  width: 30px;
+  border: 1px solid var(--hover-color);
+  border-radius: 15px;
+  color: var(--btn-font);
+  font-size: 12px;
+  padding: 6px 0;
+  background: var(--white-font);
+  height: 27px;
+  background: #f1f8e9;
+}
+
+.page-left:hover,
+.page-right:hover {
+  cursor: pointer;
+  color: var(--white-font);
+  background: linear-gradient(0deg, rgba(255,193,7,1) 0%, rgb(233, 115, 79) 100%);
+}
+
+.page-left:active,
+.page-right:active {
+  background: linear-gradient(0deg, rgba(233, 115, 79) 0%, rgba(255,193,7,1) 100%);
+}
+
+.list-product {
+  list-style: none;
+}
+
+.item-product {
+  display: flex;
+  column-gap: 10px;
+  margin-top: 10px;
+  background: var(--white-font);
+  padding: 5px 5px 5px 10px;
+  filter: drop-shadow(2px 4px 6px black);
+}
+
+.number-product {
+  align-self: center;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.item-image-product {
+  height: 100px;
+  margin: 0px 10px;
+}
+
+.item-description-container {
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+  width: 350px;
+}
+
+.name-product {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.order-product-amount {
+  display: flex;
+}
+
+.item-order-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.order-plus, 
+.order-minus {
+  background: var(--minus-plus-background);
+  border-radius: 15px;
+  font-size: 17px;
+  height: 27px;
+  line-height: 1.5;
+  text-align: center;
+  width: 29px;
+  border: none;
+}
+
+.order-plus::after {
+  content: "+";
+}
+
+.order-minus::after {
+  content: "-";
+}
+
+.order-plus:hover, 
+.order-minus:hover {
+  cursor: pointer;
+  color: var(--white-font);
+  background: linear-gradient(0deg, rgba(255,193,7,1) 0%, rgb(233, 115, 79) 100%);
+}
+
+.order-plus:active, 
+.order-minus:active {
+  background: linear-gradient(0deg, rgba(233, 115, 79) 0%, rgba(255,193,7,1) 100%);
+}
+
+.order-input-amount {
+  border: 1px solid var(--amount-border);
+  border-radius: 15px;
+  outline: none;
+  font-size: 12px;
+  height: 27px;
+  padding: 0 7px;
+  text-align: center;
+  width: 50px;
+}
+
+.stock-product,
+.price-product {
+  font-weight: bold;
+}
+
+.total-cart {
+  font-family: monospace;
+  width: 30vw;
+  display: flex;
+  flex-direction: column;
+  row-gap: 15px;
+  align-items: center;
+}
+
+.total-cart-container {
+  /* background: #607d8b91; */
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-basis: 300px;
+  width: 100%;
+  row-gap: 20px;
+  font-size: 18px;
+  backdrop-filter: blur(3px);
+  box-shadow: rgb(0 0 0) 0px 2px 5px 1px, rgb(0 0 0) 0px 0px 15px 1px;
+  border-radius: 10px;
+}
+
+.order-total-number,
+.count-total-price {
+  /* color: var(--white-font); */
+  font-size: 20px;
+}
+
+.promo-code {
+  width: 238px;
+  height: 30px;
+  background-color: var(--black-color);
+  padding: 0 15px;
+  align-self: center;
+}
+
+.promo-code-input {
+  width: 100%;
+  outline: none;
+  font-size: 16px;
+  font-family: monospace;
+  color: var(--white-font);
+  background-color: transparent;
+  border: none;
+  position: relative;
+  top: 5px;
+}
+
+.promo-code-input::-webkit-input-placeholder {
+  color: gray; 
+  font-family: monospace; 
+}
+
+.promo-code-input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  background-image: url("../../../../assets/png/cross.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 12px;
+  height: 12px;
+  cursor: pointer;
+}
+
+.promo-ex {
+  font-size: 14px;
+  margin-top: -16px;
+}
+
+.order-btn-buy {
+  border: 1px solid var(--hover-color);
+  border-radius: 15px;
+  font-size: 12px;
+  color: var(--btn-font);
+  padding: 6px 0;
+  height: 27px;
+  width: 165px;
+  background: #f1f8e9;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.order-btn-buy:hover {
+  cursor: pointer;
+  color: var(--white-font);
+  background: linear-gradient(0deg, rgba(255,193,7,1) 0%, rgb(233, 115, 79) 100%);
+}
+
+.order-btn-buy:active {
+  background: linear-gradient(0deg, rgba(233, 115, 79) 0%, rgba(255,193,7,1) 100%);
+}
