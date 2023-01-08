@@ -174,7 +174,6 @@
 }
 
 .total-cart-container {
-  /* background: #607d8b91; */
   padding: 10px;
   display: flex;
   flex-direction: column;
@@ -190,7 +189,6 @@
 
 .order-total-number,
 .count-total-price {
-  /* color: var(--white-font); */
   font-size: 20px;
 }
 

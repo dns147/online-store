@@ -1,6 +1,5 @@
 import * as noUiSlider from 'nouislider';
 import 'nouislider/dist/nouislider.css';
-import { GetResult } from '../../utils/types';
 import { getId, getPrice } from "../../utils/utils-catalog-page";
 import AppModel from "../model/AppModel";
 
@@ -12,7 +11,6 @@ export default class AppController {
     this.model = model;
     this.container = container;
 
-    //this.updateStateUrl = this.updateStateUrl.bind(this);
     this.updateState = this.updateState.bind(this);
     this.getEventsClick = this.getEventsClick.bind(this);
     this.getEventsMouseOver = this.getEventsMouseOver.bind(this);
@@ -20,7 +18,6 @@ export default class AppController {
     this.getEventsChange = this.getEventsChange.bind(this);
     this.getEventsInput = this.getEventsInput.bind(this);
 
-    //window.addEventListener('popstate', this.updateStateUrl);
     window.addEventListener('hashchange', this.updateState);
     document.addEventListener('click', this.getEventsClick);
     document.addEventListener('mouseover', this.getEventsMouseOver);
@@ -29,13 +26,7 @@ export default class AppController {
     document.addEventListener('input', this.getEventsInput);
 
     this.updateState();
-    //this.updateStateUrl();
   }
-
-  // updateStateUrl(): void {
-  //   const that = this;
-  //   that.model.updateStateUrl();
-  // }
 
   updateState(): void {
     const that = this;
@@ -53,14 +44,15 @@ export default class AppController {
       const btnViewType = event.target.closest('.sort-type') as HTMLElement;
       const listItem = event.target.closest('.list-item-container') as HTMLElement;
       const btnCartSortList = event.target.closest('.btn-cart-sort-list') as HTMLButtonElement;
-      // const logoName = event.target.closest('.logo-name') as HTMLElement;
-      // const order = event.target.closest('.order') as HTMLElement;
       const btnReset = event.target.closest('.reset') as HTMLButtonElement;
       const btnCopy = event.target.closest('.copy') as HTMLButtonElement;
       const priceSlider = event.target.closest('.price-slider') as noUiSlider.target;
       const stockSlider = event.target.closest('.stock-slider') as noUiSlider.target;
       const plusOrder = event.target.closest('.order-plus') as HTMLElement;
       const minusOrder = event.target.closest('.order-minus') as HTMLElement;
+      const btnBuyCart = event.target.closest('.buy-cart') as HTMLButtonElement;
+      const btnOrder = event.target.closest('.order-image') as HTMLElement;
+      const orderBtnBuy = event.target.closest('.order-btn-buy') as HTMLElement;
 
       // for description page
       const productPic = event.target.closest('.product-info-pictures-main') as HTMLElement;
@@ -105,9 +97,107 @@ export default class AppController {
         that.model.addToCartFromDescription(btnCartDescription);
       }
       // for description page
+
+      // order popup
+      const orderBtn = event.target.closest('.order-form__button') as HTMLButtonElement;
+      const name = document.querySelector('.order-form__name') as HTMLInputElement;
+      const phoneNum = document.querySelector('.order-form__tel') as HTMLInputElement;
+      const address = document.querySelector('.order-form__address') as HTMLInputElement;
+      const email = document.querySelector('.order-form__email') as HTMLInputElement;
+      const cardNum = document.querySelector('.order-form__card') as HTMLInputElement;
+      const cardCvv = document.querySelector('.order-form__cvv') as HTMLInputElement;
+      const cardValid = document.querySelector('.order-form__valid') as HTMLInputElement;
+      
+      if (orderBtn) {
+        event.preventDefault();
+
+        const nameArr = name.value.trim().split(' ');
+        const regexName = /[A-Za-z]{1}[A-Za-z\\'\\-]{2,}/;
+        const isValidName = nameArr.length > 1 && nameArr.every((e) => regexName.test(e));
+
+        if (!isValidName) {
+          name.closest('.order-form__name-container')?.classList.add('error');
+        } else {
+          name.closest('.order-form__name-container')?.classList.remove('error');
+        }
+
+        const regexPhoneNum = /\+{1}[0-9]{9,}/;
+        const isValidPhoneNum = regexPhoneNum.test(phoneNum.value);
+
+        if (!isValidPhoneNum) {
+          phoneNum.closest('.order-form__tel-container')?.classList.add('error');
+        } else {
+          phoneNum.closest('.order-form__tel-container')?.classList.remove('error');
+        }
+
+        const addressArr = address.value.trim().split(' ');
+        const regexAddress = /[A-Za-z0-9\\'\\-\\.\\№\\ \\:\\"\\)\\(]{5,}/;
+        const isValidAddress = addressArr.length > 2 && addressArr.every((e) => regexAddress.test(e));
+
+        if (!isValidAddress) {
+          address.closest('.order-form__address-container')?.classList.add('error');
+        } else {
+          address.closest('.order-form__address-container')?.classList.remove('error');
+        }
+
+        const regexEmail = /^([a-zA-Z0-9_\-\\.]+)+@([\w-]+\.)+[\w-]{2,4}$/
+        const isValidEmail = regexEmail.test(email.value);
+
+        if (!isValidEmail) {
+          email.closest('.order-form__email-container')?.classList.add('error');
+        } else {
+          email.closest('.order-form__email-container')?.classList.remove('error');
+        }
+
+        const regexCardNum = /[0-9]{4}/;
+        const isValidCardNum = regexCardNum.test(cardNum.value);
+
+        if (!isValidCardNum) {
+          cardNum.closest('.order-form__card-number')?.classList.add('error');
+        } else {
+          cardNum.closest('.order-form__card-number')?.classList.remove('error');
+        }
+
+        const regexCardValid = /[0-1]{1}[0-9]{1}[/][0-9]{2}/
+        const isValidCardValid = regexCardValid.test(cardValid.value);
+
+        if (!isValidCardValid) {
+          cardValid.closest('.order-form__valid-container')?.classList.add('error');
+        } else {
+          cardValid.closest('.order-form__valid-container')?.classList.remove('error');
+        }
+
+        const regexCardCvv = /[0-9]{3}/;
+        const isValidCardCvv = regexCardCvv.test(cardCvv.value);
+        
+        if (!isValidCardCvv) {
+          cardCvv.closest('.order-form__cvv-container')?.classList.add('error');
+        } else {
+          cardCvv.closest('.order-form__cvv-container')?.classList.remove('error');
+        }
+
+        const isvalidAll = [isValidName, isValidPhoneNum, isValidPhoneNum, isValidEmail, isValidCardNum, isValidCardValid, isValidCardCvv].every((e) => e);
+       
+        if (isvalidAll) {
+          document.querySelector('.form-container')?.classList.add('.ordered');
+        }
+
+        if (isvalidAll && isValidAddress && isValidName && isValidEmail && isValidPhoneNum && isValidCardNum && isValidCardValid && isValidCardCvv) {
+          that.model.sendOrder();
+        }
+
+        console.log(isvalidAll)
+        console.log(isValidAddress);
+        console.log(isValidName);
+        console.log(isValidEmail);
+        console.log(isValidPhoneNum);
+        console.log(isValidCardNum);
+        console.log(isValidCardValid);
+        console.log(isValidCardCvv);
+      }
+      // 
       
       if (product || listItem) {
-        //window.history.replaceState({}, '', `/description`);
         that.model.showDescription(product || listItem);
       }
 
@@ -187,14 +277,17 @@ export default class AppController {
         that.model.minusAmountOrder(inputAmountProduct);
       }
 
-      //if (logoName) {
-        //that.model.setDefaultParams();
-        //window.history.replaceState({}, '', '/');
-      //}
+      if (btnBuyCart) {
+        that.model.goToCartWithPopup();
+      }
 
-      //if (order) {
-        //window.history.replaceState({}, '', '/');
-      //}
+      if (btnOrder) {
+        that.model.goToCartWithoutPopup();
+      }
+
+      if (orderBtnBuy) {
+        that.model.showPopup();
+      }
     }
   }
 

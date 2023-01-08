@@ -2,7 +2,7 @@ import * as noUiSlider from 'nouislider';
 import 'nouislider/dist/nouislider.css';
 import AppView from "../view/AppView";
 import products from "../../assets/json/products.json";
-import { setQueryParam, getDataCategories, showAnimateImage, sortingCatalog, checkOtherCategory, deleteSearchParams, getPrice } from "../../utils/utils-catalog-page";
+import { setQueryParam, getDataCategories, showAnimateImage, sortingCatalog, checkOtherCategory, deleteSearchParams, getPrice, deleteQueryParam } from "../../utils/utils-catalog-page";
 import { DataCategories, GetResult, IOptionsProducts } from "../../utils/types";
 import { getStock } from '../../utils/utils-order-page';
 
@@ -37,8 +37,7 @@ export default class AppModel {
     if (id) {
       setQueryParam('id', id);
     }
-    // window.history.replaceState({}, '', `/description/${id}`);
-    // history.go();
+
     window.location.hash = 'description';
   }
 
@@ -136,10 +135,6 @@ export default class AppModel {
   clickSelect(select: HTMLInputElement): void {
     const valueSelect: string = select.value;
     this.view.clickSelect(valueSelect);
-  }
-
-  setDefaultParams(): void {
-    this.view.setDefaultParams();
   }
 
   clickSearch(): void {
@@ -243,5 +238,26 @@ export default class AppModel {
     }
 
     this.view.minusAmountOrder(input, newValue, price, stock);
+  }
+
+  goToCartWithPopup(): void {
+    setQueryParam('popup', 'true');
+  }
+
+  goToCartWithoutPopup(): void {
+    deleteSearchParams(['popup']);
+  }
+
+  sendOrder(): void {
+    this.view.sendOrder();
+
+    setTimeout(() => {
+      window.location.hash = 'catalog';
+      this.view.resetOrder();
+    }, 4000);
+  }
+
+  showPopup(): void {
+    this.view.showPopup();
   }
 }

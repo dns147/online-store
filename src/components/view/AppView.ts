@@ -3,7 +3,7 @@ import 'nouislider/dist/nouislider.css';
 import products from "../../assets/json/products.json";
 import { DataCategories, GetResult, IdStorage, IOptionsProducts, Routes, SortByType, TypeOfClasses } from "../../utils/types";
 import { setQueryParam, changeSortingByType, clickSearchProducts, getQueryParam, loadSelectedFromLocalStorage, makeCardProduct, removeSelectedToLocalStorage, saveSelectedToLocalStorage, searchProducts, sortingCatalog, sortProducts, addQueryParam, deleteQueryParam, findSumCategory, findSumBrand, resetInput, resetHideStyle, getDataCategories, deleteSearchParams, checkOtherCategory, changeSliderPrice, changeSliderStock } from "../../utils/utils-catalog-page";
-import { fillProductItems, getOrderProducts, getStock } from '../../utils/utils-order-page';
+import { fillProductItems, getOrderProducts } from '../../utils/utils-order-page';
 
 export default class AppView {
   container: HTMLElement;
@@ -483,7 +483,6 @@ export default class AppView {
 
     const currentStock = Number(itemStock.innerHTML);
     const newStock: number = currentStock - 1;
-    //const newStock: number = ((currentStock - 1) > Number(stock)) ? Number(stock) : currentStock - 1;
     itemStock.innerHTML = String(newStock);
 
     const currentPrice = Number(itemPrice.innerHTML);
@@ -514,7 +513,6 @@ export default class AppView {
 
     const currentStock = Number(itemStock.innerHTML);
     const newStock: number = currentStock + 1;
-    //const newStock: number = ((currentStock + 1) > Number(stock)) ? Number(stock) : currentStock + 1;
     itemStock.innerHTML = String(newStock);
 
     const currentPrice = Number(itemPrice.innerHTML);
@@ -537,8 +535,25 @@ export default class AppView {
     fillProductItems(orderProducts, productItemsContainer);
   }
 
-  setDefaultParams(): void {
-    // deleteSearchParams(['id', 'type', 'sort']);
-    // showSortProductBarView('.option5', SortByType.default);
+  sendOrder(): void {
+    const popup = document.querySelector('.popup-order') as HTMLElement;
+    const text: HTMLSpanElement = document.createElement('span');
+    text.innerHTML = 'ORDER IS PROCESSED';
+    text.classList.add('send-order-text');
+    popup.prepend(text);
+  }
+
+  resetOrder(): void {
+    (document.querySelector('.total-price') as HTMLElement).innerHTML = '0';
+    (document.querySelector('.count-buy') as HTMLElement).innerHTML = '0';
+
+    localStorage['totalPrice'] = 0;
+    localStorage['countBuy'] = 0;
+    localStorage.removeItem('idProductToCart');
+  }
+
+  showPopup(): void {
+    const popup = document.querySelector('.popup-order') as HTMLElement;
+    popup.classList.add('active-popup');
   }
 }
