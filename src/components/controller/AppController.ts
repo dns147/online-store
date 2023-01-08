@@ -53,7 +53,9 @@ export default class AppController {
       const btnBuyCart = event.target.closest('.buy-cart') as HTMLButtonElement;
       const btnOrder = event.target.closest('.order-image') as HTMLElement;
       const orderBtnBuy = event.target.closest('.order-btn-buy') as HTMLElement;
-
+      const applyBtnDiscount = event.target.closest('.apply-discount') as HTMLButtonElement;
+      const btnDropDiscount = event.target.closest('.drop-discount') as HTMLButtonElement;
+      
       // for description page
       const productPic = event.target.closest('.product-info-pictures-main') as HTMLElement;
       const descriptionPopup = event.target.closest('.product-picture-popup') as HTMLElement;
@@ -288,6 +290,14 @@ export default class AppController {
       if (orderBtnBuy) {
         that.model.showPopup();
       }
+
+      if (applyBtnDiscount) {
+        that.model.applyDiscount(applyBtnDiscount);
+      }
+
+      if (btnDropDiscount) {
+        that.model.dropDiscount(btnDropDiscount);
+      }
     }
   }
 
@@ -426,6 +436,8 @@ export default class AppController {
 
     if (event.target instanceof Element) {
       const search = event.target.closest('.search-input') as HTMLInputElement;
+      const promoCode = event.target.closest('.promo-code-input') as HTMLInputElement;
+
       // for order popup 
       const phoneNum = event.target.closest('.order-form__tel') as HTMLInputElement;
       const cardNum = event.target.closest('.order-form__card') as HTMLInputElement;
@@ -513,7 +525,7 @@ export default class AppController {
             }
           }
         }
-        
+
         if (cardValid.value.length > 5) {
           cardValid.value = cardValid.value.slice(0, -1);
         }
@@ -523,6 +535,11 @@ export default class AppController {
       if (search) {
         event.preventDefault();
         that.model.clickSearch();
+      }
+
+      if (promoCode) {
+        event.preventDefault();
+        that.model.enterPromoCode(promoCode);
       }
     }
   }

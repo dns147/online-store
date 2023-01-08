@@ -3,7 +3,7 @@ import 'nouislider/dist/nouislider.css';
 import AppView from "../view/AppView";
 import products from "../../assets/json/products.json";
 import { setQueryParam, getDataCategories, showAnimateImage, sortingCatalog, checkOtherCategory, deleteSearchParams, getPrice, deleteQueryParam } from "../../utils/utils-catalog-page";
-import { DataCategories, GetResult, IOptionsProducts } from "../../utils/types";
+import { DataCategories, GetResult, IOptionsProducts, PromoCode } from "../../utils/types";
 import { getStock } from '../../utils/utils-order-page';
 
 export default class AppModel {
@@ -259,5 +259,31 @@ export default class AppModel {
 
   showPopup(): void {
     this.view.showPopup();
+  }
+
+  enterPromoCode(input: HTMLInputElement): void {
+    const valueInput: string = input.value;
+
+    if (valueInput === PromoCode.code1) {
+      this.view.addPromoCode(PromoCode.code1);
+    }
+
+    if (valueInput === PromoCode.code2) {
+      this.view.addPromoCode(PromoCode.code2);
+    }
+
+    if ((valueInput !== PromoCode.code1) && (valueInput !== PromoCode.code2)) {
+      if (document.querySelector('.discount-container') as HTMLElement) {
+        (document.querySelector('.discount-container') as HTMLElement).remove();
+      }
+    }
+  }
+
+  applyDiscount(btn: HTMLButtonElement): void {
+    this.view.applyDiscount(btn);
+  }
+
+  dropDiscount(btn: HTMLButtonElement): void {
+    this.view.dropDiscount(btn);
   }
 }

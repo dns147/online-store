@@ -42,8 +42,7 @@ export default class OrderPage {
               <span class="order-total-number">0</span>
             </div>
             <div class="order-total-price">
-              <span>Total price:</span>
-              <span class="count-total-price">0</span>
+              <span>Total price: $</span><span class="count-total-price">0</span>
             </div>
             <form class="promo-code">
               <input type="search" placeholder="Enter promo code" class="promo-code-input">

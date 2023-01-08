@@ -68,7 +68,7 @@ export function makeCardProduct(arrayProducts: IOptionsProducts[]): void {
     listCategory.innerHTML = `<span class="list-name">Category: </span>${product.category}`
     listBrand.innerHTML = `<span class="list-name">Brand: </span>${product.brand}`
     listStock.innerHTML = `<span class="list-name">Stock: </span>${product.stock}`
-    listPrice.innerHTML = `<span class="list-name">Price: </span>${product.price}`
+    listPrice.innerHTML = `<span class="list-name">Price: $</span>${product.price}`
     cartContainer.innerHTML = `
       <div class="input-amount">
         <button class="minus"></button>
@@ -124,10 +124,6 @@ export function getId(): string | null {
   const params = new URLSearchParams(window.location.search);
   const id: string | null = params.get('id');
 
-  // const fullPathName: string = window.location.pathname;
-  // const fullPathNameArr: string[] = fullPathName.split('/');
-  // const id: string | null = fullPathNameArr[2];
-  
   return id;
 };
 
@@ -226,7 +222,7 @@ export function changeSortingByType(arrayProducts: IOptionsProducts[]): void {
     listItem.innerHTML = `
       <div class="list-item-container" data-id=${product.id}>
         <img src="${product.images[0]}" alt="image" class="image-sorting-by-list">
-        <span class="list-item-text">${product.title}. <b>Stock</b>: ${product.stock}. <b>Price</b>: ${product.price}</span>
+        <span class="list-item-text">${product.title}. <b>Stock</b>: ${product.stock}. <b>Price</b>: $${product.price}</span>
       </div>
       <button class="btn-cart-sort-list">ADD TO CART</button>
     `;

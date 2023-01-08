@@ -14,7 +14,7 @@ export const Header = {
         </div>
 
         <div class="order-total-container">
-          <p class="order-total">Cart total: <span class="total-price">0</span></p>
+          <p class="order-total">Cart total: $<span class="total-price">0</span></p>
         </div>
 
         <div class="order-container">

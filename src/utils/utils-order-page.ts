@@ -49,7 +49,7 @@ export function fillProductItems(orderProducts: IOptionsProducts[], container: H
           <input type="text" name="product-amount" value="${productAmountInput}" class="order-input-amount" data-id="${product.id}">
           <button class="order-plus"></button>
         </div>
-        <span class="price-product">Price: <span class="item-price">${price}</span></span>
+        <span class="price-product">Price: $<span class="item-price">${price}</span></span>
       </div>
     `;
 

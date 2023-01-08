@@ -41,3 +41,18 @@ export enum SortByType {
   stockDown = 'stock-down',
   default = 'default'
 }
+
+export enum PromoCode {
+  code1 = 'RS',
+  code2 = 'EPM'
+}
+
+export enum Discount {
+  discount1 = 10,
+  discount2 = 20
+}
+
+export enum DiscountName {
+  discountName1 = 'Rolling Scopes School - 10%',
+  discountName2 = 'EPAM Systems - 20%'
+}
