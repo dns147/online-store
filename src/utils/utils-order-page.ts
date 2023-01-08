@@ -2,7 +2,6 @@ import products from "../assets/json/products.json";
 import { IdStorage, IOptionsProducts} from "./types";
 
 export function getOrderProducts(idProducts: IdStorage): IOptionsProducts[] {
-  //const idProducts: IdStorage = JSON.parse(localStorage['idProductToCart']);
   let orderProducts: IOptionsProducts[] = [];
 
   for (let id in idProducts) {

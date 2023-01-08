@@ -464,7 +464,6 @@ export default class AppView {
   }
 
   plusAmountOrder(input: HTMLInputElement, newValue: string, price: string | null, stock: string | null): void {
-    input.value = newValue;
     const totalPrice = document.querySelector('.total-price') as HTMLElement;
     const countBuy = document.querySelector('.count-buy') as HTMLElement;
     
@@ -473,6 +472,8 @@ export default class AppView {
     const itemStock = upParentInput.querySelector('.item-stock') as HTMLElement;
     const itemPrice = upParentInput.querySelector('.item-price') as HTMLElement;
     const summaryTotalNumber = document.querySelector('.order-total-number') as HTMLElement;
+    const summaryTotalPrice = document.querySelector('.count-total-price') as HTMLElement;
+    const plus = upParentInput.querySelector('.order-plus') as HTMLButtonElement;
     
     const currentCountBuy = Number(countBuy.innerHTML);
     const newCountBuy = currentCountBuy + 1;
@@ -483,14 +484,22 @@ export default class AppView {
     totalPrice.innerHTML = String(newTotalPrice);
 
     const currentStock = Number(itemStock.innerHTML);
-    const newStock: number = currentStock - 1;
+    const newStock: number = ((currentStock - 1) >= 0) ? (currentStock - 1) : 0;
     itemStock.innerHTML = String(newStock);
+
+    if (newStock === 0) {
+      plus.disabled = true;
+      input.value = String(stock);
+    } else {
+      input.value = newValue;
+    }
 
     const currentPrice = Number(itemPrice.innerHTML);
     const newPrice: number = currentPrice + Number(price);
     itemPrice.innerHTML = String(newPrice);
 
     summaryTotalNumber.innerHTML = String(newCountBuy);
+    summaryTotalPrice.innerHTML = String(newTotalPrice);
     localStorage.setItem('countBuy', String(newCountBuy));
     localStorage.setItem('totalPrice', String(newTotalPrice));
   }
@@ -504,6 +513,9 @@ export default class AppView {
     const upParentInput = parentInput.parentElement as HTMLElement;
     const itemStock = upParentInput.querySelector('.item-stock') as HTMLElement;
     const itemPrice = upParentInput.querySelector('.item-price') as HTMLElement;
+    const summaryTotalNumber = document.querySelector('.order-total-number') as HTMLElement;
+    const summaryTotalPrice = document.querySelector('.count-total-price') as HTMLElement;
+    const plus = upParentInput.querySelector('.order-plus') as HTMLButtonElement;
 
     const currentCountBuy = Number(countBuy.innerHTML);
     const newCountBuy = currentCountBuy - 1;
@@ -517,10 +529,16 @@ export default class AppView {
     const newStock: number = currentStock + 1;
     itemStock.innerHTML = String(newStock);
 
+    if (newStock > 0) {
+      plus.disabled = false;
+    }
+
     const currentPrice = Number(itemPrice.innerHTML);
     const newPrice: number = currentPrice - Number(price);
     itemPrice.innerHTML = String(newPrice);
 
+    summaryTotalNumber.innerHTML = String(newCountBuy);
+    summaryTotalPrice.innerHTML = String(newTotalPrice);
     localStorage.setItem('countBuy', String(newCountBuy));
     localStorage.setItem('totalPrice', String(newTotalPrice));
   }

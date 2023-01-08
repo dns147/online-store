@@ -39,11 +39,11 @@ export default class OrderPage {
           <div class="total-cart-container">
             <div class="total-number">
               <span>Products:</span>
-              <span class="order-total-number">10</span>
+              <span class="order-total-number">0</span>
             </div>
             <div class="order-total-price">
               <span>Total price:</span>
-              <span class="count-total-price">10</span>
+              <span class="count-total-price">0</span>
             </div>
             <form class="promo-code">
               <input type="search" placeholder="Enter promo code" class="promo-code-input">
