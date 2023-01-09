@@ -1,8 +1,9 @@
 import * as noUiSlider from 'nouislider';
 import 'nouislider/dist/nouislider.css';
 import products from "../../assets/json/products.json";
-import { DataCategories, GetResult, IOptionsProducts, Routes, SortByType, TypeOfClasses } from "../../utils/types";
+import { DataCategories, Discount, DiscountName, GetResult, IdStorage, IOptionsProducts, PromoCode, Routes, SortByType, TypeOfClasses } from "../../utils/types";
 import { setQueryParam, changeSortingByType, clickSearchProducts, getQueryParam, loadSelectedFromLocalStorage, makeCardProduct, removeSelectedToLocalStorage, saveSelectedToLocalStorage, searchProducts, sortingCatalog, sortProducts, addQueryParam, deleteQueryParam, findSumCategory, findSumBrand, resetInput, resetHideStyle, getDataCategories, deleteSearchParams, checkOtherCategory, changeSliderPrice, changeSliderStock } from "../../utils/utils-catalog-page";
+import { fillProductItems, getOrderProducts } from '../../utils/utils-order-page';
 
 export default class AppView {
   container: HTMLElement;
@@ -462,8 +463,253 @@ export default class AppView {
     checkOtherCategory(dataCategories, dataBrands, filterCatalog);
   }
 
-  setDefaultParams(): void {
-    // deleteSearchParams(['id', 'type', 'sort']);
-    // showSortProductBarView('.option5', SortByType.default);
+  plusAmountOrder(input: HTMLInputElement, newValue: string, price: string | null, stock: string | null): void {
+    const totalPrice = document.querySelector('.total-price') as HTMLElement;
+    const countBuy = document.querySelector('.count-buy') as HTMLElement;
+    
+    const parentInput = input.parentElement as HTMLElement;
+    const upParentInput = parentInput.parentElement as HTMLElement;
+    const itemStock = upParentInput.querySelector('.item-stock') as HTMLElement;
+    const itemPrice = upParentInput.querySelector('.item-price') as HTMLElement;
+    const summaryTotalNumber = document.querySelector('.order-total-number') as HTMLElement;
+    const summaryTotalPrice = document.querySelector('.count-total-price') as HTMLElement;
+    const plus = upParentInput.querySelector('.order-plus') as HTMLButtonElement;
+    
+    const currentCountBuy = Number(countBuy.innerHTML);
+    const newCountBuy = currentCountBuy + 1;
+    countBuy.innerHTML = String(newCountBuy);
+
+    const currentTotalPrice = Number(totalPrice.innerHTML);
+    const newTotalPrice = currentTotalPrice + Number(price);
+    totalPrice.innerHTML = String(newTotalPrice);
+
+    const currentStock = Number(itemStock.innerHTML);
+    const newStock: number = ((currentStock - 1) >= 0) ? (currentStock - 1) : 0;
+    itemStock.innerHTML = String(newStock);
+
+    if (newStock === 0) {
+      plus.disabled = true;
+      input.value = String(stock);
+    } else {
+      input.value = newValue;
+    }
+
+    const currentPrice = Number(itemPrice.innerHTML);
+    const newPrice: number = currentPrice + Number(price);
+    itemPrice.innerHTML = String(newPrice);
+
+    summaryTotalNumber.innerHTML = String(newCountBuy);
+    summaryTotalPrice.innerHTML = String(newTotalPrice);
+    localStorage.setItem('countBuy', String(newCountBuy));
+    localStorage.setItem('totalPrice', String(newTotalPrice));
+  }
+
+  minusAmountOrder(input: HTMLInputElement, newValue: string, price: string | null, stock: string | null): void {
+    input.value = newValue;
+    const totalPrice = document.querySelector('.total-price') as HTMLElement;
+    const countBuy = document.querySelector('.count-buy') as HTMLElement;
+
+    const parentInput = input.parentElement as HTMLElement;
+    const upParentInput = parentInput.parentElement as HTMLElement;
+    const itemStock = upParentInput.querySelector('.item-stock') as HTMLElement;
+    const itemPrice = upParentInput.querySelector('.item-price') as HTMLElement;
+    const summaryTotalNumber = document.querySelector('.order-total-number') as HTMLElement;
+    const summaryTotalPrice = document.querySelector('.count-total-price') as HTMLElement;
+    const plus = upParentInput.querySelector('.order-plus') as HTMLButtonElement;
+
+    const currentCountBuy = Number(countBuy.innerHTML);
+    const newCountBuy = currentCountBuy - 1;
+    countBuy.innerHTML = String(newCountBuy);
+
+    const currentTotalPrice = Number(totalPrice.innerHTML);
+    const newTotalPrice = currentTotalPrice - Number(price);
+    totalPrice.innerHTML = String(newTotalPrice);
+
+    const currentStock = Number(itemStock.innerHTML);
+    const newStock: number = currentStock + 1;
+    itemStock.innerHTML = String(newStock);
+
+    if (newStock > 0) {
+      plus.disabled = false;
+    }
+
+    const currentPrice = Number(itemPrice.innerHTML);
+    const newPrice: number = currentPrice - Number(price);
+    itemPrice.innerHTML = String(newPrice);
+
+    summaryTotalNumber.innerHTML = String(newCountBuy);
+    summaryTotalPrice.innerHTML = String(newTotalPrice);
+    localStorage.setItem('countBuy', String(newCountBuy));
+    localStorage.setItem('totalPrice', String(newTotalPrice));
+  }
+
+  removeFromOrder(id: number): void {
+    const idProducts: IdStorage = JSON.parse(localStorage['idProductToCart']);
+    const limitPage = Number(getQueryParam('limit'));
+
+    delete idProducts[id];
+    localStorage.setItem('idProductToCart', JSON.stringify(idProducts));
+
+    const orderProducts: IOptionsProducts[] = getOrderProducts(idProducts);
+    const productItemsContainer = this.container.querySelector('.product-items') as HTMLElement;
+    productItemsContainer.innerHTML = '';
+    fillProductItems(orderProducts, productItemsContainer, limitPage);
+  }
+
+  sendOrder(): void {
+    const popup = document.querySelector('.popup-order') as HTMLElement;
+    const text: HTMLSpanElement = document.createElement('span');
+    text.innerHTML = 'ORDER IS PROCESSED';
+    text.classList.add('send-order-text');
+    popup.prepend(text);
+  }
+
+  resetOrder(): void {
+    (document.querySelector('.total-price') as HTMLElement).innerHTML = '0';
+    (document.querySelector('.count-buy') as HTMLElement).innerHTML = '0';
+
+    localStorage['totalPrice'] = 0;
+    localStorage['countBuy'] = 0;
+    localStorage.removeItem('idProductToCart');
+  }
+
+  showPopup(): void {
+    const popup = document.querySelector('.popup-order') as HTMLElement;
+    popup.classList.add('active-popup');
+  }
+
+  addPromoCode(promoCode: string): void {
+    let discount: number = 0;
+    let discountName: string = '';
+
+    if (promoCode === PromoCode.code1) {
+      discount = Discount.discount1;
+      discountName = DiscountName.discountName1;
+    }
+
+    if (promoCode === PromoCode.code2) {
+      discount = Discount.discount2;
+      discountName = DiscountName.discountName2;
+    }
+
+    const oldDiscountName = document.querySelectorAll('.discount-name') as NodeListOf<HTMLElement>;
+    const promoEx = document.querySelector('.promo-ex') as HTMLElement;
+    const discountContainer: HTMLDivElement = document.createElement('div');
+    discountContainer.classList.add('discount-container');
+
+    if (oldDiscountName.length > 0 && ((Number(oldDiscountName[0]?.dataset.discount) === discount) || (Number(oldDiscountName[1]?.dataset.discount) === discount))) {
+      discountContainer.innerHTML = `
+        <span class="discount-name">${discountName}</span>
+      `;
+    } else {
+      discountContainer.innerHTML = `
+        <span class="discount-name">${discountName}</span>
+        <button class="apply-discount" data-discount=${discount}>ADD</button>
+      `;
+    }
+    
+    promoEx.after(discountContainer);
+  }
+
+  applyDiscount(btn: HTMLButtonElement): void {
+    const currentPriceContainer = document.querySelector('.order-total-price') as HTMLElement;
+    const summaryPrice = currentPriceContainer.querySelector('.count-total-price') as HTMLElement;
+    const oldPriceContainer = document.querySelector('.new-price-container') as HTMLElement;
+    const currentPrice = Number(summaryPrice.innerHTML);
+    const currentDiscount = Number(btn.dataset.discount);
+    let newPrice: number = 0;
+    let discountName: string = '';
+
+    if (currentDiscount === Discount.discount1) {
+      discountName = DiscountName.discountName1;
+    }
+
+    if (currentDiscount === Discount.discount2) {
+      discountName = DiscountName.discountName2;
+    }
+
+    if (oldPriceContainer) {
+      const newCurrentPrice = Number((document.querySelector('.new-price-discount') as HTMLElement).innerHTML);
+      newPrice = newCurrentPrice - ((newCurrentPrice * currentDiscount) / 100);
+
+      oldPriceContainer.innerHTML = `
+        <span class="price-discount">Total price: $<span class="new-price-discount">${newPrice}</span></span>
+      `;
+    } else {
+      newPrice = currentPrice - ((currentPrice * currentDiscount) / 100);
+      const newPriceContainer: HTMLDivElement = document.createElement('div');
+      newPriceContainer.classList.add('new-price-container');
+
+      newPriceContainer.innerHTML = `
+        <span class="price-discount">Total price: $<span class="new-price-discount">${newPrice}</span></span>
+      `;
+
+      currentPriceContainer.classList.add('old-price');
+      currentPriceContainer.after(newPriceContainer);
+    }
+
+    const oldApplyDiscountContainer = document.querySelector('.apply-discount-container') as HTMLElement;
+    
+    if (oldApplyDiscountContainer) {
+      const newDiscountContainer: HTMLDivElement = document.createElement('div');
+      newDiscountContainer.innerHTML = `
+        <span class="discount-name" data-discount=${currentDiscount}>${discountName}</span>
+        <button class="drop-discount" data-discount=${currentDiscount}>DROP</button>
+      `;
+
+      oldApplyDiscountContainer.append(newDiscountContainer);
+    } else {
+      const container = document.querySelector('.new-price-container') as HTMLElement;
+      const applyDiscountContainer: HTMLDivElement = document.createElement('div');
+      applyDiscountContainer.classList.add('apply-discount-container')
+      applyDiscountContainer.innerHTML = `
+        <h4>Applied codes</h4>
+        <span class="discount-name" data-discount=${currentDiscount}>${discountName}</span>
+        <button class="drop-discount" data-discount=${currentDiscount}>DROP</button>
+      `;
+
+      container.after(applyDiscountContainer);
+    }
+
+    btn.remove();
+  }
+
+  dropDiscount(btn: HTMLButtonElement): void {
+    btn.remove();
+    const discount = Number(btn.dataset.discount);
+    const discountName = document.querySelectorAll('.discount-name') as NodeListOf<HTMLElement>;
+    const applyDiscountContainer = document.querySelector('.apply-discount-container') as HTMLElement;
+    const newPriceDiscount = document.querySelector('.new-price-discount') as HTMLElement;
+    const newPriceContainer = document.querySelector('.new-price-container') as HTMLElement;
+    const currentPriceContainer = document.querySelector('.order-total-price') as HTMLElement;
+    const currentPriceDiscount = Number(newPriceDiscount.innerHTML);
+
+    discountName.forEach((item) => {
+      if (Number(item.dataset.discount) === discount) {
+        item.remove();
+        const newPrice: number = (currentPriceDiscount * 100) / (100 - discount);
+        newPriceDiscount.innerHTML = String(newPrice);
+      }
+    });
+
+    if (discountName.length === 2) {
+      applyDiscountContainer.remove();
+      newPriceContainer.remove();
+      currentPriceContainer.classList.remove('old-price');
+    }
+  }
+
+  changePageUp(): void {
+    const countPageDom = document.querySelector('.count-page') as HTMLElement;
+    const countPage = Number(countPageDom.innerHTML);
+    const newCountPage = countPage + 1;
+    countPageDom.innerHTML = String(newCountPage);
+  }
+
+  changePageDown(): void {
+    const countPageDom = document.querySelector('.count-page') as HTMLElement;
+    const countPage = Number(countPageDom.innerHTML);
+    const newCountPage = ((countPage - 1) > 0) ? (countPage - 1) : 1;
+    countPageDom.innerHTML = String(newCountPage);
   }
 }

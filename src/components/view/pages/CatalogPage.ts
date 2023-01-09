@@ -80,7 +80,6 @@ export default class CatalogPage {
   }
 
   init(): void {
-    //clearLocalStorage();
     const searchInput = document.getElementById('search') as HTMLInputElement;
     const categoryFilters = document.querySelector('.category-filters') as HTMLElement;
     const brandFilters = document.querySelector('.brand-filters') as HTMLElement;
@@ -91,7 +90,7 @@ export default class CatalogPage {
     addFilterCategory(brandFilters, 'brand');
     makePriceSlider(priceSlider);
     makeStockSlider(stockSlider);
-    deleteSearchParams(['id']);
+    deleteSearchParams(['id', 'popup', 'limit', 'page']);
 
     this.typeOfView = getQueryParam('type');
     this.sort = getQueryParam('sort');
