@@ -11,6 +11,7 @@ export default class AppController {
     this.model = model;
     this.container = container;
 
+    //this.updateStateUrl = this.updateStateUrl.bind(this);
     this.updateState = this.updateState.bind(this);
     this.getEventsClick = this.getEventsClick.bind(this);
     this.getEventsMouseOver = this.getEventsMouseOver.bind(this);
@@ -18,6 +19,7 @@ export default class AppController {
     this.getEventsChange = this.getEventsChange.bind(this);
     this.getEventsInput = this.getEventsInput.bind(this);
 
+    //window.addEventListener('popstate', this.updateStateUrl);
     window.addEventListener('hashchange', this.updateState);
     document.addEventListener('click', this.getEventsClick);
     document.addEventListener('mouseover', this.getEventsMouseOver);
@@ -25,12 +27,36 @@ export default class AppController {
     document.addEventListener('change', this.getEventsChange);
     document.addEventListener('input', this.getEventsInput);
 
+    this.initLocationWatcher();
     this.updateState();
   }
 
   updateState(): void {
     const that = this;
     that.model.updateState();
+  }
+
+  initLocationWatcher() {
+    let lastLocation: string = '';
+
+    setInterval(() => {
+      const currentLocation: string = window.location.href
+
+      if (currentLocation !== lastLocation) {
+        lastLocation = currentLocation;
+        this.updateStateUrl();
+      }
+    }, 200);
+  }
+
+  updateStateUrl(): void {
+    const fullPathName: string = window.location.pathname;
+    const fullPathNameArr: string[] = fullPathName.split('/');
+    const pathName: string = fullPathNameArr[1];
+
+    if (pathName) {
+      window.location.hash = 'error';
+    }
   }
 
   getEventsClick(event: Event): void {
@@ -57,7 +83,8 @@ export default class AppController {
       const btnDropDiscount = event.target.closest('.drop-discount') as HTMLButtonElement;
       const btnPageRight = event.target.closest('.page-right') as HTMLButtonElement;
       const btnPageLeft = event.target.closest('.page-left') as HTMLButtonElement;
-      
+      const logoName = event.target.closest('.logo-name') as HTMLElement;
+            
       // for description page
       const productPic = event.target.closest('.product-info-pictures-main') as HTMLElement;
       const descriptionPopup = event.target.closest('.product-picture-popup') as HTMLElement;
@@ -307,6 +334,14 @@ export default class AppController {
 
       if (btnPageLeft) {
         that.model.changePageDown();
+      }
+
+      if (logoName) {
+        const protocol: string = window.location.protocol;
+        const host: string = window.location.host;
+        const url: string =`${protocol}//${host}`;
+
+        window.history.replaceState({}, '', `${url}`);
       }
     }
   }

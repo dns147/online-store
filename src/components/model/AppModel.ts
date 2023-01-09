@@ -15,15 +15,15 @@ export default class AppModel {
     this.hashPageName = '';
   }
 
-  updateStateUrl(): void {
-    const fullPathName: string = window.location.pathname;
-    const fullPathNameArr: string[] = fullPathName.split('/');
-    const pathName: string = fullPathNameArr[1];
+  // updateStateUrl(): void {
+  //   const fullPathName: string = window.location.pathname;
+  //   const fullPathNameArr: string[] = fullPathName.split('/');
+  //   const pathName: string = fullPathNameArr[1];
     
-    if (!this.hashPageName) {
-      this.view.renderContent(pathName);
-    }
-  }
+  //   if (!this.hashPageName) {
+  //     this.view.renderContent(pathName);
+  //   }
+  // }
 
   updateState(): void {
     const hashPageName: string = window.location.hash.slice(1);
