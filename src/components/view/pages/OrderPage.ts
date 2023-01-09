@@ -64,7 +64,7 @@ export default class OrderPage {
                     <input class="order-form__tel order-input" type="tel" placeholder="Phone number" title="begins with '+', at least 9 digits">
                   </div>
                   <div class="order-form__address-container">
-                    <input class="order-form__address order-input" type="text" placeholder="Delivery adress" title="at least 3 words in English(5 characters each)">
+                    <input class="order-form__address order-input" type="text" placeholder="Delivery address" title="at least 3 words in English(5 characters(digits, №, :, -) each)">
                   </div>
                   <div class="order-form__email-container">
                     <input class="order-form__email order-input" type="email" placeholder="Email xxxxx@xxxxx.xxx">
@@ -74,13 +74,13 @@ export default class OrderPage {
                   <h3 class="order-form__card-heading">imperial bank</h3>
                   <div class="order-form__payment-info">
                     <div class="order-form__payment-system">
-                      <img class="order-form__payment-img" src="" alt=""></img>
+                      <img class="order-form__payment-img" src="" alt="">
                     </div>
                     <div class="order-form__card-number">
-                      <input class="order-form__card first-numbers order-input" type="number" placeholder="0000" pattern="[0-9]{4}">
-                      <input class="order-form__card order-input" type="number" placeholder="0000" pattern="[0-9]{4}">
-                      <input class="order-form__card order-input" type="number" placeholder="0000" pattern="[0-9]{4}">
-                      <input class="order-form__card order-input" type="number" placeholder="0000" pattern="[0-9]{4}">
+                      <input class="order-form__card first-numbers order-input" type="number" placeholder="0000" pattern="[0-9]{4}" title="numbers required">
+                      <input class="order-form__card order-input" type="number" placeholder="0000" pattern="[0-9]{4}" title="numbers required">
+                      <input class="order-form__card order-input" type="number" placeholder="0000" pattern="[0-9]{4}" title="numbers required" >
+                      <input class="order-form__card order-input" type="number" placeholder="0000" pattern="[0-9]{4}" title="numbers required">
                     </div>
                   </div>
                   <div class="order-form__card-info">
@@ -88,11 +88,11 @@ export default class OrderPage {
                       <label class="order-form__valid-text" for="valid">
                       <span>valid</span><span>thru</span>
                       </label>
-                      <input id="valid" class="order-form__valid order-input" type="text" placeholder="00/00" pattern="[0-1]{1}[0-9]{1}/[0-9]{2}">
+                      <input id="valid" class="order-form__valid order-input" type="text" placeholder="00/00" pattern="[0-1]{1}[0-9]{1}/[0-9]{2}" title="month up to '12' / year at least '23'">
                     </div>
                     <div class="order-form__cvv-container">
                       <label class="order-form__cvv-text" for="cvv">cvv</label>
-                      <input id="cvv" class="order-form__cvv order-input" type="number" placeholder="000" pattern="[0-9]{3}">
+                      <input id="cvv" class="order-form__cvv order-input" type="number" placeholder="000" pattern="[0-9]{3}" title="numbers required">
                     </div>
                   </div>
                 </div>
