@@ -135,7 +135,7 @@ export default class AppController {
         }
 
         const addressArr = address.value.trim().split(' ');
-        const regexAddress = /[A-Za-z0-9\\'\\-\\.\\№\\ \\:\\"\\)\\(]{5,}/;
+        const regexAddress = /[A-Za-z0-9\\'\\-\\.\\№\\:\\"\\)\\(]{5,}/;
         const isValidAddress = addressArr.length > 2 && addressArr.every((e) => regexAddress.test(e));
 
         if (!isValidAddress) {
