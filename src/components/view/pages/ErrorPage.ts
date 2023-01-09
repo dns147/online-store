@@ -1,3 +1,5 @@
+import './styles/error-page.css';
+
 export default class ErrorPage {
   container: HTMLElement;
   
@@ -7,7 +9,13 @@ export default class ErrorPage {
 
   render(): string {
     return `
-      <div class="main-container">Error Page</div>
+      <div class="main-container">
+        <div class="error-container">
+          <div class="error-container__error-message">
+            <img class="error-container__error-pic" src="https://i.ibb.co/MP2dd5r/star-wars-404.webp" alt"">
+          </div>
+        </div>
+      </div>
     `;
   }
 
