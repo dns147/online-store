@@ -3,7 +3,7 @@ import 'nouislider/dist/nouislider.css';
 import products from "../../assets/json/products.json";
 import { DataCategories, Discount, DiscountName, GetResult, IdStorage, IOptionsProducts, PromoCode, Routes, SortByType, TypeOfClasses } from "../../utils/types";
 import { setQueryParam, changeSortingByType, clickSearchProducts, getQueryParam, loadSelectedFromLocalStorage, makeCardProduct, removeSelectedToLocalStorage, saveSelectedToLocalStorage, searchProducts, sortingCatalog, sortProducts, addQueryParam, deleteQueryParam, findSumCategory, findSumBrand, resetInput, resetHideStyle, getDataCategories, deleteSearchParams, checkOtherCategory, changeSliderPrice, changeSliderStock } from "../../utils/utils-catalog-page";
-import { changeProductInPage, fillProductItems, getOrderProducts } from '../../utils/utils-order-page';
+import { addLimitPage, changeProductInPage, fillProductItems, getOrderProducts } from '../../utils/utils-order-page';
 
 export default class AppView {
   container: HTMLElement;
@@ -244,8 +244,6 @@ export default class AppView {
     if (!view || (view === SortByType.bar)) {
       makeCardProduct(searchCatalog);
     }
-
-    console.log(searchCatalog)
 
     const dataCategories: DataCategories = getDataCategories('category');
     const dataBrands: DataCategories = getDataCategories('brand');
@@ -569,7 +567,7 @@ export default class AppView {
 
     const productItemsContainer = this.container.querySelector('.product-items') as HTMLElement;
     productItemsContainer.innerHTML = '';
-    fillProductItems(orderProducts, productItemsContainer, limitPage, startIndex);
+    fillProductItems(orderProducts, productItemsContainer, limitPage, startIndex, true);
   }
 
   sendOrder(): void {
@@ -735,20 +733,19 @@ export default class AppView {
     localStorage.setItem('page', String(newCountPage));
 
     const productsInPage = document.querySelectorAll('.item-product') as NodeListOf<Element>;
-    let numberProductInPage: number = 0;
+    let startIndex: number = 0;
 
-    if (localStorage['numberProductInPage']) {
-      numberProductInPage = Number(localStorage['numberProductInPage']) + productsInPage.length;
-      localStorage.setItem('numberProductInPage', String(numberProductInPage));
+    if (localStorage['startIndex']) {
+      startIndex = Number(localStorage['startIndex']);
     } else {
-      numberProductInPage = productsInPage.length;
-      localStorage.setItem('numberProductInPage', String(numberProductInPage));
+      startIndex = productsInPage.length;
     }
 
-    const startIndex: number = numberProductInPage;
-    const limitPage: number = Number(getQueryParam('limit'));
+    localStorage.setItem('previousStartIndex', String(startIndex));
+    localStorage.setItem('previousProductsInPage', String(productsInPage.length));
 
-    changeProductInPage(limitPage, startIndex);
+    const limitPage: number = Number(getQueryParam('limit'));
+    changeProductInPage(limitPage, startIndex, true);
   }
 
   changePageDown(): void {
@@ -769,19 +766,36 @@ export default class AppView {
     localStorage.setItem('page', String(newCountPage));
 
     const productsInPage = document.querySelectorAll('.item-product') as NodeListOf<Element>;
-    let numberProductInPage: number = 0;
+    let startIndex: number = 0;
 
-    if (localStorage['numberProductInPage']) {
-      numberProductInPage = Number(localStorage['numberProductInPage']) - productsInPage.length;
-      localStorage.setItem('numberProductInPage', String(numberProductInPage));
+    if (localStorage['startIndex']) {
+      startIndex = Number(localStorage['previousStartIndex']) - Number(localStorage['previousProductsInPage']);
+      localStorage.setItem('previousStartIndex', String(startIndex));
     } else {
-      numberProductInPage = productsInPage.length;
-      localStorage.setItem('numberProductInPage', String(numberProductInPage));
+      startIndex = productsInPage.length;
     }
 
-    const startIndex: number = numberProductInPage;
     const limitPage: number = Number(getQueryParam('limit'));
 
-    changeProductInPage(limitPage, startIndex);
+    changeProductInPage(limitPage, startIndex, false);
+  }
+
+  upLimitPage(): void {
+    const limitInput = document.querySelector('.limit-input') as HTMLInputElement;
+    const idProducts: IdStorage = JSON.parse(localStorage['idProductToCart']);
+    const orderProducts: IOptionsProducts[] = getOrderProducts(idProducts);
+
+    const limit: number = (Number(limitInput.value) + 1 > orderProducts.length) ? orderProducts.length : Number(limitInput.value) + 1;
+    limitInput.value = String(limit);
+
+    addLimitPage(limit, true);
+  }
+
+  downLimitPage(): void {
+    const limitInput = document.querySelector('.limit-input') as HTMLInputElement;
+    const limit: number = (Number(limitInput.value) - 1) <= 1 ? 1 : Number(limitInput.value) - 1;
+    limitInput.value = String(limit);
+
+    addLimitPage(limit, false);
   }
 }

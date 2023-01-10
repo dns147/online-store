@@ -277,31 +277,19 @@ export default class AppModel {
     this.view.dropDiscount(btn);
   }
 
-  addLimitPage(limitInput: HTMLInputElement): void {
-    const limitPage: number = Number(limitInput.value);
-    setQueryParam('limit', String(limitPage));
-    localStorage.setItem('limit', String(limitPage));
-
-    const idProducts: IdStorage = JSON.parse(localStorage['idProductToCart']);
-    const orderProducts: IOptionsProducts[] = getOrderProducts(idProducts);
-    const elemSummaryPage = document.querySelector('.summary-page') as HTMLElement;
-    const summaryPage: number = Math.ceil(orderProducts.length / limitPage);
-    const resultSummaryPage: number = (isFinite(summaryPage)) ? summaryPage : orderProducts.length;
-    
-    elemSummaryPage.innerHTML = String(resultSummaryPage);
-
-    const startIndex: number = 0;
-
-    if (Number(limitInput.value) > 0) {
-      changeProductInPage(Number(limitInput.value), startIndex);
-    }
-  }
-
   changePageUp(): void {
     this.view.changePageUp();
   }
 
   changePageDown(): void {
     this.view.changePageDown();
+  }
+
+  upLimitPage(): void {
+    this.view.upLimitPage();
+  }
+
+  downLimitPage(): void {
+    this.view.downLimitPage();
   }
 }

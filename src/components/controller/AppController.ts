@@ -86,6 +86,8 @@ export default class AppController {
       const btnPageLeft = event.target.closest('.page-left') as HTMLButtonElement;
       const logoName = event.target.closest('.logo-name') as HTMLElement;
       const order = event.target.closest('.order') as HTMLElement;
+      const btnUpPage = event.target.closest('.up-page') as HTMLElement;
+      const btnDownPage = event.target.closest('.down-page') as HTMLElement;
             
       // for description page
       const productPic = event.target.closest('.product-info-pictures-main') as HTMLElement;
@@ -336,6 +338,14 @@ export default class AppController {
 
         window.history.replaceState({}, '', `${url}`);
       }
+
+      if (btnUpPage) {
+        that.model.upLimitPage();
+      }
+
+      if (btnDownPage) {
+        that.model.downLimitPage();
+      }
     }
   }
 
@@ -475,7 +485,7 @@ export default class AppController {
     if (event.target instanceof Element) {
       const search = event.target.closest('.search-input') as HTMLInputElement;
       const promoCode = event.target.closest('.promo-code-input') as HTMLInputElement;
-      const limitInput = event.target.closest('.limit-input') as HTMLInputElement;
+      //const limitInput = event.target.closest('.limit-input') as HTMLInputElement;
       
       // for order popup 
       const phoneNum = event.target.closest('.order-form__tel') as HTMLInputElement;
@@ -579,10 +589,6 @@ export default class AppController {
       if (promoCode) {
         event.preventDefault();
         that.model.enterPromoCode(promoCode);
-      }
-
-      if (limitInput) {
-        that.model.addLimitPage(limitInput);
       }
     }
   }

@@ -326,3 +326,36 @@
   position: absolute;
   top: 33%;
 }
+
+.limit {
+  display: flex;
+  align-items: baseline;
+}
+
+.btn-page {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+}
+
+.up-page,
+.down-page {
+  width: 15px;
+  border: 1px solid var(--hover-color);
+  border-radius: 15px;
+  color: var(--btn-font);
+  background: var(--white-font);
+  height: 15px;
+  background: #f1f8e9;
+}
+.up-page:hover,
+.down-page:hover {
+  cursor: pointer;
+  color: var(--white-font);
+  background: linear-gradient(0deg, rgba(255,193,7,1) 0%, rgb(233, 115, 79) 100%);
+}
+
+.up-page:active,
+.down-page:active {
+  background: linear-gradient(0deg, rgba(233, 115, 79) 0%, rgba(255,193,7,1) 100%);
+}

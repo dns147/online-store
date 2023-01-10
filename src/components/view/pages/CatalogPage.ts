@@ -100,6 +100,13 @@ export default class CatalogPage {
     this.price = getQueryParam('price');
     this.stock = getQueryParam('stock');
 
+    localStorage.removeItem('limit');
+    localStorage.removeItem('page');
+    localStorage.removeItem('summaryPage');
+    localStorage.removeItem('startIndex');
+    localStorage.removeItem('previousStartIndex');
+    localStorage.removeItem('previousProductsInPage');
+
     localStorage.removeItem('filterCatalog');
     checkTypeOfSort(this.typeOfView);
    
