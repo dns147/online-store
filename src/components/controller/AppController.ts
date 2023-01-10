@@ -11,7 +11,7 @@ export default class AppController {
     this.model = model;
     this.container = container;
 
-    //this.updateStateUrl = this.updateStateUrl.bind(this);
+    //this.initLocationWatcher = this.initLocationWatcher.bind(this);
     this.updateState = this.updateState.bind(this);
     this.getEventsClick = this.getEventsClick.bind(this);
     this.getEventsMouseOver = this.getEventsMouseOver.bind(this);
@@ -19,7 +19,7 @@ export default class AppController {
     this.getEventsChange = this.getEventsChange.bind(this);
     this.getEventsInput = this.getEventsInput.bind(this);
 
-    //window.addEventListener('popstate', this.updateStateUrl);
+    //window.addEventListener('popstate', this.initLocationWatcher);
     window.addEventListener('hashchange', this.updateState);
     document.addEventListener('click', this.getEventsClick);
     document.addEventListener('mouseover', this.getEventsMouseOver);
@@ -37,6 +37,7 @@ export default class AppController {
   }
 
   initLocationWatcher() {
+    const that = this;
     let lastLocation: string = '';
 
     setInterval(() => {
@@ -44,7 +45,7 @@ export default class AppController {
 
       if (currentLocation !== lastLocation) {
         lastLocation = currentLocation;
-        this.updateStateUrl();
+        that.updateStateUrl();
       }
     }, 200);
   }
@@ -84,6 +85,7 @@ export default class AppController {
       const btnPageRight = event.target.closest('.page-right') as HTMLButtonElement;
       const btnPageLeft = event.target.closest('.page-left') as HTMLButtonElement;
       const logoName = event.target.closest('.logo-name') as HTMLElement;
+      const order = event.target.closest('.order') as HTMLElement;
             
       // for description page
       const productPic = event.target.closest('.product-info-pictures-main') as HTMLElement;
@@ -216,15 +218,6 @@ export default class AppController {
         if (isvalidAll && isValidAddress && isValidName && isValidEmail && isValidPhoneNum && isValidCardNum && isValidCardValid && isValidCardCvv) {
           that.model.sendOrder();
         }
-
-        console.log(isvalidAll)
-        console.log(isValidAddress);
-        console.log(isValidName);
-        console.log(isValidEmail);
-        console.log(isValidPhoneNum);
-        console.log(isValidCardNum);
-        console.log(isValidCardValid);
-        console.log(isValidCardCvv);
       }
       // 
       
@@ -336,7 +329,7 @@ export default class AppController {
         that.model.changePageDown();
       }
 
-      if (logoName) {
+      if (logoName || order) {
         const protocol: string = window.location.protocol;
         const host: string = window.location.host;
         const url: string =`${protocol}//${host}`;
