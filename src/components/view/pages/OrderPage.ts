@@ -21,8 +21,12 @@ export default class OrderPage {
             <h2 class="header-name">Products In Cart</h2>
             <div class="page-control">
               <div class="limit"> 
-                <span>LIMIT: </span> 
-                <input type="number" value="1" min="1" max="99" class="limit-input">
+                <span>LIMIT: </span>
+                <input type="number" value="1" min="1" max="99" class="limit-input" readonly>
+                <div class="btn-page">
+                  <button class="up-page">+</button>
+                  <button class="down-page">-</button>
+                </div>
               </div>
               <div class="page-numbers">
                 <span>PAGE: </span>
@@ -108,24 +112,26 @@ export default class OrderPage {
   init(): void {
     deleteSearchParams(['id', 'sort']);
     this.popup = getQueryParam('popup');
-
-    localStorage.removeItem('numberProductInPage');
+    let limitPage: number = 1;
 
     const limitPageInput = document.querySelector('.limit-input') as HTMLInputElement;
     const elemCountPage = document.querySelector('.count-page') as HTMLElement;
-    let limitPage: number = 1;
     
-    if (localStorage['limit']) {
-      limitPage = Number(localStorage['limit']);
-      limitPageInput.value = String(limitPage);
-      elemCountPage.innerHTML = localStorage['page'];
-      setQueryParam('limit', localStorage['limit']);
-      setQueryParam('page', localStorage['page']);
-      setQueryParam('pages', localStorage['summaryPage']);
+    const limit: string | null = getQueryParam('limit');
+    let page: string | null = getQueryParam('page');
+
+    if (limit && page) {     
+      limitPageInput.value = limit;
+      elemCountPage.innerHTML = page;
+      limitPage = Number(limit);
     } else {
+      setQueryParam('limit', String(1));
+      setQueryParam('page', String(1));
+
       localStorage.setItem('limit', String(1));
       localStorage.setItem('page', String(1));
-      localStorage.setItem('summaryPage', String(1));
+
+      page = '1';
     }
 
     if (localStorage['idProductToCart']) {
@@ -137,10 +143,14 @@ export default class OrderPage {
       setQueryParam('pages', String(summaryPage));
       localStorage.setItem('summaryPage', String(summaryPage));
 
-      const startIndex: number = 0;
-
+      const startIndex: number = (Number(page) === 1) ? 0 : (Number(page) - 1) * limitPage;
       const productItemsContainer = this.container.querySelector('.product-items') as HTMLElement;
-      fillProductItems(orderProducts, productItemsContainer, limitPage, startIndex);
+
+      if (startIndex === 0) {
+        fillProductItems(orderProducts, productItemsContainer, limitPage, startIndex, false);
+      } else {
+        fillProductItems(orderProducts, productItemsContainer, limitPage, startIndex, true);
+      }
     }
     
     if (localStorage['totalPrice']) {
@@ -159,3 +169,4 @@ export default class OrderPage {
     }
   }
 }
+

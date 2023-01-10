@@ -24,12 +24,31 @@ export function getStock(id: number | undefined): string | null {
   return String(stock);
 };
 
-export function fillProductItems(orderProducts: IOptionsProducts[], container: HTMLElement, limitPage: number, startIndex: number): void {
+export function fillProductItems(orderProducts: IOptionsProducts[], container: HTMLElement, limitPage: number, startIndex: number, statePageUp: boolean): void {
   const idProducts: IdStorage = JSON.parse(localStorage['idProductToCart']);
   const listProduct: HTMLUListElement = document.createElement('ul');
   listProduct.classList.add('list-product');
+  let endIndex: number = 0;
 
-  for (let index = startIndex; index < limitPage + startIndex; index += 1) {
+  if (localStorage['startIndex'] && statePageUp) {
+    const middle: number = orderProducts.length - Number(localStorage['startIndex']);
+
+    if (Number(localStorage['startIndex']) > middle && limitPage > 2) {
+      endIndex = Number(localStorage['startIndex']) + middle;
+    } else {
+      endIndex = startIndex + limitPage;
+    }
+  } else {
+    endIndex = startIndex + limitPage;
+  }
+
+  if (!statePageUp) {
+    endIndex = startIndex + limitPage;
+  }
+
+  localStorage.setItem('startIndex', String(endIndex));
+
+  for (let index = startIndex; index < endIndex; index += 1) {
     const itemProduct: HTMLLIElement = document.createElement('li');
     itemProduct.classList.add('item-product');
     const productAmountInput: string = idProducts[orderProducts[index].id];
@@ -60,10 +79,28 @@ export function fillProductItems(orderProducts: IOptionsProducts[], container: H
   container.append(listProduct);
 }
 
-export function changeProductInPage(limitPage: number, startIndex: number): void {
+export function changeProductInPage(limitPage: number, startIndex: number, statePageUp: boolean): void {
   const idProducts: IdStorage = JSON.parse(localStorage['idProductToCart']);
   const orderProducts: IOptionsProducts[] = getOrderProducts(idProducts);
   const productItemsContainer = document.querySelector('.product-items') as HTMLElement;
   productItemsContainer.innerHTML = '';
-  fillProductItems(orderProducts, productItemsContainer, limitPage, startIndex);
+  fillProductItems(orderProducts, productItemsContainer, limitPage, startIndex, statePageUp);
+}
+
+export function addLimitPage(limitPage: number, statePageUp: boolean): void {
+  setQueryParam('limit', String(limitPage));
+  localStorage.setItem('limit', String(limitPage));
+
+  const idProducts: IdStorage = JSON.parse(localStorage['idProductToCart']);
+  const orderProducts: IOptionsProducts[] = getOrderProducts(idProducts);
+  const elemSummaryPage = document.querySelector('.summary-page') as HTMLElement;
+  const summaryPage: number = Math.ceil(orderProducts.length / limitPage);
+  const resultSummaryPage: number = (isFinite(summaryPage)) ? summaryPage : orderProducts.length;
+  
+  elemSummaryPage.innerHTML = String(resultSummaryPage);
+  setQueryParam('pages', String(resultSummaryPage));
+  localStorage.setItem('summaryPage', String(resultSummaryPage));
+
+  const startIndex: number = 0;
+  changeProductInPage(limitPage, startIndex, statePageUp);
 }
