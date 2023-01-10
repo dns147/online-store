@@ -316,3 +316,13 @@
 .drop-discount:active {
   background: linear-gradient(0deg, rgba(233, 115, 79) 0%, rgba(255,193,7,1) 100%);
 }
+
+.hide-container {
+  visibility: hidden;
+}
+
+.text-empty {
+  font-family: monospace;
+  position: absolute;
+  top: 33%;
+}

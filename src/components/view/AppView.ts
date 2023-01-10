@@ -3,7 +3,7 @@ import 'nouislider/dist/nouislider.css';
 import products from "../../assets/json/products.json";
 import { DataCategories, Discount, DiscountName, GetResult, IdStorage, IOptionsProducts, PromoCode, Routes, SortByType, TypeOfClasses } from "../../utils/types";
 import { setQueryParam, changeSortingByType, clickSearchProducts, getQueryParam, loadSelectedFromLocalStorage, makeCardProduct, removeSelectedToLocalStorage, saveSelectedToLocalStorage, searchProducts, sortingCatalog, sortProducts, addQueryParam, deleteQueryParam, findSumCategory, findSumBrand, resetInput, resetHideStyle, getDataCategories, deleteSearchParams, checkOtherCategory, changeSliderPrice, changeSliderStock } from "../../utils/utils-catalog-page";
-import { fillProductItems, getOrderProducts } from '../../utils/utils-order-page';
+import { changeProductInPage, fillProductItems, getOrderProducts } from '../../utils/utils-order-page';
 
 export default class AppView {
   container: HTMLElement;
@@ -546,14 +546,30 @@ export default class AppView {
   removeFromOrder(id: number): void {
     const idProducts: IdStorage = JSON.parse(localStorage['idProductToCart']);
     const limitPage = Number(getQueryParam('limit'));
+    const startIndex: number = 0;
 
     delete idProducts[id];
     localStorage.setItem('idProductToCart', JSON.stringify(idProducts));
 
     const orderProducts: IOptionsProducts[] = getOrderProducts(idProducts);
+
+    if (orderProducts.length === 0) {
+      const mainCartContainer = document.querySelector('.main-cart-container') as HTMLElement;
+      const productInCart = document.querySelector('.product-in-cart') as HTMLElement;
+      const summaryContainer = document.querySelector('.total-cart') as HTMLElement;
+      
+      productInCart.classList.add('hide-container');
+      summaryContainer.classList.add('hide-container');
+
+      const textEmpty: HTMLHeadingElement = document.createElement('h2');
+      textEmpty.innerHTML = 'Cart is Empty';
+      textEmpty.classList.add('text-empty');
+      mainCartContainer.append(textEmpty);
+    } 
+
     const productItemsContainer = this.container.querySelector('.product-items') as HTMLElement;
     productItemsContainer.innerHTML = '';
-    fillProductItems(orderProducts, productItemsContainer, limitPage);
+    fillProductItems(orderProducts, productItemsContainer, limitPage, startIndex);
   }
 
   sendOrder(): void {
@@ -700,16 +716,72 @@ export default class AppView {
   }
 
   changePageUp(): void {
+    const elemSummaryPage = document.querySelector('.summary-page') as HTMLElement;
     const countPageDom = document.querySelector('.count-page') as HTMLElement;
     const countPage = Number(countPageDom.innerHTML);
-    const newCountPage = countPage + 1;
+    const summaryPage = Number(elemSummaryPage.innerHTML);
+    const newCountPage = ((countPage + 1) > summaryPage) ? summaryPage : (countPage + 1);
     countPageDom.innerHTML = String(newCountPage);
+
+    const btnPageLeft = document.querySelector('.page-left') as HTMLButtonElement;
+    btnPageLeft.disabled = false;
+    
+    if (newCountPage === summaryPage) {
+      const btnPageRight = document.querySelector('.page-right') as HTMLButtonElement;
+      btnPageRight.disabled = true;
+    }
+
+    setQueryParam('page', String(newCountPage));
+    localStorage.setItem('page', String(newCountPage));
+
+    const productsInPage = document.querySelectorAll('.item-product') as NodeListOf<Element>;
+    let numberProductInPage: number = 0;
+
+    if (localStorage['numberProductInPage']) {
+      numberProductInPage = Number(localStorage['numberProductInPage']) + productsInPage.length;
+      localStorage.setItem('numberProductInPage', String(numberProductInPage));
+    } else {
+      numberProductInPage = productsInPage.length;
+      localStorage.setItem('numberProductInPage', String(numberProductInPage));
+    }
+
+    const startIndex: number = numberProductInPage;
+    const limitPage: number = Number(getQueryParam('limit'));
+
+    changeProductInPage(limitPage, startIndex);
   }
 
   changePageDown(): void {
-    const countPageDom = document.querySelector('.count-page') as HTMLElement;
-    const countPage = Number(countPageDom.innerHTML);
+    const elemCountPage = document.querySelector('.count-page') as HTMLElement;
+    const countPage = Number(elemCountPage.innerHTML);
     const newCountPage = ((countPage - 1) > 0) ? (countPage - 1) : 1;
-    countPageDom.innerHTML = String(newCountPage);
+    elemCountPage.innerHTML = String(newCountPage);
+
+    const btnPageRight = document.querySelector('.page-right') as HTMLButtonElement;
+    btnPageRight.disabled = false;
+
+    if (newCountPage === 1) {
+      const btnPageLeft = document.querySelector('.page-left') as HTMLButtonElement;
+      btnPageLeft.disabled = true;
+    }
+
+    setQueryParam('page', String(newCountPage));
+    localStorage.setItem('page', String(newCountPage));
+
+    const productsInPage = document.querySelectorAll('.item-product') as NodeListOf<Element>;
+    let numberProductInPage: number = 0;
+
+    if (localStorage['numberProductInPage']) {
+      numberProductInPage = Number(localStorage['numberProductInPage']) - productsInPage.length;
+      localStorage.setItem('numberProductInPage', String(numberProductInPage));
+    } else {
+      numberProductInPage = productsInPage.length;
+      localStorage.setItem('numberProductInPage', String(numberProductInPage));
+    }
+
+    const startIndex: number = numberProductInPage;
+    const limitPage: number = Number(getQueryParam('limit'));
+
+    changeProductInPage(limitPage, startIndex);
   }
 }

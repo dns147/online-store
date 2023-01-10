@@ -3,8 +3,8 @@ import 'nouislider/dist/nouislider.css';
 import AppView from "../view/AppView";
 import products from "../../assets/json/products.json";
 import { setQueryParam, getDataCategories, showAnimateImage, sortingCatalog, checkOtherCategory, deleteSearchParams, getPrice, deleteQueryParam } from "../../utils/utils-catalog-page";
-import { DataCategories, GetResult, IOptionsProducts, PromoCode } from "../../utils/types";
-import { getStock } from '../../utils/utils-order-page';
+import { DataCategories, GetResult, IdStorage, IOptionsProducts, PromoCode } from "../../utils/types";
+import { changeProductInPage, getOrderProducts, getStock } from '../../utils/utils-order-page';
 
 export default class AppModel {
   view: AppView;
@@ -13,16 +13,6 @@ export default class AppModel {
   constructor(view: AppView) {
     this.view = view;
     this.hashPageName = '';
-  }
-
-  updateStateUrl(): void {
-    const fullPathName: string = window.location.pathname;
-    const fullPathNameArr: string[] = fullPathName.split('/');
-    const pathName: string = fullPathNameArr[1];
-    
-    if (!this.hashPageName) {
-      this.view.renderContent(pathName);
-    }
   }
 
   updateState(): void {
@@ -288,7 +278,23 @@ export default class AppModel {
   }
 
   addLimitPage(limitInput: HTMLInputElement): void {
-    setQueryParam('limit', limitInput.value);
+    const limitPage: number = Number(limitInput.value);
+    setQueryParam('limit', String(limitPage));
+    localStorage.setItem('limit', String(limitPage));
+
+    const idProducts: IdStorage = JSON.parse(localStorage['idProductToCart']);
+    const orderProducts: IOptionsProducts[] = getOrderProducts(idProducts);
+    const elemSummaryPage = document.querySelector('.summary-page') as HTMLElement;
+    const summaryPage: number = Math.ceil(orderProducts.length / limitPage);
+    const resultSummaryPage: number = (isFinite(summaryPage)) ? summaryPage : orderProducts.length;
+    
+    elemSummaryPage.innerHTML = String(resultSummaryPage);
+
+    const startIndex: number = 0;
+
+    if (Number(limitInput.value) > 0) {
+      changeProductInPage(Number(limitInput.value), startIndex);
+    }
   }
 
   changePageUp(): void {

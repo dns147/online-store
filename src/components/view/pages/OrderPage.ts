@@ -27,7 +27,7 @@ export default class OrderPage {
               <div class="page-numbers">
                 <span>PAGE: </span>
                 <button class="page-left"> &lt; </button>
-                <span class="count-page">1</span>
+                <span><span class="count-page">1</span>/<span class="summary-page">1</span></span>
                 <button class="page-right"> &gt; </button>
               </div>
             </div>
@@ -109,17 +109,38 @@ export default class OrderPage {
     deleteSearchParams(['id', 'sort']);
     this.popup = getQueryParam('popup');
 
+    localStorage.removeItem('numberProductInPage');
+
     const limitPageInput = document.querySelector('.limit-input') as HTMLInputElement;
-    const limitPage = Number(limitPageInput.value);
-    setQueryParam('limit', String(limitPage));
-    setQueryParam('page', String(1));
+    const elemCountPage = document.querySelector('.count-page') as HTMLElement;
+    let limitPage: number = 1;
+    
+    if (localStorage['limit']) {
+      limitPage = Number(localStorage['limit']);
+      limitPageInput.value = String(limitPage);
+      elemCountPage.innerHTML = localStorage['page'];
+      setQueryParam('limit', localStorage['limit']);
+      setQueryParam('page', localStorage['page']);
+      setQueryParam('pages', localStorage['summaryPage']);
+    } else {
+      localStorage.setItem('limit', String(1));
+      localStorage.setItem('page', String(1));
+      localStorage.setItem('summaryPage', String(1));
+    }
 
     if (localStorage['idProductToCart']) {
       const idProducts: IdStorage = JSON.parse(localStorage['idProductToCart']);
       const orderProducts: IOptionsProducts[] = getOrderProducts(idProducts);
+      const elemSummaryPage = document.querySelector('.summary-page') as HTMLElement;
+      const summaryPage: number = Math.ceil(orderProducts.length / limitPage);
+      elemSummaryPage.innerHTML = String(summaryPage);
+      setQueryParam('pages', String(summaryPage));
+      localStorage.setItem('summaryPage', String(summaryPage));
+
+      const startIndex: number = 0;
 
       const productItemsContainer = this.container.querySelector('.product-items') as HTMLElement;
-      fillProductItems(orderProducts, productItemsContainer, limitPage);
+      fillProductItems(orderProducts, productItemsContainer, limitPage, startIndex);
     }
     
     if (localStorage['totalPrice']) {

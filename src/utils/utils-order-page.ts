@@ -24,58 +24,30 @@ export function getStock(id: number | undefined): string | null {
   return String(stock);
 };
 
-export function fillProductItems(orderProducts: IOptionsProducts[], container: HTMLElement, limitPage: number): void {
+export function fillProductItems(orderProducts: IOptionsProducts[], container: HTMLElement, limitPage: number, startIndex: number): void {
   const idProducts: IdStorage = JSON.parse(localStorage['idProductToCart']);
   const listProduct: HTMLUListElement = document.createElement('ul');
   listProduct.classList.add('list-product');
 
-  // for (let index = 0; index < limitPage; index += 1) {
-  //   const itemProduct: HTMLLIElement = document.createElement('li');
-  //   itemProduct.classList.add('item-product');
-  //   const productAmountInput: string = idProducts[orderProducts[index].id];
-  //   const price: number = Number(productAmountInput) * orderProducts[index].price;
-  //   const stock: number = orderProducts[index].stock - Number(productAmountInput);
-
-  //   itemProduct.innerHTML = `
-  //     <span class="number-product">${index + 1}</span>
-  //     <img src="${orderProducts[index].images[0]}" alt="image" class="item-image-product">
-  //     <div class="item-description-container">
-  //       <span class="name-product">${orderProducts[index].title}</span>
-  //       <span class="description-product">${orderProducts[index].description}</span>
-  //     </div>
-  //     <div class="item-order-container">
-  //       <span class="stock-product">Stock: <span class="item-stock">${stock}</span></span>
-  //       <div class="order-product-amount">
-  //         <button class="order-minus"></button>
-  //         <input type="text" name="product-amount" value="${productAmountInput}" class="order-input-amount" data-id="${orderProducts[index].id}">
-  //         <button class="order-plus"></button>
-  //       </div>
-  //       <span class="price-product">Price: $<span class="item-price">${price}</span></span>
-  //     </div>
-  //   `;
-
-  //   listProduct.append(itemProduct);
-  // }
-
-  orderProducts.forEach((product: IOptionsProducts, index: number) => {
+  for (let index = startIndex; index < limitPage + startIndex; index += 1) {
     const itemProduct: HTMLLIElement = document.createElement('li');
     itemProduct.classList.add('item-product');
-    const productAmountInput: string = idProducts[product.id];
-    const price: number = Number(productAmountInput) * product.price;
-    const stock: number = product.stock - Number(productAmountInput);
+    const productAmountInput: string = idProducts[orderProducts[index].id];
+    const price: number = Number(productAmountInput) * orderProducts[index].price;
+    const stock: number = orderProducts[index].stock - Number(productAmountInput);
 
     itemProduct.innerHTML = `
       <span class="number-product">${index + 1}</span>
-      <img src="${product.images[0]}" alt="image" class="item-image-product">
+      <img src="${orderProducts[index].images[0]}" alt="image" class="item-image-product">
       <div class="item-description-container">
-        <span class="name-product">${product.title}</span>
-        <span class="description-product">${product.description}</span>
+        <span class="name-product">${orderProducts[index].title}</span>
+        <span class="description-product">${orderProducts[index].description}</span>
       </div>
       <div class="item-order-container">
         <span class="stock-product">Stock: <span class="item-stock">${stock}</span></span>
         <div class="order-product-amount">
           <button class="order-minus"></button>
-          <input type="text" name="product-amount" value="${productAmountInput}" class="order-input-amount" data-id="${product.id}">
+          <input type="text" name="product-amount" value="${productAmountInput}" class="order-input-amount" data-id="${orderProducts[index].id}" readonly>
           <button class="order-plus"></button>
         </div>
         <span class="price-product">Price: $<span class="item-price">${price}</span></span>
@@ -83,7 +55,15 @@ export function fillProductItems(orderProducts: IOptionsProducts[], container: H
     `;
 
     listProduct.append(itemProduct);
-  });
+  }
 
   container.append(listProduct);
+}
+
+export function changeProductInPage(limitPage: number, startIndex: number): void {
+  const idProducts: IdStorage = JSON.parse(localStorage['idProductToCart']);
+  const orderProducts: IOptionsProducts[] = getOrderProducts(idProducts);
+  const productItemsContainer = document.querySelector('.product-items') as HTMLElement;
+  productItemsContainer.innerHTML = '';
+  fillProductItems(orderProducts, productItemsContainer, limitPage, startIndex);
 }

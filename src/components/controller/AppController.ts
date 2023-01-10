@@ -11,6 +11,7 @@ export default class AppController {
     this.model = model;
     this.container = container;
 
+    //this.initLocationWatcher = this.initLocationWatcher.bind(this);
     this.updateState = this.updateState.bind(this);
     this.getEventsClick = this.getEventsClick.bind(this);
     this.getEventsMouseOver = this.getEventsMouseOver.bind(this);
@@ -18,6 +19,7 @@ export default class AppController {
     this.getEventsChange = this.getEventsChange.bind(this);
     this.getEventsInput = this.getEventsInput.bind(this);
 
+    //window.addEventListener('popstate', this.initLocationWatcher);
     window.addEventListener('hashchange', this.updateState);
     document.addEventListener('click', this.getEventsClick);
     document.addEventListener('mouseover', this.getEventsMouseOver);
@@ -25,12 +27,37 @@ export default class AppController {
     document.addEventListener('change', this.getEventsChange);
     document.addEventListener('input', this.getEventsInput);
 
+    this.initLocationWatcher();
     this.updateState();
   }
 
   updateState(): void {
     const that = this;
     that.model.updateState();
+  }
+
+  initLocationWatcher() {
+    const that = this;
+    let lastLocation: string = '';
+
+    setInterval(() => {
+      const currentLocation: string = window.location.href
+
+      if (currentLocation !== lastLocation) {
+        lastLocation = currentLocation;
+        that.updateStateUrl();
+      }
+    }, 200);
+  }
+
+  updateStateUrl(): void {
+    const fullPathName: string = window.location.pathname;
+    const fullPathNameArr: string[] = fullPathName.split('/');
+    const pathName: string = fullPathNameArr[1];
+
+    if (pathName) {
+      window.location.hash = 'error';
+    }
   }
 
   getEventsClick(event: Event): void {
@@ -57,7 +84,9 @@ export default class AppController {
       const btnDropDiscount = event.target.closest('.drop-discount') as HTMLButtonElement;
       const btnPageRight = event.target.closest('.page-right') as HTMLButtonElement;
       const btnPageLeft = event.target.closest('.page-left') as HTMLButtonElement;
-      
+      const logoName = event.target.closest('.logo-name') as HTMLElement;
+      const order = event.target.closest('.order') as HTMLElement;
+            
       // for description page
       const productPic = event.target.closest('.product-info-pictures-main') as HTMLElement;
       const descriptionPopup = event.target.closest('.product-picture-popup') as HTMLElement;
@@ -189,15 +218,6 @@ export default class AppController {
         if (isvalidAll && isValidAddress && isValidName && isValidEmail && isValidPhoneNum && isValidCardNum && isValidCardValid && isValidCardCvv) {
           that.model.sendOrder();
         }
-
-        console.log(isvalidAll)
-        console.log(isValidAddress);
-        console.log(isValidName);
-        console.log(isValidEmail);
-        console.log(isValidPhoneNum);
-        console.log(isValidCardNum);
-        console.log(isValidCardValid);
-        console.log(isValidCardCvv);
       }
       // 
       
@@ -307,6 +327,14 @@ export default class AppController {
 
       if (btnPageLeft) {
         that.model.changePageDown();
+      }
+
+      if (logoName || order) {
+        const protocol: string = window.location.protocol;
+        const host: string = window.location.host;
+        const url: string =`${protocol}//${host}`;
+
+        window.history.replaceState({}, '', `${url}`);
       }
     }
   }
