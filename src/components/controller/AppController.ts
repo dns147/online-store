@@ -490,8 +490,8 @@ export default class AppController {
       const search = event.target.closest('.search-input') as HTMLInputElement;
       const promoCode = event.target.closest('.promo-code-input') as HTMLInputElement;
       //const limitInput = event.target.closest('.limit-input') as HTMLInputElement;
-      
-      // for order popup 
+
+      // for order popup
       const phoneNum = event.target.closest('.order-form__tel') as HTMLInputElement;
       const cardNum = event.target.closest('.order-form__card') as HTMLInputElement;
       const cardFirstNum = event.target.closest('.first-numbers') as HTMLInputElement;
@@ -512,23 +512,31 @@ export default class AppController {
       }
 
       if (cardNum) {
+        const regexNum = /[0-9]/;
+        if (!regexNum.test(cardNum.value[cardNum.value.length - 1])) {
+          cardNum.value = cardNum.value.slice(0, -1);
+        }
         if (cardNum.value.length > 4) {
           cardNum.value = cardNum.value.slice(0, -1);
         }
       }
 
       if (cardFirstNum) {
-        const systemsImg: {'3': string, '4': string, '5': string} = {
+        const systemsImg: { '3': string; '4': string; '5': string } = {
           '3': 'https://i.ibb.co/5cd0r7D/express.png',
           '4': 'https://i.ibb.co/SdrfhSy/visa.png',
           '5': 'https://i.ibb.co/Sc8dDpj/mastercard.png',
-        }
+        };
         const img = document.querySelector('.order-form__payment-img') as HTMLImageElement;
         const firstInt = cardFirstNum.value[0];
         img.src = systemsImg[firstInt as keyof typeof systemsImg] || '';
       }
 
       if (cardCvv) {
+        const regexNum = /[0-9]/;
+        if (!regexNum.test(cardCvv.value[cardCvv.value.length - 1])) {
+          cardCvv.value = cardCvv.value.slice(0, -1);
+        }
         if (cardCvv.value.length > 3) {
           cardCvv.value = cardCvv.value.slice(0, -1);
         }
@@ -583,7 +591,7 @@ export default class AppController {
           cardValid.value = cardValid.value.slice(0, -1);
         }
       }
-      // 
+      //
 
       if (search) {
         event.preventDefault();
