@@ -734,6 +734,10 @@ export default class AppView {
       btnPageRight.disabled = true;
     }
 
+    if (summaryPage === 1) {
+      return;
+    }
+
     setQueryParam('page', String(newCountPage));
     localStorage.setItem('page', String(newCountPage));
 
@@ -762,9 +766,13 @@ export default class AppView {
     const btnPageRight = document.querySelector('.page-right') as HTMLButtonElement;
     btnPageRight.disabled = false;
 
-    if (newCountPage === 1) {
+    if (countPage === 1 || newCountPage === 1) {
       const btnPageLeft = document.querySelector('.page-left') as HTMLButtonElement;
       btnPageLeft.disabled = true;
+    }
+
+    if (countPage === 1) {
+      return;
     }
 
     setQueryParam('page', String(newCountPage));

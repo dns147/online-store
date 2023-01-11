@@ -2,7 +2,7 @@ import * as noUiSlider from 'nouislider';
 import 'nouislider/dist/nouislider.css';
 import AppView from "../view/AppView";
 import products from "../../assets/json/products.json";
-import { setQueryParam, getDataCategories, showAnimateImage, sortingCatalog, checkOtherCategory, deleteSearchParams, getPrice, deleteQueryParam } from "../../utils/utils-catalog-page";
+import { setQueryParam, getDataCategories, showAnimateImage, sortingCatalog, checkOtherCategory, deleteSearchParams, getPrice, deleteQueryParam, getQueryParam, saveSelectedToLocalStorage } from "../../utils/utils-catalog-page";
 import { DataCategories, GetResult, IdStorage, IOptionsProducts, PromoCode } from "../../utils/types";
 import { changeProductInPage, getOrderProducts, getStock } from '../../utils/utils-order-page';
 
@@ -210,6 +210,16 @@ export default class AppModel {
     }
 
     this.view.plusAmountOrder(input, newValue, price, stock);
+
+    if (!localStorage['idProductToCart']) {
+      const idStorage: IdStorage = {};
+      idStorage[String(id)] = newValue;
+      localStorage.setItem('idProductToCart', JSON.stringify(idStorage));
+    } else {
+      const idProductToCart: IdStorage = JSON.parse(localStorage['idProductToCart']);
+      idProductToCart[String(id)] = newValue;
+      localStorage.setItem('idProductToCart', JSON.stringify(idProductToCart));
+    }
   }
 
   minusAmountOrder(input: HTMLInputElement): void {
@@ -232,6 +242,13 @@ export default class AppModel {
 
   goToCartWithPopup(): void {
     setQueryParam('popup', 'true');
+
+    const idProduct: string = String(getQueryParam('id'));
+    const priceProduct: string | null = getPrice(Number(idProduct));
+    saveSelectedToLocalStorage(idProduct);
+
+    localStorage.setItem('totalPrice', String(priceProduct));
+    localStorage.setItem('countBuy', '1');
   }
 
   goToCartWithoutPopup(): void {
