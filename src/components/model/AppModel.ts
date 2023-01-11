@@ -251,6 +251,10 @@ export default class AppModel {
     this.view.showPopup();
   }
 
+  hidePopup(): void {
+    this.view.hidePopup();
+  }
+
   enterPromoCode(input: HTMLInputElement): void {
     const valueInput: string = input.value;
 
