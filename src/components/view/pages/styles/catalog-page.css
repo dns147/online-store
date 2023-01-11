@@ -497,3 +497,10 @@
 .hide-name {
   color: gray;
 }
+
+.text-no-products {
+  text-transform: uppercase;
+  font-family: monospace;
+  font-size: 24px;
+  font-weight: bold;
+}

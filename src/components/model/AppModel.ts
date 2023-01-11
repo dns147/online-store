@@ -187,9 +187,15 @@ export default class AppModel {
     this.view.resetFilters();
   }
 
-  copyUrlToBuffer(): void {
+  copyUrlToBuffer(btnCopy: HTMLButtonElement): void {
     const url: string = window.location.href;
     navigator.clipboard.writeText(url);
+
+    btnCopy.innerHTML = 'COPIED'
+
+    setTimeout(() => {
+      btnCopy.innerHTML = 'COPY LINK'
+    }, 600);
   }
 
   sortSlider(slider: noUiSlider.target, nameSlider: string): void {

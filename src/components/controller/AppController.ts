@@ -283,7 +283,7 @@ export default class AppController {
       }
 
       if (btnCopy) {
-        that.model.copyUrlToBuffer();
+        that.model.copyUrlToBuffer(btnCopy);
       }
 
       if (priceSlider) {
@@ -488,7 +488,6 @@ export default class AppController {
     if (event.target instanceof Element) {
       const search = event.target.closest('.search-input') as HTMLInputElement;
       const promoCode = event.target.closest('.promo-code-input') as HTMLInputElement;
-      //const limitInput = event.target.closest('.limit-input') as HTMLInputElement;
 
       // for order popup
       const phoneNum = event.target.closest('.order-form__tel') as HTMLInputElement;
