@@ -48,9 +48,9 @@ export default class OrderPage {
             <div class="order-total-price">
               <span>Total price: $</span><span class="count-total-price">0</span>
             </div>
-            <form class="promo-code">
+            <div class="promo-code">
               <input type="search" placeholder="Enter promo code" class="promo-code-input">
-            </form>
+            </div>
             <span class="promo-ex">Promo for test: 'RS', 'EPM'</span>
             <button class="order-btn-buy">BUY NOW</button>
           </div>
