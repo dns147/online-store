@@ -592,6 +592,11 @@ export default class AppView {
     popup.classList.add('active-popup');
   }
 
+  hidePopup(): void {
+    const popup = document.querySelector('.popup-order') as HTMLElement;
+    popup.classList.remove('active-popup');
+  }
+
   addPromoCode(promoCode: string): void {
     let discount: number = 0;
     let discountName: string = '';

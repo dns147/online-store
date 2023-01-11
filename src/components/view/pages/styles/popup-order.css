@@ -210,13 +210,28 @@
   background-color: rgb(255, 255, 255, 0.8);
 }
 
-.order-form__button {
+.order-form__buttons-container {
+  display: flex;
+  gap: 30px;
+}
+
+.order-form__button,
+.order-form__button-cancel {
   width: 80px;
   height: 40px;
   padding: 5px;
+  border-radius: 5px;
   text-transform: uppercase;
   cursor: pointer;
   transition: all 1s linear;
+}
+
+.order-form__button {
+  background-color: rgb(13, 96, 111, 0.3);
+}
+
+.order-form__button-cancel {
+  background-color: rgb(255, 0, 0, 0.3);
 }
 
 /* hide arrows in input type number */

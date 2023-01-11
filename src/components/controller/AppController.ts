@@ -135,6 +135,7 @@ export default class AppController {
 
       // order popup
       const orderBtn = event.target.closest('.order-form__button') as HTMLButtonElement;
+      const cancelBtn = event.target.closest('.order-form__button-cancel') as HTMLButtonElement;
       const name = document.querySelector('.order-form__name') as HTMLInputElement;
       const phoneNum = document.querySelector('.order-form__tel') as HTMLInputElement;
       const address = document.querySelector('.order-form__address') as HTMLInputElement;
@@ -221,7 +222,10 @@ export default class AppController {
           that.model.sendOrder();
         }
       }
-      // 
+      if (cancelBtn) {
+        that.model.hidePopup();
+      }
+      //
       
       if (product || listItem) {
         that.model.showDescription(product || listItem);

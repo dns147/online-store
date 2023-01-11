@@ -100,7 +100,10 @@ export default class OrderPage {
                     </div>
                   </div>
                 </div>
-                <button class="order-form__button" type="submit">confirm</button>
+                <div class="order-form__buttons-container">
+                  <button class="order-form__button-cancel" type="submit">cancel</button>
+                  <button class="order-form__button" type="submit">confirm</button>
+                </div>
               </form>
             </div>
           </div>
