@@ -278,7 +278,6 @@ export function saveSelectedToLocalStorage(idProduct: string): void {
     idStorage[idProduct] = productAmount;
     localStorage.setItem('idProductToCart', JSON.stringify(idStorage));
   } else {
-    
     const idProductToCart: IdStorage = JSON.parse(localStorage['idProductToCart']);
     idProductToCart[idProduct] = productAmount;
     localStorage.setItem('idProductToCart', JSON.stringify(idProductToCart));
