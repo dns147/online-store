@@ -11,7 +11,6 @@ export default class AppController {
     this.model = model;
     this.container = container;
 
-    //this.initLocationWatcher = this.initLocationWatcher.bind(this);
     this.updateState = this.updateState.bind(this);
     this.getEventsClick = this.getEventsClick.bind(this);
     this.getEventsMouseOver = this.getEventsMouseOver.bind(this);
@@ -19,7 +18,6 @@ export default class AppController {
     this.getEventsChange = this.getEventsChange.bind(this);
     this.getEventsInput = this.getEventsInput.bind(this);
 
-    //window.addEventListener('popstate', this.initLocationWatcher);
     window.addEventListener('hashchange', this.updateState);
     document.addEventListener('click', this.getEventsClick);
     document.addEventListener('mouseover', this.getEventsMouseOver);
@@ -222,6 +220,7 @@ export default class AppController {
           that.model.sendOrder();
         }
       }
+      
       if (cancelBtn) {
         that.model.hidePopup();
       }
@@ -284,7 +283,7 @@ export default class AppController {
       }
 
       if (btnCopy) {
-        that.model.copyUrlToBuffer();
+        that.model.copyUrlToBuffer(btnCopy);
       }
 
       if (priceSlider) {
@@ -489,7 +488,6 @@ export default class AppController {
     if (event.target instanceof Element) {
       const search = event.target.closest('.search-input') as HTMLInputElement;
       const promoCode = event.target.closest('.promo-code-input') as HTMLInputElement;
-      //const limitInput = event.target.closest('.limit-input') as HTMLInputElement;
 
       // for order popup
       const phoneNum = event.target.closest('.order-form__tel') as HTMLInputElement;

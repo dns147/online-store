@@ -50,6 +50,13 @@ export function makeCardProduct(arrayProducts: IOptionsProducts[]): void {
 
   contentsContainer.innerHTML = '';
 
+  if (arrayProducts.length === 0) {
+    const textNoProducts: HTMLSpanElement = document.createElement('span');
+    textNoProducts.classList.add('text-no-products');
+    textNoProducts.innerHTML = 'No products found';
+    contentsContainer.append(textNoProducts);
+  }
+
   arrayProducts.forEach((product: IOptionsProducts) => {
     const cardMain: HTMLDivElement = document.createElement('div');
     const cardProduct: HTMLDivElement = document.createElement('div');
@@ -278,7 +285,6 @@ export function saveSelectedToLocalStorage(idProduct: string): void {
     idStorage[idProduct] = productAmount;
     localStorage.setItem('idProductToCart', JSON.stringify(idStorage));
   } else {
-    
     const idProductToCart: IdStorage = JSON.parse(localStorage['idProductToCart']);
     idProductToCart[idProduct] = productAmount;
     localStorage.setItem('idProductToCart', JSON.stringify(idProductToCart));
