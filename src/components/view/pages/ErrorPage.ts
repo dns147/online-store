@@ -2,7 +2,7 @@ import './styles/error-page.css';
 
 export default class ErrorPage {
   container: HTMLElement;
-  
+
   constructor(container: HTMLElement) {
     this.container = container;
   }
@@ -20,6 +20,6 @@ export default class ErrorPage {
   }
 
   init(): void {
-    
+    console.log('');
   }
 }

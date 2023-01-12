@@ -25,7 +25,7 @@ export const Header = {
         </div>
       </header>
     `;
-  }
+  },
 };
 
 export const Content = {
@@ -35,7 +35,7 @@ export const Content = {
 
       </main>
     `;
-  }
+  },
 };
 
 export const Footer = {
@@ -59,5 +59,5 @@ export const Footer = {
         </ul>
       </footer>
     `;
-  }
+  },
 };

@@ -1,12 +1,12 @@
 import './styles/description-page.css';
-import products from "../../../assets/json/products.json";
-import { getId } from "../../../utils/utils-catalog-page";
+import products from '../../../assets/json/products.json';
+import { getId } from '../../../utils/utils-catalog-page';
 import { checkFromLocalStorage } from '../../../utils/utils-description-page';
 
 export default class DescriptionPage {
   container: HTMLElement;
   id: string | null;
-  
+
   constructor(container: HTMLElement) {
     this.container = container;
     this.id = null;
@@ -27,7 +27,7 @@ export default class DescriptionPage {
 
   render(): string {
     const id: number = Number(getId()) ?? 0;
-    
+
     return `
       <div class="description-wrapper">
        <div class="product-picture-popup"></div>

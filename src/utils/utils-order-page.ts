@@ -1,12 +1,12 @@
-import products from "../assets/json/products.json";
-import { IdStorage, IOptionsProducts} from "./types";
-import { setQueryParam } from "./utils-catalog-page";
+import products from '../assets/json/products.json';
+import { IdStorage, IOptionsProducts } from './types';
+import { setQueryParam } from './utils-catalog-page';
 
 export function getOrderProducts(idProducts: IdStorage): IOptionsProducts[] {
-  let orderProducts: IOptionsProducts[] = [];
+  const orderProducts: IOptionsProducts[] = [];
 
-  for (let id in idProducts) {
-    orderProducts.push(... products.filter((product: IOptionsProducts) => product.id === Number(id)));
+  for (const id in idProducts) {
+    orderProducts.push(...products.filter((product: IOptionsProducts) => product.id === Number(id)));
   }
 
   return orderProducts;
@@ -20,15 +20,21 @@ export function getStock(id: number | undefined): string | null {
       stock = product.stock;
     }
   });
-  
-  return String(stock);
-};
 
-export function fillProductItems(orderProducts: IOptionsProducts[], container: HTMLElement, limitPage: number, startIndex: number, statePageUp: boolean): void {
+  return String(stock);
+}
+
+export function fillProductItems(
+  orderProducts: IOptionsProducts[],
+  container: HTMLElement,
+  limitPage: number,
+  startIndex: number,
+  statePageUp: boolean
+): void {
   const idProducts: IdStorage = JSON.parse(localStorage['idProductToCart']);
   const listProduct: HTMLUListElement = document.createElement('ul');
   listProduct.classList.add('list-product');
-  let endIndex: number = 0;
+  let endIndex = 0;
 
   if (localStorage['startIndex'] && statePageUp) {
     const middle: number = orderProducts.length - Number(localStorage['startIndex']);
@@ -67,7 +73,9 @@ export function fillProductItems(orderProducts: IOptionsProducts[], container: H
           <span class="stock-product">Stock: <span class="item-stock">${stock}</span></span>
           <div class="order-product-amount">
             <button class="order-minus"></button>
-            <input type="text" name="product-amount" value="${productAmountInput}" class="order-input-amount" data-id="${orderProducts[index].id}" readonly>
+            <input type="text" name="product-amount" value="${productAmountInput}" class="order-input-amount" data-id="${
+        orderProducts[index].id
+      }" readonly>
             <button class="order-plus"></button>
           </div>
           <span class="price-product">Price: $<span class="item-price">${price}</span></span>
@@ -97,12 +105,12 @@ export function addLimitPage(limitPage: number, statePageUp: boolean): void {
   const orderProducts: IOptionsProducts[] = getOrderProducts(idProducts);
   const elemSummaryPage = document.querySelector('.summary-page') as HTMLElement;
   const summaryPage: number = Math.ceil(orderProducts.length / limitPage);
-  const resultSummaryPage: number = (isFinite(summaryPage)) ? summaryPage : orderProducts.length;
-  
+  const resultSummaryPage: number = isFinite(summaryPage) ? summaryPage : orderProducts.length;
+
   elemSummaryPage.innerHTML = String(resultSummaryPage);
   setQueryParam('pages', String(resultSummaryPage));
   localStorage.setItem('summaryPage', String(resultSummaryPage));
 
-  const startIndex: number = 0;
+  const startIndex = 0;
   changeProductInPage(limitPage, startIndex, statePageUp);
 }
