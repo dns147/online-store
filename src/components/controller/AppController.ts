@@ -157,7 +157,7 @@ export default class AppController {
           name.closest('.order-form__name-container')?.classList.remove('error');
         }
 
-        const regexPhoneNum = /\+{1}[0-9]{9,}/;
+        const regexPhoneNum = /\+{1}^\D[0-9]{9,}/;
         const isValidPhoneNum = regexPhoneNum.test(phoneNum.value);
 
         if (!isValidPhoneNum) {
@@ -176,7 +176,7 @@ export default class AppController {
           address.closest('.order-form__address-container')?.classList.remove('error');
         }
 
-        const regexEmail = /^([a-zA-Z0-9_\-\\.]+)+@([\w-]+\.)+[\w-]{2,4}$/
+        const regexEmail = /^([a-zA-Z0-9_\-\\.]+)+@([\w-]+\.)+[\w-]{2,4}$/;
         const isValidEmail = regexEmail.test(email.value);
 
         if (!isValidEmail) {
