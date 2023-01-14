@@ -735,7 +735,7 @@ export function sortFilterProducts(filterProducts: IOptionsProducts[], nameSort:
   return resultSort;
 }
 
-function getProductAmount(idProduct: string): string {
+export function getProductAmount(idProduct: string): string {
   let productAmount = '1';
   const params = new URLSearchParams(window.location.search);
 
