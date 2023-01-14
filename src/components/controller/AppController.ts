@@ -1,7 +1,7 @@
 import * as noUiSlider from 'nouislider';
 import 'nouislider/dist/nouislider.css';
-import { getId, getPrice } from "../../utils/utils-catalog-page";
-import AppModel from "../model/AppModel";
+import { getId, getPrice } from '../../utils/utils-catalog-page';
+import AppModel from '../model/AppModel';
 
 export default class AppController {
   model: AppModel;
@@ -30,20 +30,18 @@ export default class AppController {
   }
 
   updateState(): void {
-    const that = this;
-    that.model.updateState();
+    this.model.updateState();
   }
 
   initLocationWatcher() {
-    const that = this;
-    let lastLocation: string = '';
+    let lastLocation = '';
 
     setInterval(() => {
-      const currentLocation: string = window.location.href
+      const currentLocation: string = window.location.href;
 
       if (currentLocation !== lastLocation) {
         lastLocation = currentLocation;
-        that.updateStateUrl();
+        this.updateStateUrl();
       }
     }, 200);
   }
@@ -59,8 +57,6 @@ export default class AppController {
   }
 
   getEventsClick(event: Event): void {
-    const that = this;
-
     if (event.target instanceof Element) {
       const product = event.target.closest('.card-product') as HTMLElement;
       const plus = event.target.closest('.plus') as HTMLElement;
@@ -86,13 +82,12 @@ export default class AppController {
       const order = event.target.closest('.order') as HTMLElement;
       const btnUpPage = event.target.closest('.up-page') as HTMLElement;
       const btnDownPage = event.target.closest('.down-page') as HTMLElement;
-            
-      // for description page
+
       const productPic = event.target.closest('.product-info-pictures-main') as HTMLElement;
       const descriptionPopup = event.target.closest('.product-picture-popup') as HTMLElement;
-      const productAdPic = event.target.closest('.product-info-pictures-item') as HTMLElement
+      const productAdPic = event.target.closest('.product-info-pictures-item') as HTMLElement;
       const btnCartDescription = event.target.closest('.btn-cart-description') as HTMLButtonElement;
-      
+
       if (productPic) {
         const popup = document.querySelector('.product-picture-popup') as HTMLElement;
         const pic = productPic.firstElementChild as HTMLElement;
@@ -102,7 +97,7 @@ export default class AppController {
 
         clone.classList.remove('description-img');
         clone.classList.add('product-picture-popup__img');
-        
+
         popup.append(clone);
         popup.classList.add('product-picture-popup_open');
       }
@@ -110,7 +105,7 @@ export default class AppController {
       if (descriptionPopup) {
         descriptionPopup.classList.remove('product-picture-popup_open');
       }
-      
+
       if (productAdPic) {
         const pic = productAdPic.firstElementChild as HTMLImageElement;
         const mainPic = document.querySelector('.product-info-pictures-main .description-img') as HTMLImageElement;
@@ -124,14 +119,12 @@ export default class AppController {
         const idProduct: number | undefined = Number(getId());
         const priceProduct: string | null = getPrice(idProduct);
         const totalPrice = document.querySelector('.total-price') as HTMLElement;
-        
-        that.model.changeStyleBtnCartDescription(btnCartDescription, String(idProduct));
-        that.model.getTotalPrice(btnCartDescription, totalPrice, priceProduct);
-        that.model.addToCartFromDescription(btnCartDescription);
-      }
-      // for description page
 
-      // order popup
+        this.model.changeStyleBtnCartDescription(btnCartDescription, String(idProduct));
+        this.model.getTotalPrice(btnCartDescription, totalPrice, priceProduct);
+        this.model.addToCartFromDescription(btnCartDescription);
+      }
+
       const orderBtn = event.target.closest('.order-form__button') as HTMLButtonElement;
       const cancelBtn = event.target.closest('.order-form__button-cancel') as HTMLButtonElement;
       const name = document.querySelector('.order-form__name') as HTMLInputElement;
@@ -141,7 +134,7 @@ export default class AppController {
       const cardNum = document.querySelector('.order-form__card') as HTMLInputElement;
       const cardCvv = document.querySelector('.order-form__cvv') as HTMLInputElement;
       const cardValid = document.querySelector('.order-form__valid') as HTMLInputElement;
-      
+
       if (orderBtn) {
         event.preventDefault();
 
@@ -192,7 +185,7 @@ export default class AppController {
           cardNum.closest('.order-form__card-number')?.classList.remove('error');
         }
 
-        const regexCardValid = /[0-1]{1}[0-9]{1}[/][0-9]{2}/
+        const regexCardValid = /[0-1]{1}[0-9]{1}[/][0-9]{2}/;
         const isValidCardValid = regexCardValid.test(cardValid.value);
 
         if (!isValidCardValid) {
@@ -203,31 +196,47 @@ export default class AppController {
 
         const regexCardCvv = /[0-9]{3}/;
         const isValidCardCvv = regexCardCvv.test(cardCvv.value);
-        
+
         if (!isValidCardCvv) {
           cardCvv.closest('.order-form__cvv-container')?.classList.add('error');
         } else {
           cardCvv.closest('.order-form__cvv-container')?.classList.remove('error');
         }
 
-        const isvalidAll = [isValidName, isValidPhoneNum, isValidPhoneNum, isValidEmail, isValidCardNum, isValidCardValid, isValidCardCvv].every((e) => e);
-       
+        const isvalidAll = [
+          isValidName,
+          isValidPhoneNum,
+          isValidPhoneNum,
+          isValidEmail,
+          isValidCardNum,
+          isValidCardValid,
+          isValidCardCvv,
+        ].every((e) => e);
+
         if (isvalidAll) {
           document.querySelector('.form-container')?.classList.add('.ordered');
         }
 
-        if (isvalidAll && isValidAddress && isValidName && isValidEmail && isValidPhoneNum && isValidCardNum && isValidCardValid && isValidCardCvv) {
-          that.model.sendOrder();
+        if (
+          isvalidAll &&
+          isValidAddress &&
+          isValidName &&
+          isValidEmail &&
+          isValidPhoneNum &&
+          isValidCardNum &&
+          isValidCardValid &&
+          isValidCardCvv
+        ) {
+          this.model.sendOrder();
         }
       }
-      
+
       if (cancelBtn) {
-        that.model.hidePopup();
+        this.model.hidePopup();
       }
-      //
-      
+
       if (product || listItem) {
-        that.model.showDescription(product || listItem);
+        this.model.showDescription(product || listItem);
       }
 
       if (plus) {
@@ -236,13 +245,13 @@ export default class AppController {
         const parentInput = parentPlus.parentElement as HTMLElement;
         const upParentInput = parentInput.parentElement as HTMLElement;
         const btnCart = parentInput.querySelector('.btn-cart') as HTMLElement;
-        that.model.plusAmountProduct(btnCart, inputAmountProduct, upParentInput);
+        this.model.plusAmountProduct(btnCart, inputAmountProduct, upParentInput);
       }
 
       if (minus) {
         const parentMinus = minus.parentElement as HTMLElement;
         const inputAmountProduct = parentMinus.querySelector('.product-amount') as HTMLInputElement;
-        that.model.minusAmountProduct(inputAmountProduct);
+        this.model.minusAmountProduct(inputAmountProduct);
       }
 
       if (btnCart) {
@@ -256,13 +265,13 @@ export default class AppController {
         const imageProduct = parentMain.querySelector('.image-product') as HTMLElement;
         const imageParent = parentMain.querySelector('.card-product') as HTMLElement;
 
-        that.model.changeStyleCard(btnCart, imageParent, parentBtn, String(idProduct));
-        that.model.getTotalPrice(btnCart, totalPrice, priceProduct, inputAmountProduct);
-        that.model.addToCart(btnCart, imageProduct, imageParent, inputAmountProduct);
+        this.model.changeStyleCard(btnCart, imageParent, parentBtn, String(idProduct));
+        this.model.getTotalPrice(btnCart, totalPrice, priceProduct, inputAmountProduct);
+        this.model.addToCart(btnCart, imageProduct, imageParent, inputAmountProduct);
       }
 
       if (btnViewType) {
-        that.model.changeViewType(btnViewType);
+        this.model.changeViewType(btnViewType);
       }
 
       if (btnCartSortList) {
@@ -272,18 +281,18 @@ export default class AppController {
         const priceProduct: string | null = getPrice(idProduct);
         const totalPrice = document.querySelector('.total-price') as HTMLElement;
         const imageProduct = listItemContainer.querySelector('.image-sorting-by-list') as HTMLElement;
-        
-        that.model.changeStyleCard(btnCartSortList, listItemContainer, parentBtn, String(idProduct));
-        that.model.getTotalPrice(btnCartSortList, totalPrice, priceProduct);
-        that.model.addToCart(btnCartSortList, imageProduct, listItemContainer);
+
+        this.model.changeStyleCard(btnCartSortList, listItemContainer, parentBtn, String(idProduct));
+        this.model.getTotalPrice(btnCartSortList, totalPrice, priceProduct);
+        this.model.addToCart(btnCartSortList, imageProduct, listItemContainer);
       }
 
       if (btnReset) {
-        that.model.resetFilters();
+        this.model.resetFilters();
       }
 
       if (btnCopy) {
-        that.model.copyUrlToBuffer(btnCopy);
+        this.model.copyUrlToBuffer(btnCopy);
       }
 
       if (priceSlider) {
@@ -297,92 +306,86 @@ export default class AppController {
       if (plusOrder) {
         const parentPlus = plusOrder.parentElement as HTMLElement;
         const inputAmountProduct = parentPlus.querySelector('.order-input-amount') as HTMLInputElement;
-        that.model.plusAmountOrder(inputAmountProduct);
+        this.model.plusAmountOrder(inputAmountProduct);
       }
 
       if (minusOrder) {
         const parentMinus = minusOrder.parentElement as HTMLElement;
         const inputAmountProduct = parentMinus.querySelector('.order-input-amount') as HTMLInputElement;
-        that.model.minusAmountOrder(inputAmountProduct);
+        this.model.minusAmountOrder(inputAmountProduct);
       }
 
       if (btnBuyCart) {
-        that.model.goToCartWithPopup();
+        this.model.goToCartWithPopup();
       }
 
       if (btnOrder) {
-        that.model.goToCartWithoutPopup();
+        this.model.goToCartWithoutPopup();
       }
 
       if (orderBtnBuy) {
-        that.model.showPopup();
+        this.model.showPopup();
       }
 
       if (applyBtnDiscount) {
-        that.model.applyDiscount(applyBtnDiscount);
+        this.model.applyDiscount(applyBtnDiscount);
       }
 
       if (btnDropDiscount) {
-        that.model.dropDiscount(btnDropDiscount);
+        this.model.dropDiscount(btnDropDiscount);
       }
 
       if (btnPageRight) {
-        that.model.changePageUp();
+        this.model.changePageUp();
       }
 
       if (btnPageLeft) {
-        that.model.changePageDown();
+        this.model.changePageDown();
       }
 
       if (logoName || order) {
         const protocol: string = window.location.protocol;
         const host: string = window.location.host;
-        const url: string =`${protocol}//${host}`;
+        const url = `${protocol}//${host}`;
 
         window.history.replaceState({}, '', `${url}`);
       }
 
       if (btnUpPage) {
-        that.model.upLimitPage();
+        this.model.upLimitPage();
       }
 
       if (btnDownPage) {
-        that.model.downLimitPage();
+        this.model.downLimitPage();
       }
     }
   }
 
   getEventsMouseOver(event: Event): void {
-    const that = this;
-
     if (event.target instanceof Element) {
       const btnCartSortList = event.target.closest('.btn-cart-sort-list') as HTMLElement;
 
       if (btnCartSortList) {
         const parentBtn = btnCartSortList.parentElement as HTMLElement;
         const listItemContainer = parentBtn.querySelector('.list-item-container') as HTMLElement;
-        that.model.addStyleBtn(listItemContainer);
+        this.model.addStyleBtn(listItemContainer);
       }
     }
   }
 
   getEventsMouseOut(event: Event): void {
-    const that = this;
-
     if (event.target instanceof Element) {
       const btnCartSortList = event.target.closest('.btn-cart-sort-list') as HTMLElement;
 
       if (btnCartSortList) {
         const parentBtn = btnCartSortList.parentElement as HTMLElement;
         const listItemContainer = parentBtn.querySelector('.list-item-container') as HTMLElement;
-        that.model.removeStyleBtn(listItemContainer);
+        this.model.removeStyleBtn(listItemContainer);
       }
     }
   }
 
   getEventsChange(event: Event): void {
-    const that = this;
-
     if (event.target instanceof Element) {
       const select = event.target.closest('.search-select') as HTMLInputElement;
       const category1 = event.target.closest('.category1') as HTMLInputElement;
@@ -397,99 +400,96 @@ export default class AppController {
 
       if (select) {
         event.preventDefault();
-        that.model.clickSelect(select);
+        this.model.clickSelect(select);
       }
 
       if (category1) {
         if (category1.checked) {
-          that.model.sortCategory(category1, 'category');
-          that.model.checkOtherCategory(category1, 'category');
+          this.model.sortCategory(category1, 'category');
+          this.model.checkOtherCategory(category1, 'category');
         } else {
-          that.model.unSortCategory(category1, 'category');
-          that.model.resetOtherCategory(category1, 'category');
+          this.model.unSortCategory(category1, 'category');
+          this.model.resetOtherCategory(category1, 'category');
         }
       }
 
       if (category2) {
         if (category2.checked) {
-          that.model.sortCategory(category2, 'category');
-          that.model.checkOtherCategory(category2, 'category');
+          this.model.sortCategory(category2, 'category');
+          this.model.checkOtherCategory(category2, 'category');
         } else {
-          that.model.unSortCategory(category2, 'category');
-          that.model.resetOtherCategory(category2, 'category');
+          this.model.unSortCategory(category2, 'category');
+          this.model.resetOtherCategory(category2, 'category');
         }
       }
 
       if (category3) {
         if (category3.checked) {
-          that.model.sortCategory(category3, 'category');
-          that.model.checkOtherCategory(category3, 'category');
+          this.model.sortCategory(category3, 'category');
+          this.model.checkOtherCategory(category3, 'category');
         } else {
-          that.model.unSortCategory(category3, 'category');
-          that.model.resetOtherCategory(category3, 'category');
+          this.model.unSortCategory(category3, 'category');
+          this.model.resetOtherCategory(category3, 'category');
         }
       }
 
       if (category4) {
         if (category4.checked) {
-          that.model.sortCategory(category4, 'category');
-          that.model.checkOtherCategory(category4, 'category');
+          this.model.sortCategory(category4, 'category');
+          this.model.checkOtherCategory(category4, 'category');
         } else {
-          that.model.unSortCategory(category4, 'category');
-          that.model.resetOtherCategory(category4, 'category');
+          this.model.unSortCategory(category4, 'category');
+          this.model.resetOtherCategory(category4, 'category');
         }
       }
 
       if (brand1) {
         if (brand1.checked) {
-          that.model.sortCategory(brand1, 'brand');
-          that.model.checkOtherCategory(brand1, 'brand');
+          this.model.sortCategory(brand1, 'brand');
+          this.model.checkOtherCategory(brand1, 'brand');
         } else {
-          that.model.unSortCategory(brand1, 'brand');
-          that.model.resetOtherCategory(brand1, 'brand');
+          this.model.unSortCategory(brand1, 'brand');
+          this.model.resetOtherCategory(brand1, 'brand');
         }
       }
 
       if (brand2) {
         if (brand2.checked) {
-          that.model.sortCategory(brand2, 'brand');
-          that.model.checkOtherCategory(brand2, 'brand');
+          this.model.sortCategory(brand2, 'brand');
+          this.model.checkOtherCategory(brand2, 'brand');
         } else {
-          that.model.unSortCategory(brand2, 'brand');
-          that.model.resetOtherCategory(brand2, 'brand');
+          this.model.unSortCategory(brand2, 'brand');
+          this.model.resetOtherCategory(brand2, 'brand');
         }
       }
 
       if (brand3) {
         if (brand3.checked) {
-          that.model.sortCategory(brand3, 'brand');
-          that.model.checkOtherCategory(brand3, 'brand');
+          this.model.sortCategory(brand3, 'brand');
+          this.model.checkOtherCategory(brand3, 'brand');
         } else {
-          that.model.unSortCategory(brand3, 'brand');
-          that.model.resetOtherCategory(brand3, 'brand');
+          this.model.unSortCategory(brand3, 'brand');
+          this.model.resetOtherCategory(brand3, 'brand');
         }
       }
 
       if (brand4) {
         if (brand4.checked) {
-          that.model.sortCategory(brand4, 'brand');
-          that.model.checkOtherCategory(brand4, 'brand');
+          this.model.sortCategory(brand4, 'brand');
+          this.model.checkOtherCategory(brand4, 'brand');
         } else {
-          that.model.unSortCategory(brand4, 'brand');
-          that.model.resetOtherCategory(brand4, 'brand');
+          this.model.unSortCategory(brand4, 'brand');
+          this.model.resetOtherCategory(brand4, 'brand');
         }
       }
     }
   }
 
   getEventsInput(event: Event): void {
-    const that = this;
-
     if (event.target instanceof Element) {
       const search = event.target.closest('.search-input') as HTMLInputElement;
       const promoCode = event.target.closest('.promo-code-input') as HTMLInputElement;
 
-      // for order popup
       const phoneNum = event.target.closest('.order-form__tel') as HTMLInputElement;
       const cardNum = event.target.closest('.order-form__card') as HTMLInputElement;
       const cardFirstNum = event.target.closest('.first-numbers') as HTMLInputElement;
@@ -589,16 +589,15 @@ export default class AppController {
           cardValid.value = cardValid.value.slice(0, -1);
         }
       }
-      //
 
       if (search) {
         event.preventDefault();
-        that.model.clickSearch();
+        this.model.clickSearch();
       }
 
       if (promoCode) {
         event.preventDefault();
-        that.model.enterPromoCode(promoCode);
+        this.model.enterPromoCode(promoCode);
       }
     }
   }

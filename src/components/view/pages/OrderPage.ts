@@ -1,13 +1,13 @@
 import './styles/order-page.css';
 import './styles/popup-order.css';
-import { IdStorage, IOptionsProducts } from "../../../utils/types";
-import { deleteSearchParams, getQueryParam, setQueryParam } from "../../../utils/utils-catalog-page";
-import { fillProductItems, getOrderProducts } from "../../../utils/utils-order-page";
+import { IdStorage, IOptionsProducts } from '../../../utils/types';
+import { deleteSearchParams, getQueryParam, setQueryParam } from '../../../utils/utils-catalog-page';
+import { fillProductItems, getOrderProducts } from '../../../utils/utils-order-page';
 
 export default class OrderPage {
   container: HTMLElement;
   popup: string | null;
-  
+
   constructor(container: HTMLElement) {
     this.container = container;
     this.popup = null;
@@ -115,15 +115,15 @@ export default class OrderPage {
   init(): void {
     deleteSearchParams(['id', 'sort']);
     this.popup = getQueryParam('popup');
-    let limitPage: number = 1;
+    let limitPage = 1;
 
     const limitPageInput = document.querySelector('.limit-input') as HTMLInputElement;
     const elemCountPage = document.querySelector('.count-page') as HTMLElement;
-    
+
     const limit: string | null = getQueryParam('limit');
     let page: string | null = getQueryParam('page');
 
-    if (limit && page) {     
+    if (limit && page) {
       limitPageInput.value = limit;
       elemCountPage.innerHTML = page;
       limitPage = Number(limit);
@@ -146,7 +146,7 @@ export default class OrderPage {
       setQueryParam('pages', String(summaryPage));
       localStorage.setItem('summaryPage', String(summaryPage));
 
-      const startIndex: number = (Number(page) === 1) ? 0 : (Number(page) - 1) * limitPage;
+      const startIndex: number = Number(page) === 1 ? 0 : (Number(page) - 1) * limitPage;
       const productItemsContainer = this.container.querySelector('.product-items') as HTMLElement;
 
       if (startIndex === 0) {
@@ -155,7 +155,7 @@ export default class OrderPage {
         fillProductItems(orderProducts, productItemsContainer, limitPage, startIndex, true);
       }
     }
-    
+
     if (localStorage['totalPrice']) {
       (document.querySelector('.total-price') as HTMLElement).innerHTML = localStorage['totalPrice'];
       (document.querySelector('.count-total-price') as HTMLElement).innerHTML = localStorage['totalPrice'];
@@ -172,4 +172,3 @@ export default class OrderPage {
     }
   }
 }
-

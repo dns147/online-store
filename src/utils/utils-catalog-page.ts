@@ -1,14 +1,14 @@
 import * as noUiSlider from 'nouislider';
 import 'nouislider/dist/nouislider.css';
 import wNumb from 'wnumb';
-import products from "../assets/json/products.json";
-import { DataCategories, IdStorage, IOptionsProducts, SortByType } from "./types";
+import products from '../assets/json/products.json';
+import { DataCategories, IdStorage, IOptionsProducts, SortByType } from './types';
 
 export function addFilterCategory(container: HTMLElement, nameItem: string): void {
   const dataCategories: DataCategories = getDataCategories(nameItem);
-  let index: number = 1;
+  let index = 1;
 
-  for (let key in dataCategories) {
+  for (const key in dataCategories) {
     const categoryItem: HTMLDivElement = document.createElement('div');
     const categoryItemDiv: HTMLDivElement = document.createElement('div');
     const input: HTMLInputElement = document.createElement('input');
@@ -72,10 +72,10 @@ export function makeCardProduct(arrayProducts: IOptionsProducts[]): void {
     cardName.innerHTML = product.title;
     image.src = product.images[0];
     image.alt = `image`;
-    listCategory.innerHTML = `<span class="list-name">Category: </span>${product.category}`
-    listBrand.innerHTML = `<span class="list-name">Brand: </span>${product.brand}`
-    listStock.innerHTML = `<span class="list-name">Stock: </span>${product.stock}`
-    listPrice.innerHTML = `<span class="list-name">Price: $</span>${product.price}`
+    listCategory.innerHTML = `<span class="list-name">Category: </span>${product.category}`;
+    listBrand.innerHTML = `<span class="list-name">Brand: </span>${product.brand}`;
+    listStock.innerHTML = `<span class="list-name">Stock: </span>${product.stock}`;
+    listPrice.innerHTML = `<span class="list-name">Price: $</span>${product.price}`;
     cartContainer.innerHTML = `
       <div class="input-amount">
         <button class="minus"></button>
@@ -97,7 +97,7 @@ export function makeCardProduct(arrayProducts: IOptionsProducts[]): void {
     listStock.classList.add('list-item');
     listPrice.classList.add('list-item');
     cartContainer.classList.add('cart-container');
-    
+
     cardProduct.append(cardName);
     cardProduct.append(image);
     list.append(listCategory);
@@ -109,7 +109,7 @@ export function makeCardProduct(arrayProducts: IOptionsProducts[]): void {
     cardMain.append(cardProduct);
     cardMain.append(cartContainer);
 
-    cardAnimate(cardMain); 
+    cardAnimate(cardMain);
 
     contentsContainer.append(cardMain);
   });
@@ -132,14 +132,14 @@ export function getId(): string | null {
   const id: string | null = params.get('id');
 
   return id;
-};
+}
 
 export function getQueryParam(type: string): string | null {
   const params = new URLSearchParams(window.location.search);
   const typeParam: string | null = params.get(type);
-  
+
   return typeParam;
-};
+}
 
 export function getPrice(id: number | undefined): string | null {
   let price = null;
@@ -149,15 +149,15 @@ export function getPrice(id: number | undefined): string | null {
       price = product.price;
     }
   });
-  
+
   return String(price);
-};
+}
 
 export function showAnimateImage(imageProduct: HTMLElement, imageParent: HTMLElement, state: boolean) {
   const cloneImage = imageProduct.cloneNode(true) as HTMLElement;
   const params = new URLSearchParams(window.location.search);
 
-  if (!params.get('type') || (params.get('type') === SortByType.bar)) {
+  if (!params.get('type') || params.get('type') === SortByType.bar) {
     cloneImage.classList.add('clone-image');
   }
 
@@ -175,20 +175,14 @@ export function showAnimateImage(imageProduct: HTMLElement, imageParent: HTMLEle
 
   if (state) {
     cloneImage.animate(
-      [
-        { transform: `translate(0px, 0px) scale(1)` },
-        { transform: `translate(${offsetX}px, -${posY}px) scale(0)` }
-      ],  
+      [{ transform: `translate(0px, 0px) scale(1)` }, { transform: `translate(${offsetX}px, -${posY}px) scale(0)` }],
       {
         duration: 1000,
       }
     );
   } else {
     cloneImage.animate(
-      [
-        { transform: `translate(${offsetX}px, -${posY}px) scale(0)` },
-        { transform: `translate(0px, 0px) scale(1)` }
-      ],  
+      [{ transform: `translate(${offsetX}px, -${posY}px) scale(0)` }, { transform: `translate(0px, 0px) scale(1)` }],
       {
         duration: 1000,
       }
@@ -240,16 +234,19 @@ export function changeSortingByType(arrayProducts: IOptionsProducts[]): void {
   catalogList.append(list);
 }
 
-export function loadSelectedFromLocalStorage(itemContainer: NodeListOf<HTMLElement>, btnCart: NodeListOf<HTMLElement>): void {
+export function loadSelectedFromLocalStorage(
+  itemContainer: NodeListOf<HTMLElement>,
+  btnCart: NodeListOf<HTMLElement>
+): void {
   const sortByType: string | null = getQueryParam('type');
 
   if (localStorage['idProductToCart']) {
     const idProductToCart: IdStorage = JSON.parse(localStorage['idProductToCart']);
-    
+
     products.forEach((product: IOptionsProducts, index: number) => {
-      const idProduct: string = String(product.id);
-      
-      for (let key in idProductToCart) {
+      const idProduct = String(product.id);
+
+      for (const key in idProductToCart) {
         if (key === idProduct && sortByType === SortByType.list) {
           itemContainer[index].classList.add('active-card');
           btnCart[index].innerHTML = `DROP FROM CART (${idProductToCart[key]})`;
@@ -272,7 +269,7 @@ export function loadSelectedFromLocalStorage(itemContainer: NodeListOf<HTMLEleme
           minus.disabled = true;
           plus.disabled = true;
         }
-      }      
+      }
     });
   }
 }
@@ -293,7 +290,7 @@ export function saveSelectedToLocalStorage(idProduct: string): void {
 
 export function removeSelectedToLocalStorage(idProduct: string): void {
   const idProductToCart: IdStorage = JSON.parse(localStorage['idProductToCart']);
-  
+
   delete idProductToCart[idProduct];
   localStorage.setItem('idProductToCart', JSON.stringify(idProductToCart));
 }
@@ -319,7 +316,7 @@ export function addQueryParam(productName: string, param: string): void {
   } else {
     params.set(productName, param);
   }
-  
+
   window.history.replaceState({}, '', `${window.location.pathname}?${params}${hashPageName}`);
 }
 
@@ -336,7 +333,9 @@ export function deleteQueryParam(productName: string, categoryName: string): voi
 }
 
 export function sortProducts(typeSort: string): IOptionsProducts[] {
-  const filterCatalog: IOptionsProducts[] = localStorage['filterCatalog'] ? JSON.parse(localStorage['filterCatalog']) : products;
+  const filterCatalog: IOptionsProducts[] = localStorage['filterCatalog']
+    ? JSON.parse(localStorage['filterCatalog'])
+    : products;
   let resultSort: IOptionsProducts[] = [];
 
   switch (typeSort) {
@@ -345,13 +344,13 @@ export function sortProducts(typeSort: string): IOptionsProducts[] {
         return a.price - b.price;
       });
       break;
-    
+
     case SortByType.priceDown:
       resultSort = filterCatalog.sort((a, b) => {
         return b.price - a.price;
       });
       break;
-    
+
     case SortByType.stockUp:
       resultSort = filterCatalog.sort((a, b) => {
         return a.stock - b.stock;
@@ -373,7 +372,6 @@ export function sortProducts(typeSort: string): IOptionsProducts[] {
     default:
       break;
   }
-
 
   return resultSort;
 }
@@ -403,24 +401,28 @@ export function showSortProductListView(classForSearch: string, typeOfSort: stri
 }
 
 export function searchProducts(valueInput: string): IOptionsProducts[] {
-  const valueInputLowerCase: string =  valueInput.toLowerCase();
-  const filterCatalog: IOptionsProducts[] = localStorage['filterCatalog'] ? JSON.parse(localStorage['filterCatalog']) : products;
-  let resultSearch: IOptionsProducts[] = [];
+  const valueInputLowerCase: string = valueInput.toLowerCase();
+  const filterCatalog: IOptionsProducts[] = localStorage['filterCatalog']
+    ? JSON.parse(localStorage['filterCatalog'])
+    : products;
+  const resultSearch: IOptionsProducts[] = [];
 
   filterCatalog.forEach((item: IOptionsProducts) => {
-    const title: string =  item.title.toLowerCase();
-    const description: string =  item.description.toLowerCase();
-    const price: string =  String(item.price);
-    const stock: string =  String(item.stock);
-    const brand: string =  item.brand.toLowerCase();
-    const category: string =  item.category.toLowerCase();
+    const title: string = item.title.toLowerCase();
+    const description: string = item.description.toLowerCase();
+    const price = String(item.price);
+    const stock = String(item.stock);
+    const brand: string = item.brand.toLowerCase();
+    const category: string = item.category.toLowerCase();
 
-    if (title.includes(valueInputLowerCase) ||
-        description.includes(valueInputLowerCase) ||
-        price.includes(valueInputLowerCase) ||
-        stock.includes(valueInputLowerCase) ||
-        brand.includes(valueInputLowerCase) ||
-        category.includes(valueInputLowerCase)) {
+    if (
+      title.includes(valueInputLowerCase) ||
+      description.includes(valueInputLowerCase) ||
+      price.includes(valueInputLowerCase) ||
+      stock.includes(valueInputLowerCase) ||
+      brand.includes(valueInputLowerCase) ||
+      category.includes(valueInputLowerCase)
+    ) {
       resultSearch.push(item);
     }
   });
@@ -430,7 +432,7 @@ export function searchProducts(valueInput: string): IOptionsProducts[] {
 
 export function sortingCatalog(categoryName: string, name: string): IOptionsProducts[] {
   let resultSearch: IOptionsProducts[] = [];
-  
+
   if (name === 'category') {
     resultSearch = products.filter((item: IOptionsProducts) => item.category === categoryName);
   }
@@ -441,16 +443,20 @@ export function sortingCatalog(categoryName: string, name: string): IOptionsProd
 
   if (name === 'price') {
     const price: string[] = JSON.parse(categoryName);
-    const resultStartPrice: IOptionsProducts[] = products.filter((item: IOptionsProducts) => item.price >= Number(price[0]));
+    const resultStartPrice: IOptionsProducts[] = products.filter(
+      (item: IOptionsProducts) => item.price >= Number(price[0])
+    );
     resultSearch = resultStartPrice.filter((item: IOptionsProducts) => item.price <= Number(price[1]));
   }
 
   if (name === 'stock') {
     const stock: string[] = JSON.parse(categoryName);
-    const resultStartStock: IOptionsProducts[] = products.filter((item: IOptionsProducts) => item.stock >= Number(stock[0]));
+    const resultStartStock: IOptionsProducts[] = products.filter(
+      (item: IOptionsProducts) => item.stock >= Number(stock[0])
+    );
     resultSearch = resultStartStock.filter((item: IOptionsProducts) => item.stock <= Number(stock[1]));
   }
-  
+
   return resultSearch;
 }
 
@@ -465,7 +471,7 @@ export function clickSearchProducts(valueInput: string): void {
     changeSortingByType(searchCatalog);
   }
 
-  if (!view || (view === SortByType.bar)) {
+  if (!view || view === SortByType.bar) {
     makeCardProduct(searchCatalog);
   }
 }
@@ -477,11 +483,11 @@ export function makePriceSlider(priceSlider: HTMLElement): void {
     tooltips: [true, true],
     step: 1,
     range: {
-        'min': 5,
-        'max': 65
+      min: 5,
+      max: 65,
     },
     format: wNumb({
-        decimals: 0
+      decimals: 0,
     }),
   });
 }
@@ -493,11 +499,11 @@ export function makeStockSlider(stockSlider: HTMLElement): void {
     tooltips: [true, true],
     step: 1,
     range: {
-        'min': 1,
-        'max': 44
+      min: 1,
+      max: 44,
     },
     format: wNumb({
-        decimals: 0
+      decimals: 0,
     }),
   });
 }
@@ -536,8 +542,8 @@ export function getDataCategories(name: string): DataCategories {
 export function findSumCategory(dataCategories: DataCategories, filterCatalog: IOptionsProducts[]): number[] {
   const findSum: number[] = [];
 
-  for (let nameCategory in dataCategories) {
-    let sum: number = 0;
+  for (const nameCategory in dataCategories) {
+    let sum = 0;
 
     filterCatalog.forEach((item: IOptionsProducts) => {
       if (item.category === nameCategory) {
@@ -554,8 +560,8 @@ export function findSumCategory(dataCategories: DataCategories, filterCatalog: I
 export function findSumBrand(dataBrands: DataCategories, filterCatalog: IOptionsProducts[]): number[] {
   const findSum: number[] = [];
 
-  for (let nameBrands in dataBrands) {
-    let sum: number = 0;
+  for (const nameBrands in dataBrands) {
+    let sum = 0;
 
     filterCatalog.forEach((item: IOptionsProducts) => {
       if (item.brand === nameBrands) {
@@ -585,15 +591,19 @@ export function resetHideStyle(categories: NodeListOf<Element>): void {
   });
 }
 
-export function checkOtherCategory(dataCategories: DataCategories, dataBrands: DataCategories, filterCatalog: IOptionsProducts[]): void {
+export function checkOtherCategory(
+  dataCategories: DataCategories,
+  dataBrands: DataCategories,
+  filterCatalog: IOptionsProducts[]
+): void {
   const countCategories = document.querySelectorAll('.category-find') as NodeListOf<Element>;
   const nameCategories = document.querySelectorAll('.category-name') as NodeListOf<Element>;
   const countBrands = document.querySelectorAll('.brand-find') as NodeListOf<Element>;
   const nameBrands = document.querySelectorAll('.brand-name') as NodeListOf<Element>;
-  
+
   const sumCategories: number[] = findSumCategory(dataCategories, filterCatalog);
   const sumBrands: number[] = findSumBrand(dataBrands, filterCatalog);
-  
+
   countCategories.forEach((countCategory, index) => {
     countCategory.innerHTML = String(sumCategories[index]);
 
@@ -627,12 +637,12 @@ export function checkQueryParams(): void {
   const dataCategories: DataCategories = getDataCategories('category');
   const dataBrands: DataCategories = getDataCategories('brand');
   const view = getQueryParam('type');
-  
+
   valueParamCategory.forEach((value) => {
     const inputCategory = document.querySelector(`[name="${value}`) as HTMLInputElement;
     inputCategory.checked = true;
   });
-  
+
   valueParamBrand.forEach((value) => {
     const inputBrand = document.querySelector(`[name="${value}`) as HTMLInputElement;
     inputBrand.checked = true;
@@ -673,13 +683,11 @@ export function checkQueryParams(): void {
     changeSortingByType(filterCatalog);
   }
 
-  if (!view || (view === SortByType.bar)) {
+  if (!view || view === SortByType.bar) {
     makeCardProduct(filterCatalog);
   }
-  
+
   checkOtherCategory(dataCategories, dataBrands, filterCatalog);
-  // changeSliderPrice(filterCatalog);
-  // changeSliderStock(filterCatalog);
 }
 
 export function changeSliderPrice(filterProducts: IOptionsProducts[], state?: boolean): void {
@@ -687,7 +695,7 @@ export function changeSliderPrice(filterProducts: IOptionsProducts[], state?: bo
   const startPrice: number = sortPriceCatalog[0]?.price;
   const endPrice: number = sortPriceCatalog[sortPriceCatalog.length - 1]?.price;
   const priceSlider = document.querySelector('.price-slider') as noUiSlider.target;
-  
+
   priceSlider.noUiSlider?.set([startPrice, endPrice]);
 
   if (state) {
@@ -700,7 +708,7 @@ export function changeSliderStock(filterProducts: IOptionsProducts[], state?: bo
   const startStock: number = sortStockCatalog[0]?.stock;
   const endStock: number = sortStockCatalog[sortStockCatalog.length - 1]?.stock;
   const stockSlider = document.querySelector('.stock-slider') as noUiSlider.target;
-  
+
   stockSlider.noUiSlider?.set([startStock, endStock]);
 
   if (state) {
@@ -711,7 +719,7 @@ export function changeSliderStock(filterProducts: IOptionsProducts[], state?: bo
 export function sortFilterProducts(filterProducts: IOptionsProducts[], nameSort: string): IOptionsProducts[] {
   const copyProducts: IOptionsProducts[] = filterProducts.slice();
   let resultSort: IOptionsProducts[] = [];
-  
+
   if (nameSort === 'price') {
     resultSort = copyProducts.sort((a, b) => {
       return a.price - b.price;
@@ -728,12 +736,12 @@ export function sortFilterProducts(filterProducts: IOptionsProducts[], nameSort:
 }
 
 function getProductAmount(idProduct: string): string {
-  let productAmount: string = '1';
+  let productAmount = '1';
   const params = new URLSearchParams(window.location.search);
 
   if (!params.get('type') || params.get('type') === SortByType.bar) {
     const cardsMain = document.querySelectorAll('.card-main') as NodeListOf<HTMLElement>;
-    
+
     for (let i = 0; i < cardsMain.length; i++) {
       if (cardsMain[i].dataset.id === idProduct) {
         const input = cardsMain[i].querySelector('.product-amount') as HTMLInputElement;
@@ -742,7 +750,7 @@ function getProductAmount(idProduct: string): string {
     }
   }
 
-  if ((params.get('type') === SortByType.list)) {
+  if (params.get('type') === SortByType.list) {
     productAmount = '1';
   }
 
@@ -750,14 +758,8 @@ function getProductAmount(idProduct: string): string {
 }
 
 function cardAnimate(item: HTMLDivElement): void {
-  item.animate(
-    [
-      { transform: `translate(300px, 300px) scale(0.1, 0.1)` },
-      { transform: 'none' },
-    ],
-    {
-      duration: 600,
-      easing: 'ease-out',
-    }
-  );
+  item.animate([{ transform: `translate(300px, 300px) scale(0.1, 0.1)` }, { transform: 'none' }], {
+    duration: 600,
+    easing: 'ease-out',
+  });
 }

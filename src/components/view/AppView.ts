@@ -1,15 +1,49 @@
-import * as noUiSlider from 'nouislider';
-import 'nouislider/dist/nouislider.css';
-import products from "../../assets/json/products.json";
-import { DataCategories, Discount, DiscountName, GetResult, IdStorage, IOptionsProducts, PromoCode, Routes, SortByType, TypeOfClasses } from "../../utils/types";
-import { setQueryParam, changeSortingByType, clickSearchProducts, getQueryParam, loadSelectedFromLocalStorage, makeCardProduct, removeSelectedToLocalStorage, saveSelectedToLocalStorage, searchProducts, sortingCatalog, sortProducts, addQueryParam, deleteQueryParam, findSumCategory, findSumBrand, resetInput, resetHideStyle, getDataCategories, deleteSearchParams, checkOtherCategory, changeSliderPrice, changeSliderStock } from "../../utils/utils-catalog-page";
+import products from '../../assets/json/products.json';
+import {
+  DataCategories,
+  Discount,
+  DiscountName,
+  GetResult,
+  IdStorage,
+  IOptionsProducts,
+  PromoCode,
+  Routes,
+  SortByType,
+  TypeOfClasses,
+} from '../../utils/types';
+
+import {
+  setQueryParam,
+  changeSortingByType,
+  clickSearchProducts,
+  getQueryParam,
+  loadSelectedFromLocalStorage,
+  makeCardProduct,
+  removeSelectedToLocalStorage,
+  saveSelectedToLocalStorage,
+  searchProducts,
+  sortingCatalog,
+  sortProducts,
+  addQueryParam,
+  deleteQueryParam,
+  findSumCategory,
+  findSumBrand,
+  resetInput,
+  resetHideStyle,
+  getDataCategories,
+  deleteSearchParams,
+  checkOtherCategory,
+  changeSliderPrice,
+  changeSliderStock,
+} from '../../utils/utils-catalog-page';
+
 import { addLimitPage, changeProductInPage, fillProductItems, getOrderProducts } from '../../utils/utils-order-page';
 
 export default class AppView {
   container: HTMLElement;
   routes: Routes;
   contentContainer: HTMLElement;
-  
+
   constructor(container: HTMLElement, routes: Routes) {
     this.container = container;
     this.routes = routes;
@@ -31,7 +65,12 @@ export default class AppView {
     page.init();
   }
 
-  changeStyleCard(btnCart: HTMLButtonElement, imageParent: HTMLElement, parentBtn: HTMLElement, idProduct: string): void {
+  changeStyleCard(
+    btnCart: HTMLButtonElement,
+    imageParent: HTMLElement,
+    parentBtn: HTMLElement,
+    idProduct: string
+  ): void {
     const plus = parentBtn.querySelector('.plus') as HTMLButtonElement;
     const minus = parentBtn.querySelector('.minus') as HTMLButtonElement;
 
@@ -43,7 +82,7 @@ export default class AppView {
       if (imageParent.classList.contains('list-item-container-active')) {
         imageParent.classList.remove('list-item-container-active');
       }
-      
+
       if (plus) {
         plus.disabled = false;
         minus.disabled = false;
@@ -83,8 +122,8 @@ export default class AppView {
 
   addToCart(btnCart: HTMLButtonElement, countProduct: number): void {
     const countBuy = document.querySelector('.count-buy') as HTMLElement;
-    const currentCountBuy: number = Number(countBuy.innerHTML);
-    let newCountBuy: string = '';
+    const currentCountBuy = Number(countBuy.innerHTML);
+    let newCountBuy = '';
 
     if (btnCart.classList.contains('active-btn')) {
       newCountBuy = String(currentCountBuy + countProduct);
@@ -92,7 +131,7 @@ export default class AppView {
       newCountBuy = String(currentCountBuy - countProduct);
       btnCart.removeAttribute('data-count');
     }
-    
+
     countBuy.innerHTML = newCountBuy;
     localStorage.setItem('countBuy', newCountBuy);
   }
@@ -153,7 +192,7 @@ export default class AppView {
     const view = getQueryParam('type');
 
     switch (valueSelect) {
-      case '1':
+      case '1': {
         setQueryParam('sort', SortByType.priceUp);
         const sortCatalog1: IOptionsProducts[] = sortProducts(SortByType.priceUp);
 
@@ -161,13 +200,14 @@ export default class AppView {
           changeSortingByType(sortCatalog1);
         }
 
-        if (!view || (view === SortByType.bar)) {
+        if (!view || view === SortByType.bar) {
           makeCardProduct(sortCatalog1);
         }
 
         break;
+      }
 
-      case '2':
+      case '2': {
         setQueryParam('sort', SortByType.priceDown);
         const sortCatalog2: IOptionsProducts[] = sortProducts(SortByType.priceDown);
 
@@ -175,13 +215,14 @@ export default class AppView {
           changeSortingByType(sortCatalog2);
         }
 
-        if (!view || (view === SortByType.bar)) {
+        if (!view || view === SortByType.bar) {
           makeCardProduct(sortCatalog2);
         }
 
         break;
+      }
 
-      case '3':
+      case '3': {
         setQueryParam('sort', SortByType.stockUp);
         const sortCatalog3: IOptionsProducts[] = sortProducts(SortByType.stockUp);
 
@@ -189,13 +230,14 @@ export default class AppView {
           changeSortingByType(sortCatalog3);
         }
 
-        if (!view || (view === SortByType.bar)) {
+        if (!view || view === SortByType.bar) {
           makeCardProduct(sortCatalog3);
         }
-        
+
         break;
-      
-      case '4':
+      }
+
+      case '4': {
         setQueryParam('sort', SortByType.stockDown);
         const sortCatalog4: IOptionsProducts[] = sortProducts(SortByType.stockDown);
 
@@ -203,13 +245,14 @@ export default class AppView {
           changeSortingByType(sortCatalog4);
         }
 
-        if (!view || (view === SortByType.bar)) {
+        if (!view || view === SortByType.bar) {
           makeCardProduct(sortCatalog4);
         }
-        
+
         break;
-      
-      case '5':
+      }
+
+      case '5': {
         setQueryParam('sort', SortByType.default);
         const sortCatalog5: IOptionsProducts[] = sortProducts(SortByType.default);
 
@@ -217,12 +260,13 @@ export default class AppView {
           changeSortingByType(sortCatalog5);
         }
 
-        if (!view || (view === SortByType.bar)) {
+        if (!view || view === SortByType.bar) {
           makeCardProduct(sortCatalog5);
         }
-        
+
         break;
-  
+      }
+
       default:
         break;
     }
@@ -241,7 +285,7 @@ export default class AppView {
       changeSortingByType(searchCatalog);
     }
 
-    if (!view || (view === SortByType.bar)) {
+    if (!view || view === SortByType.bar) {
       makeCardProduct(searchCatalog);
     }
 
@@ -262,7 +306,11 @@ export default class AppView {
 
     if (localStorage['filterCatalog'] && JSON.parse(localStorage['filterCatalog']).length !== 0 && !stateHideElement) {
       filterCatalog = JSON.parse(localStorage['filterCatalog']);
-    } else if (localStorage['filterCatalog'] && JSON.parse(localStorage['filterCatalog']).length !== 0 && stateHideElement) {
+    } else if (
+      localStorage['filterCatalog'] &&
+      JSON.parse(localStorage['filterCatalog']).length !== 0 &&
+      stateHideElement
+    ) {
       filterCatalog = JSON.parse(localStorage['filterCatalog']).concat(sortingCatalog(categoryName, name));
     } else {
       filterCatalog = sortingCatalog(categoryName, name);
@@ -275,7 +323,7 @@ export default class AppView {
       changeSortingByType(filterCatalog);
     }
 
-    if (!view || (view === SortByType.bar)) {
+    if (!view || view === SortByType.bar) {
       makeCardProduct(filterCatalog);
     }
 
@@ -287,7 +335,7 @@ export default class AppView {
     const productName: string = category.name;
     const numberCategory: string | undefined = category.dataset.num;
     let inputCategory = null;
-    
+
     deleteQueryParam(productName, name);
 
     if (name === 'category') {
@@ -300,7 +348,7 @@ export default class AppView {
 
     const productsLocalStorage: IOptionsProducts[] = JSON.parse(localStorage['filterCatalog']);
     let filterProduct: IOptionsProducts[] = [];
-  
+
     if (name === 'category' && !inputCategory?.checked) {
       filterProduct = productsLocalStorage.filter((item: IOptionsProducts) => item.category !== productName);
     } else if (name === 'category' && inputCategory?.checked) {
@@ -323,7 +371,7 @@ export default class AppView {
       changeSortingByType(resultFilter);
     }
 
-    if (!view || (view === SortByType.bar)) {
+    if (!view || view === SortByType.bar) {
       makeCardProduct(resultFilter);
     }
 
@@ -331,7 +379,11 @@ export default class AppView {
     changeSliderStock(resultFilter);
   }
 
-  resetOtherCategory(dataCategories: DataCategories, dataBrands: DataCategories, filterCatalog: IOptionsProducts[]): void {
+  resetOtherCategory(
+    dataCategories: DataCategories,
+    dataBrands: DataCategories,
+    filterCatalog: IOptionsProducts[]
+  ): void {
     const nameCategories = document.querySelectorAll('.category-name') as NodeListOf<Element>;
     const countCategories = document.querySelectorAll('.category-find') as NodeListOf<Element>;
     const nameBrands = document.querySelectorAll('.brand-name') as NodeListOf<Element>;
@@ -393,16 +445,16 @@ export default class AppView {
 
     const dataCategories: DataCategories = getDataCategories('category');
     const dataBrands: DataCategories = getDataCategories('brand');
-    let index1: number = 0;
-    let index2: number = 0;
+    let index1 = 0;
+    let index2 = 0;
     const view = getQueryParam('type');
 
-    for (let key in dataCategories) {
+    for (const key in dataCategories) {
       countCategories[index1].innerHTML = String(dataCategories[key]);
       index1 += 1;
     }
 
-    for (let key in dataBrands) {
+    for (const key in dataBrands) {
       countBrands[index2].innerHTML = String(dataBrands[key]);
       index2 += 1;
     }
@@ -411,7 +463,7 @@ export default class AppView {
       changeSortingByType(products);
     }
 
-    if (!view || (view === SortByType.bar)) {
+    if (!view || view === SortByType.bar) {
       makeCardProduct(products);
     }
 
@@ -435,8 +487,8 @@ export default class AppView {
 
     const view = getQueryParam('type');
     const foundCount = document.querySelector('.found-count') as HTMLElement;
-    let filterCatalog: IOptionsProducts[] = sortingCatalog(JSON.stringify(valueSlider), nameSlider);
-    
+    const filterCatalog: IOptionsProducts[] = sortingCatalog(JSON.stringify(valueSlider), nameSlider);
+
     localStorage.setItem('filterCatalog', JSON.stringify(filterCatalog));
     foundCount.innerHTML = String(filterCatalog.length);
 
@@ -444,7 +496,7 @@ export default class AppView {
       changeSortingByType(filterCatalog);
     }
 
-    if (!view || (view === SortByType.bar)) {
+    if (!view || view === SortByType.bar) {
       makeCardProduct(filterCatalog);
     }
 
@@ -464,7 +516,7 @@ export default class AppView {
   plusAmountOrder(input: HTMLInputElement, newValue: string, price: string | null, stock: string | null): void {
     const totalPrice = document.querySelector('.total-price') as HTMLElement;
     const countBuy = document.querySelector('.count-buy') as HTMLElement;
-    
+
     const parentInput = input.parentElement as HTMLElement;
     const upParentInput = parentInput.parentElement as HTMLElement;
     const itemStock = upParentInput.querySelector('.item-stock') as HTMLElement;
@@ -472,7 +524,7 @@ export default class AppView {
     const summaryTotalNumber = document.querySelector('.order-total-number') as HTMLElement;
     const summaryTotalPrice = document.querySelector('.count-total-price') as HTMLElement;
     const plus = upParentInput.querySelector('.order-plus') as HTMLButtonElement;
-    
+
     const currentCountBuy = Number(countBuy.innerHTML);
     const newCountBuy = currentCountBuy + 1;
     countBuy.innerHTML = String(newCountBuy);
@@ -482,7 +534,7 @@ export default class AppView {
     totalPrice.innerHTML = String(newTotalPrice);
 
     const currentStock = Number(itemStock.innerHTML);
-    const newStock: number = ((currentStock - 1) >= 0) ? (currentStock - 1) : 0;
+    const newStock: number = currentStock - 1 >= 0 ? currentStock - 1 : 0;
     itemStock.innerHTML = String(newStock);
 
     if (newStock === 0) {
@@ -502,7 +554,7 @@ export default class AppView {
     localStorage.setItem('totalPrice', String(newTotalPrice));
   }
 
-  minusAmountOrder(input: HTMLInputElement, newValue: string, price: string | null, stock: string | null): void {
+  minusAmountOrder(input: HTMLInputElement, newValue: string, price: string | null): void {
     input.value = newValue;
     const totalPrice = document.querySelector('.total-price') as HTMLElement;
     const countBuy = document.querySelector('.count-buy') as HTMLElement;
@@ -544,7 +596,7 @@ export default class AppView {
   removeFromOrder(id: number): void {
     const idProducts: IdStorage = JSON.parse(localStorage['idProductToCart']);
     const limitPage = Number(getQueryParam('limit'));
-    const startIndex: number = 0;
+    const startIndex = 0;
 
     delete idProducts[id];
     localStorage.setItem('idProductToCart', JSON.stringify(idProducts));
@@ -555,7 +607,7 @@ export default class AppView {
       const mainCartContainer = document.querySelector('.main-cart-container') as HTMLElement;
       const productInCart = document.querySelector('.product-in-cart') as HTMLElement;
       const summaryContainer = document.querySelector('.total-cart') as HTMLElement;
-      
+
       productInCart.classList.add('hide-container');
       summaryContainer.classList.add('hide-container');
 
@@ -563,7 +615,7 @@ export default class AppView {
       textEmpty.innerHTML = 'Cart is Empty';
       textEmpty.classList.add('text-empty');
       mainCartContainer.append(textEmpty);
-    } 
+    }
 
     const productItemsContainer = this.container.querySelector('.product-items') as HTMLElement;
     productItemsContainer.innerHTML = '';
@@ -598,8 +650,8 @@ export default class AppView {
   }
 
   addPromoCode(promoCode: string): void {
-    let discount: number = 0;
-    let discountName: string = '';
+    let discount = 0;
+    let discountName = '';
 
     if (promoCode === PromoCode.code1) {
       discount = Discount.discount1;
@@ -616,7 +668,11 @@ export default class AppView {
     const discountContainer: HTMLDivElement = document.createElement('div');
     discountContainer.classList.add('discount-container');
 
-    if (oldDiscountName.length > 0 && ((Number(oldDiscountName[0]?.dataset.discount) === discount) || (Number(oldDiscountName[1]?.dataset.discount) === discount))) {
+    if (
+      oldDiscountName.length > 0 &&
+      (Number(oldDiscountName[0]?.dataset.discount) === discount ||
+        Number(oldDiscountName[1]?.dataset.discount) === discount)
+    ) {
       discountContainer.innerHTML = `
         <span class="discount-name">${discountName}</span>
       `;
@@ -626,7 +682,7 @@ export default class AppView {
         <button class="apply-discount" data-discount=${discount}>ADD</button>
       `;
     }
-    
+
     promoEx.after(discountContainer);
   }
 
@@ -636,8 +692,8 @@ export default class AppView {
     const oldPriceContainer = document.querySelector('.new-price-container') as HTMLElement;
     const currentPrice = Number(summaryPrice.innerHTML);
     const currentDiscount = Number(btn.dataset.discount);
-    let newPrice: number = 0;
-    let discountName: string = '';
+    let newPrice = 0;
+    let discountName = '';
 
     if (currentDiscount === Discount.discount1) {
       discountName = DiscountName.discountName1;
@@ -649,13 +705,13 @@ export default class AppView {
 
     if (oldPriceContainer) {
       const newCurrentPrice = Number((document.querySelector('.new-price-discount') as HTMLElement).innerHTML);
-      newPrice = newCurrentPrice - ((newCurrentPrice * currentDiscount) / 100);
+      newPrice = newCurrentPrice - (newCurrentPrice * currentDiscount) / 100;
 
       oldPriceContainer.innerHTML = `
         <span class="price-discount">Total price: $<span class="new-price-discount">${newPrice}</span></span>
       `;
     } else {
-      newPrice = currentPrice - ((currentPrice * currentDiscount) / 100);
+      newPrice = currentPrice - (currentPrice * currentDiscount) / 100;
       const newPriceContainer: HTMLDivElement = document.createElement('div');
       newPriceContainer.classList.add('new-price-container');
 
@@ -668,7 +724,7 @@ export default class AppView {
     }
 
     const oldApplyDiscountContainer = document.querySelector('.apply-discount-container') as HTMLElement;
-    
+
     if (oldApplyDiscountContainer) {
       const newDiscountContainer: HTMLDivElement = document.createElement('div');
       newDiscountContainer.innerHTML = `
@@ -680,7 +736,7 @@ export default class AppView {
     } else {
       const container = document.querySelector('.new-price-container') as HTMLElement;
       const applyDiscountContainer: HTMLDivElement = document.createElement('div');
-      applyDiscountContainer.classList.add('apply-discount-container')
+      applyDiscountContainer.classList.add('apply-discount-container');
       applyDiscountContainer.innerHTML = `
         <h4>Applied codes</h4>
         <span class="discount-name" data-discount=${currentDiscount}>${discountName}</span>
@@ -723,12 +779,12 @@ export default class AppView {
     const countPageDom = document.querySelector('.count-page') as HTMLElement;
     const countPage = Number(countPageDom.innerHTML);
     const summaryPage = Number(elemSummaryPage.innerHTML);
-    const newCountPage = ((countPage + 1) > summaryPage) ? summaryPage : (countPage + 1);
+    const newCountPage = countPage + 1 > summaryPage ? summaryPage : countPage + 1;
     countPageDom.innerHTML = String(newCountPage);
 
     const btnPageLeft = document.querySelector('.page-left') as HTMLButtonElement;
     btnPageLeft.disabled = false;
-    
+
     if (newCountPage === summaryPage) {
       const btnPageRight = document.querySelector('.page-right') as HTMLButtonElement;
       btnPageRight.disabled = true;
@@ -742,7 +798,7 @@ export default class AppView {
     localStorage.setItem('page', String(newCountPage));
 
     const productsInPage = document.querySelectorAll('.item-product') as NodeListOf<Element>;
-    let startIndex: number = 0;
+    let startIndex = 0;
 
     if (localStorage['startIndex']) {
       startIndex = Number(localStorage['startIndex']);
@@ -753,14 +809,14 @@ export default class AppView {
     localStorage.setItem('previousStartIndex', String(startIndex));
     localStorage.setItem('previousProductsInPage', String(productsInPage.length));
 
-    const limitPage: number = Number(getQueryParam('limit'));
+    const limitPage = Number(getQueryParam('limit'));
     changeProductInPage(limitPage, startIndex, true);
   }
 
   changePageDown(): void {
     const elemCountPage = document.querySelector('.count-page') as HTMLElement;
     const countPage = Number(elemCountPage.innerHTML);
-    const newCountPage = ((countPage - 1) > 0) ? (countPage - 1) : 1;
+    const newCountPage = countPage - 1 > 0 ? countPage - 1 : 1;
     elemCountPage.innerHTML = String(newCountPage);
 
     const btnPageRight = document.querySelector('.page-right') as HTMLButtonElement;
@@ -779,7 +835,7 @@ export default class AppView {
     localStorage.setItem('page', String(newCountPage));
 
     const productsInPage = document.querySelectorAll('.item-product') as NodeListOf<Element>;
-    let startIndex: number = 0;
+    let startIndex = 0;
 
     if (localStorage['startIndex']) {
       startIndex = Number(localStorage['previousStartIndex']) - Number(localStorage['previousProductsInPage']);
@@ -788,7 +844,7 @@ export default class AppView {
       startIndex = productsInPage.length;
     }
 
-    const limitPage: number = Number(getQueryParam('limit'));
+    const limitPage = Number(getQueryParam('limit'));
 
     changeProductInPage(limitPage, startIndex, false);
   }
@@ -798,7 +854,8 @@ export default class AppView {
     const idProducts: IdStorage = JSON.parse(localStorage['idProductToCart']);
     const orderProducts: IOptionsProducts[] = getOrderProducts(idProducts);
 
-    const limit: number = (Number(limitInput.value) + 1 > orderProducts.length) ? orderProducts.length : Number(limitInput.value) + 1;
+    const limit: number =
+      Number(limitInput.value) + 1 > orderProducts.length ? orderProducts.length : Number(limitInput.value) + 1;
     limitInput.value = String(limit);
 
     addLimitPage(limit, true);
@@ -806,7 +863,7 @@ export default class AppView {
 
   downLimitPage(): void {
     const limitInput = document.querySelector('.limit-input') as HTMLInputElement;
-    const limit: number = (Number(limitInput.value) - 1) <= 1 ? 1 : Number(limitInput.value) - 1;
+    const limit: number = Number(limitInput.value) - 1 <= 1 ? 1 : Number(limitInput.value) - 1;
     limitInput.value = String(limit);
 
     addLimitPage(limit, false);

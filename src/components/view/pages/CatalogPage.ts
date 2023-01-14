@@ -1,7 +1,17 @@
 import './styles/catalog-page.css';
-import products from "../../../assets/json/products.json";
 import { SortByType } from '../../../utils/types';
-import { deleteSearchParams, checkTypeOfSort, getQueryParam, showSortProductListView, showSortProductBarView, clickSearchProducts, addFilterCategory, makePriceSlider, makeStockSlider, checkQueryParams } from '../../../utils/utils-catalog-page';
+import {
+  deleteSearchParams,
+  checkTypeOfSort,
+  getQueryParam,
+  showSortProductListView,
+  showSortProductBarView,
+  clickSearchProducts,
+  addFilterCategory,
+  makePriceSlider,
+  makeStockSlider,
+  checkQueryParams,
+} from '../../../utils/utils-catalog-page';
 
 export default class CatalogPage {
   container: HTMLElement;
@@ -109,7 +119,7 @@ export default class CatalogPage {
 
     localStorage.removeItem('filterCatalog');
     checkTypeOfSort(this.typeOfView);
-   
+
     if (this.typeOfView === SortByType.list && this.sort === SortByType.priceUp) {
       showSortProductListView('.option1', SortByType.priceUp);
     }
@@ -130,28 +140,38 @@ export default class CatalogPage {
       showSortProductListView('.option5', SortByType.default);
     }
 
-    if ((!this.typeOfView && this.sort === SortByType.priceUp) ||
-        (this.typeOfView === SortByType.bar && this.sort === SortByType.priceUp)) {
+    if (
+      (!this.typeOfView && this.sort === SortByType.priceUp) ||
+      (this.typeOfView === SortByType.bar && this.sort === SortByType.priceUp)
+    ) {
       showSortProductBarView('.option1', SortByType.priceUp);
     }
 
-    if ((!this.typeOfView && this.sort === SortByType.priceDown) ||
-        (this.typeOfView === SortByType.bar && this.sort === SortByType.priceDown)) {
+    if (
+      (!this.typeOfView && this.sort === SortByType.priceDown) ||
+      (this.typeOfView === SortByType.bar && this.sort === SortByType.priceDown)
+    ) {
       showSortProductBarView('.option2', SortByType.priceDown);
     }
 
-    if ((!this.typeOfView && this.sort === SortByType.stockUp) || 
-        (this.typeOfView === SortByType.bar && this.sort === SortByType.stockUp)) {
+    if (
+      (!this.typeOfView && this.sort === SortByType.stockUp) ||
+      (this.typeOfView === SortByType.bar && this.sort === SortByType.stockUp)
+    ) {
       showSortProductBarView('.option3', SortByType.stockUp);
     }
 
-    if ((!this.typeOfView && this.sort === SortByType.stockDown) || 
-        (this.typeOfView === SortByType.bar && this.sort === SortByType.stockDown)) {
+    if (
+      (!this.typeOfView && this.sort === SortByType.stockDown) ||
+      (this.typeOfView === SortByType.bar && this.sort === SortByType.stockDown)
+    ) {
       showSortProductBarView('.option4', SortByType.stockDown);
     }
 
-    if ((!this.typeOfView && this.sort === SortByType.default) || 
-        (this.typeOfView === SortByType.bar && this.sort === SortByType.default)) {
+    if (
+      (!this.typeOfView && this.sort === SortByType.default) ||
+      (this.typeOfView === SortByType.bar && this.sort === SortByType.default)
+    ) {
       showSortProductBarView('.option5', SortByType.default);
     }
 
@@ -159,11 +179,11 @@ export default class CatalogPage {
       showSortProductBarView('.option5', SortByType.default);
     }
 
-    if ((this.typeOfView === SortByType.bar) && !this.sort) {
+    if (this.typeOfView === SortByType.bar && !this.sort) {
       showSortProductBarView('.option5', SortByType.default);
     }
 
-    if ((this.typeOfView === SortByType.list) && !this.sort) {
+    if (this.typeOfView === SortByType.list && !this.sort) {
       showSortProductListView('.option5', SortByType.default);
     }
 

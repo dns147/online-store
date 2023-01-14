@@ -1,10 +1,19 @@
 import * as noUiSlider from 'nouislider';
 import 'nouislider/dist/nouislider.css';
-import AppView from "../view/AppView";
-import products from "../../assets/json/products.json";
-import { setQueryParam, getDataCategories, showAnimateImage, sortingCatalog, checkOtherCategory, deleteSearchParams, getPrice, deleteQueryParam, getQueryParam, saveSelectedToLocalStorage } from "../../utils/utils-catalog-page";
-import { DataCategories, GetResult, IdStorage, IOptionsProducts, PromoCode } from "../../utils/types";
-import { changeProductInPage, getOrderProducts, getStock } from '../../utils/utils-order-page';
+import AppView from '../view/AppView';
+import {
+  setQueryParam,
+  getDataCategories,
+  showAnimateImage,
+  sortingCatalog,
+  checkOtherCategory,
+  deleteSearchParams,
+  getPrice,
+  getQueryParam,
+  saveSelectedToLocalStorage,
+} from '../../utils/utils-catalog-page';
+import { DataCategories, GetResult, IdStorage, IOptionsProducts, PromoCode } from '../../utils/types';
+import { getStock } from '../../utils/utils-order-page';
 
 export default class AppModel {
   view: AppView;
@@ -32,10 +41,10 @@ export default class AppModel {
   }
 
   plusAmountProduct(btnCart: HTMLElement, input: HTMLInputElement, cardMain: HTMLElement): void {
-    const value: number = Number(input.value);
-    const id: number = Number(cardMain.dataset.id);
-    const stock: number = Number(getStock(id));
-    const newValue: number = ((value + 1) > stock) ? stock : value + 1;
+    const value = Number(input.value);
+    const id = Number(cardMain.dataset.id);
+    const stock = Number(getStock(id));
+    const newValue: number = value + 1 > stock ? stock : value + 1;
 
     if (!btnCart.classList.contains('active-btn')) {
       input.value = String(newValue);
@@ -43,14 +52,19 @@ export default class AppModel {
   }
 
   minusAmountProduct(input: HTMLInputElement): void {
-    const value: number = Number(input.value);
+    const value = Number(input.value);
 
     if (value > 1) {
       input.value = String(value - 1);
     }
   }
 
-  changeStyleCard(btnCart: HTMLButtonElement, imageParent: HTMLElement, parentBtn: HTMLElement, idProduct: string): void {
+  changeStyleCard(
+    btnCart: HTMLButtonElement,
+    imageParent: HTMLElement,
+    parentBtn: HTMLElement,
+    idProduct: string
+  ): void {
     this.view.changeStyleCard(btnCart, imageParent, parentBtn, idProduct);
   }
 
@@ -58,12 +72,17 @@ export default class AppModel {
     this.view.changeStyleBtnCartDescription(btnCart, idProduct);
   }
 
-  getTotalPrice(btnCart: HTMLButtonElement, totalPrice: HTMLElement, priceProduct: string | null, input?: HTMLInputElement): void {
-    const price: number = Number(priceProduct);
-    const currentTotalPrice: number = Number(totalPrice.innerHTML);
-    const countProduct: number = Number(input?.value);
-    const savedCountProduct: number = Number(btnCart.dataset.count ?? 1);
-    let newTotalPrice: string = '';
+  getTotalPrice(
+    btnCart: HTMLButtonElement,
+    totalPrice: HTMLElement,
+    priceProduct: string | null,
+    input?: HTMLInputElement
+  ): void {
+    const price = Number(priceProduct);
+    const currentTotalPrice = Number(totalPrice.innerHTML);
+    const countProduct = Number(input?.value);
+    const savedCountProduct = Number(btnCart.dataset.count ?? 1);
+    let newTotalPrice = '';
 
     if (input && btnCart.classList.contains('active-btn')) {
       newTotalPrice = String(currentTotalPrice + countProduct * price);
@@ -80,8 +99,13 @@ export default class AppModel {
     this.view.showNewTotalPrice(totalPrice, newTotalPrice);
   }
 
-  addToCart(btnCart: HTMLButtonElement, imageProduct: HTMLElement, imageParent: HTMLElement, input?: HTMLInputElement): void {
-    const countProduct: number = Number(input?.value);
+  addToCart(
+    btnCart: HTMLButtonElement,
+    imageProduct: HTMLElement,
+    imageParent: HTMLElement,
+    input?: HTMLInputElement
+  ): void {
+    const countProduct = Number(input?.value);
     btnCart.disabled = true;
     const savedCountProduct = Number(btnCart.dataset?.count) ? Number(btnCart.dataset?.count) : 1;
 
@@ -109,7 +133,7 @@ export default class AppModel {
     this.view.addToCart(btnCart, savedCountProduct);
   }
 
-  changeViewType(btnViewType: HTMLElement):void {
+  changeViewType(btnViewType: HTMLElement): void {
     const typeOfView: string | undefined = btnViewType.dataset.type;
     this.view.changeViewType(btnViewType, typeOfView);
   }
@@ -138,7 +162,7 @@ export default class AppModel {
     const parentCategory = category.parentElement as HTMLElement;
     const nameCategoryBrand = parentCategory.querySelector('.brand-name') as HTMLElement;
     const nameCategory = parentCategory.querySelector('.category-name') as HTMLElement;
-    let stateHideElement: boolean = true;
+    let stateHideElement = true;
 
     if (nameCategoryBrand?.classList.contains('hide-name') || nameCategory?.classList.contains('hide-name')) {
       stateHideElement = true;
@@ -164,7 +188,7 @@ export default class AppModel {
     } else {
       filterCatalog = sortingCatalog(productName, name);
     }
-    
+
     checkOtherCategory(dataCategories, dataBrands, filterCatalog);
   }
 
@@ -191,10 +215,10 @@ export default class AppModel {
     const url: string = window.location.href;
     navigator.clipboard.writeText(url);
 
-    btnCopy.innerHTML = 'COPIED'
+    btnCopy.innerHTML = 'COPIED';
 
     setTimeout(() => {
-      btnCopy.innerHTML = 'COPY LINK'
+      btnCopy.innerHTML = 'COPY LINK';
     }, 600);
   }
 
@@ -207,8 +231,8 @@ export default class AppModel {
   plusAmountOrder(input: HTMLInputElement): void {
     const id: number | undefined = Number(input.dataset.id);
     let price: string | null = null;
-    const value: number = Number(input.value);
-    const newValue: string = String(value + 1);
+    const value = Number(input.value);
+    const newValue = String(value + 1);
     const stock: string | null = getStock(id);
 
     if (id >= 0) {
@@ -231,9 +255,8 @@ export default class AppModel {
   minusAmountOrder(input: HTMLInputElement): void {
     const id: number | undefined = Number(input.dataset.id);
     let price: string | null = null;
-    const value: number = Number(input.value);
-    const newValue: string = String(value - 1);
-    const stock: string | null = getStock(id);
+    const value = Number(input.value);
+    const newValue = String(value - 1);
 
     if (id >= 0) {
       price = getPrice(id);
@@ -243,13 +266,13 @@ export default class AppModel {
       this.view.removeFromOrder(id);
     }
 
-    this.view.minusAmountOrder(input, newValue, price, stock);
+    this.view.minusAmountOrder(input, newValue, price);
   }
 
   goToCartWithPopup(): void {
     setQueryParam('popup', 'true');
 
-    const idProduct: string = String(getQueryParam('id'));
+    const idProduct = String(getQueryParam('id'));
     const priceProduct: string | null = getPrice(Number(idProduct));
     saveSelectedToLocalStorage(idProduct);
 
@@ -289,7 +312,7 @@ export default class AppModel {
       this.view.addPromoCode(PromoCode.code2);
     }
 
-    if ((valueInput !== PromoCode.code1) && (valueInput !== PromoCode.code2)) {
+    if (valueInput !== PromoCode.code1 && valueInput !== PromoCode.code2) {
       if (document.querySelector('.discount-container') as HTMLElement) {
         (document.querySelector('.discount-container') as HTMLElement).remove();
       }
