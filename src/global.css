@@ -1,0 +1,133 @@
+@font-face {
+  font-family: 'Starwars';
+  src: url("./assets/fonts/SFDistantGalaxy.ttf");
+}
+
+@font-face {
+  font-family: 'StarwarsOutline';
+  src: url("./assets/fonts/SFDistantGalaxyOutline.ttf");
+}
+
+:root {
+  --main-font-color: #f44336;
+  --black-font-color: #000000;
+  --white-font-color: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+}
+
+html {
+  overflow-x: hidden;
+  margin-right: calc(-1 * (100vw - 100%));
+  background-color: #607d8b;
+}
+
+.container {
+  height: 100px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--black-font-color);
+  padding: 0 20px;
+  color: var(--main-font-color);
+  font-family: 'Starwars', sans-serif;
+  font-size: 18px;
+}
+
+.footer {
+  height: 100px;
+  background-color: var(--black-font-color);
+  padding: 0 20px;
+}
+
+.footer-list {
+  list-style-type: none;
+  color: var(--main-font-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  column-gap: 20px;
+  height: 100%;
+}
+
+.footer-item {
+  display: flex;
+  align-items: center;
+  font-family: 'Starwars', sans-serif;
+  font-size: 20px;
+  letter-spacing: 1px; 
+}
+
+.footer-link {
+  text-decoration: none;
+  color: var(--main-font-color);
+  font-family: 'StarwarsOutline', sans-serif;
+  font-size: 20px;
+  letter-spacing: 1px; 
+}
+
+.footer-link:hover,
+.logo-name:hover {
+  font-family: 'Starwars', sans-serif;
+}
+
+.order-image,
+.github-link,
+.rs-link {
+  filter: brightness(0) saturate(100%) invert(30%) sepia(88%) saturate(2354%) hue-rotate(344deg) brightness(102%) contrast(91%);
+}
+
+.order-image:hover {
+  filter: brightness(0) saturate(100%) invert(18%) sepia(96%) saturate(4938%) hue-rotate(101deg) brightness(105%) contrast(107%);
+}
+
+.item-github {
+  display: flex;
+  width: 450px;
+  justify-content: space-between;
+}
+
+.logo-name {
+  text-decoration: none;
+  color: var(--main-font-color);
+  font-family: 'StarwarsOutline', sans-serif;
+  letter-spacing: 3px;
+  display: flex;
+  align-items: center;
+}
+
+.name {
+  display: inline-block;
+  width: 155px;
+  line-height: 78%;
+  text-align: center;
+}
+
+.total-price {
+  display: inline-block;
+  width: 90px;
+  color: var(--white-font-color);
+  font-family: monospace;
+}
+
+.order {
+  text-decoration: none;
+}
+
+.order-container {
+  position: relative;
+  margin-right: 15px;
+}
+
+.count-buy {
+  color: var(--white-font-color);
+  display: inline-block;
+  width: 24px;
+  font-family: monospace;
+}
