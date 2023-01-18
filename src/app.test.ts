@@ -3,10 +3,18 @@ import CatalogPage from './components/view/pages/CatalogPage';
 import DescriptionPage from './components/view/pages/DescriptionPage';
 import OrderPage from './components/view/pages/OrderPage';
 import ErrorPage from './components/view/pages/ErrorPage';
-import { getProductAmount } from './utils/utils-catalog-page';
 import { getOrderProducts, getStock } from './utils/utils-order-page';
 import { IdStorage, IOptionsProducts } from './utils/types';
 import { Content, Footer, Header } from './components/components';
+import {
+  getProductAmount,
+  getId,
+  getQueryParam,
+  getPrice,
+  getDataCategories,
+  sortProducts,
+  searchProducts,
+} from './utils/utils-catalog-page';
 
 describe('getStock should get stock of product by id product', () => {
   test('adds 0 to equal "44"', () => {
@@ -72,5 +80,51 @@ describe('component should make render component', () => {
 
   test('add component footer', () => {
     expect(componentFooter.includes('footer')).toBe(true);
+  });
+});
+
+describe('getId', () => {
+  test('returns null', () => {
+    expect(getId()).toBeNull();
+  });
+});
+
+describe('getQueryParam', () => {
+  const type = 'brand';
+
+  test('returns null', () => {
+    expect(getQueryParam(type)).toBeNull();
+  });
+});
+
+describe('first product in list', () => {
+  const id = products[0].id;
+
+  test('is worth 15', () => {
+    expect(getPrice(id)).toBe('15');
+  });
+});
+
+describe('getDataCategories', () => {
+  const name = 'brand';
+
+  test('returns object', () => {
+    expect(getDataCategories(name)).toBeInstanceOf(Object);
+  });
+});
+
+describe('sortProducts', () => {
+  const typeSort = 'price-up';
+
+  test('returns array', () => {
+    expect(sortProducts(typeSort)).toBeInstanceOf(Array);
+  });
+});
+
+describe('search field', () => {
+  const valueInput = 'Greedo';
+
+  test('shows 1 product', () => {
+    expect(searchProducts(valueInput)).toHaveLength(1);
   });
 });
